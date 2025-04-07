@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:realtokens/managers/data_manager.dart';
 import 'package:realtokens/app_state.dart';
 import 'package:realtokens/generated/l10n.dart';
+
 import 'package:realtokens/utils/parameters.dart';
-import 'package:realtokens/modals/modal_others_pie.dart'; // Assurez-vous que ce fichier existe
+import 'package:realtokens/modals/Modal_others_pie.dart';
 import 'package:realtokens/pages/Statistics/portfolio/common_functions.dart';
 
 class TokenDistributionByRegionCard extends StatefulWidget {
