@@ -73,7 +73,7 @@ class _PortfolioStats extends State<PortfolioStats> {
               end: Alignment.bottomCenter,
               colors: [
                 Theme.of(context).scaffoldBackgroundColor,
-                Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+                Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
               ],
             ),
           ),

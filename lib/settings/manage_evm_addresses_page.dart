@@ -186,7 +186,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 1,
                   offset: const Offset(0, 1),
                 ),
@@ -205,7 +205,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                         decoration: BoxDecoration(
                           color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                          border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
                         ),
                       ),
                     ),
@@ -325,7 +325,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -383,7 +383,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -402,7 +402,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                     Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Icon(
@@ -481,7 +481,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                 if (i < addresses.length - 1)
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
-                    child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withOpacity(0.3)),
+                    child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
                   ),
               ],
             ),

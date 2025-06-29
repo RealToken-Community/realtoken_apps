@@ -118,7 +118,7 @@ Widget _buildSectionCard(BuildContext context, {required String title, required 
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.05),
+          color: Colors.black.withValues(alpha: 0.05),
           blurRadius: 10,
           offset: const Offset(0, 2),
         ),
@@ -160,7 +160,7 @@ Widget _buildDetailRow(BuildContext context, String label, String value, {IconDa
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: (iconColor ?? Colors.blue).withOpacity(0.1),
+                  color: (iconColor ?? Colors.blue).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -215,7 +215,7 @@ Widget _buildRentalStatusRow(BuildContext context, {required Map<String, dynamic
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
@@ -251,7 +251,7 @@ Widget _buildRentalStatusRow(BuildContext context, {required Map<String, dynamic
           height: 8,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(4),
           ),
           child: LayoutBuilder(
@@ -309,7 +309,7 @@ Widget _buildRentStartDateRow(BuildContext context, {required Map<String, dynami
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
+                color: Colors.orange.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
@@ -343,7 +343,7 @@ Widget _buildRentStartDateRow(BuildContext context, {required Map<String, dynami
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.2),
+                color: statusColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

@@ -152,7 +152,7 @@ class RmmStatsState extends State<RmmStats> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
           width: 0.5,
         ),
       ),
@@ -189,7 +189,7 @@ class RmmStatsState extends State<RmmStats> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
@@ -270,7 +270,7 @@ class RmmStatsState extends State<RmmStats> {
           ),
 
           // Ligne de séparation
-          Divider(height: 0, thickness: 0.5, color: Theme.of(context).dividerColor.withOpacity(0.1)),
+          Divider(height: 0, thickness: 0.5, color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
 
           // Ligne Deposit
           Row(
@@ -310,7 +310,7 @@ class RmmStatsState extends State<RmmStats> {
           ),
 
           // Ligne de séparation
-          Divider(height: 0, thickness: 0.5, color: Theme.of(context).dividerColor.withOpacity(0.1)),
+          Divider(height: 0, thickness: 0.5, color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
 
           // Ligne Borrow
           Row(

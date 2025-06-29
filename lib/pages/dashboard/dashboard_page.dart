@@ -359,11 +359,11 @@ class DashboardPageState extends State<DashboardPage> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: Colors.orange.withOpacity(0.9),
+            color: Colors.orange.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.orange.withOpacity(0.3),
+                color: Colors.orange.withValues(alpha: 0.3),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -468,7 +468,7 @@ class DashboardPageState extends State<DashboardPage> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Theme.of(context).primaryColor.withOpacity(0.8),
+                            Theme.of(context).primaryColor.withValues(alpha: 0.8),
                             Theme.of(context).primaryColor,
                           ],
                           begin: Alignment.topCenter,
@@ -478,7 +478,7 @@ class DashboardPageState extends State<DashboardPage> {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).primaryColor.withOpacity(0.2),
+                            color: Theme.of(context).primaryColor.withValues(alpha: 0.2),
                             blurRadius: 5,
                             offset: const Offset(0, 4),
                             spreadRadius: -2,
@@ -497,7 +497,7 @@ class DashboardPageState extends State<DashboardPage> {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.15),
+                                    color: Colors.white.withValues(alpha: 0.15),
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Row(
@@ -584,7 +584,7 @@ class DashboardPageState extends State<DashboardPage> {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.15),
+                                        color: Colors.white.withValues(alpha: 0.15),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Row(

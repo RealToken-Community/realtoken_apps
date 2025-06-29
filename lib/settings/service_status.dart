@@ -66,10 +66,10 @@ class ServiceStatusPage extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: allAreUpToDate ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
+                      color: allAreUpToDate ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: allAreUpToDate ? Colors.green.withOpacity(0.3) : Colors.red.withOpacity(0.3),
+                        color: allAreUpToDate ? Colors.green.withValues(alpha: 0.3) : Colors.red.withValues(alpha: 0.3),
                         width: 1,
                       ),
                     ),
@@ -182,7 +182,7 @@ class ServiceStatusPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -254,7 +254,7 @@ class ServiceStatusPage extends StatelessWidget {
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 44),
-            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withOpacity(0.3)),
+            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );

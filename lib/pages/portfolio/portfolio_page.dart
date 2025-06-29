@@ -415,7 +415,7 @@ class PortfolioPageState extends State<PortfolioPage> {
                                               borderRadius: BorderRadius.circular(24),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.black.withOpacity(0.03),
+                                                  color: Colors.black.withValues(alpha: 0.03),
                                                   blurRadius: 8,
                                                   offset: const Offset(0, 2),
                                                 ),
@@ -574,14 +574,14 @@ class PortfolioPageState extends State<PortfolioPage> {
                                               },
                                               offset: const Offset(0, 40),
                                               elevation: 8,
-                                              color: Theme.of(context).cardColor.withOpacity(0.97),
+                                              color: Theme.of(context).cardColor.withValues(alpha: 0.97),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(16),
                                               ),
                                               child: Container(
                                                 padding: const EdgeInsets.all(8),
                                                 decoration: BoxDecoration(
-                                                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                  color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                                                   borderRadius: BorderRadius.circular(12),
                                                 ),
                                                 child: Icon(
@@ -753,7 +753,7 @@ class PortfolioPageState extends State<PortfolioPage> {
         },
         offset: const Offset(0, 40),
         elevation: 8,
-        color: Theme.of(context).cardColor.withOpacity(0.97),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.97),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -761,8 +761,8 @@ class PortfolioPageState extends State<PortfolioPage> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: selectedWallets.isNotEmpty 
-              ? Theme.of(context).primaryColor.withOpacity(0.2)
-              : Theme.of(context).primaryColor.withOpacity(0.1),
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
+              : Theme.of(context).primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: selectedWallets.isNotEmpty 
               ? Border.all(color: Theme.of(context).primaryColor, width: 2)
@@ -857,7 +857,7 @@ class PortfolioPageState extends State<PortfolioPage> {
         },
         offset: const Offset(0, 40),
         elevation: 8,
-        color: Theme.of(context).cardColor.withOpacity(0.97),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.97),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -865,8 +865,8 @@ class PortfolioPageState extends State<PortfolioPage> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: selectedProductTypes.isNotEmpty 
-              ? Theme.of(context).primaryColor.withOpacity(0.2)
-              : Theme.of(context).primaryColor.withOpacity(0.1),
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
+              : Theme.of(context).primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: selectedProductTypes.isNotEmpty 
               ? Border.all(color: Theme.of(context).primaryColor, width: 2)
@@ -975,7 +975,7 @@ class PortfolioPageState extends State<PortfolioPage> {
         },
         offset: const Offset(0, 40),
         elevation: 8,
-        color: Theme.of(context).cardColor.withOpacity(0.97),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.97),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -983,8 +983,8 @@ class PortfolioPageState extends State<PortfolioPage> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: selectedRegion != null 
-              ? Theme.of(context).primaryColor.withOpacity(0.2)
-              : Theme.of(context).primaryColor.withOpacity(0.1),
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
+              : Theme.of(context).primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: selectedRegion != null 
               ? Border.all(color: Theme.of(context).primaryColor, width: 2)
@@ -1074,7 +1074,7 @@ class PortfolioPageState extends State<PortfolioPage> {
         },
         offset: const Offset(0, 40),
         elevation: 8,
-        color: Theme.of(context).cardColor.withOpacity(0.97),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.97),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -1082,8 +1082,8 @@ class PortfolioPageState extends State<PortfolioPage> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: selectedCountry != null 
-              ? Theme.of(context).primaryColor.withOpacity(0.2)
-              : Theme.of(context).primaryColor.withOpacity(0.1),
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
+              : Theme.of(context).primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: selectedCountry != null 
               ? Border.all(color: Theme.of(context).primaryColor, width: 2)
@@ -1169,7 +1169,7 @@ class PortfolioPageState extends State<PortfolioPage> {
         },
         offset: const Offset(0, 40),
         elevation: 8,
-        color: Theme.of(context).cardColor.withOpacity(0.97),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.97),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -1177,8 +1177,8 @@ class PortfolioPageState extends State<PortfolioPage> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: selectedRentalStatus != rentalStatusAll 
-              ? Theme.of(context).primaryColor.withOpacity(0.2)
-              : Theme.of(context).primaryColor.withOpacity(0.1),
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
+              : Theme.of(context).primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: selectedRentalStatus != rentalStatusAll 
               ? Border.all(color: Theme.of(context).primaryColor, width: 2)
@@ -1275,7 +1275,7 @@ class PortfolioPageState extends State<PortfolioPage> {
         },
         offset: const Offset(0, 40),
         elevation: 8,
-        color: Theme.of(context).cardColor.withOpacity(0.97),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.97),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -1283,8 +1283,8 @@ class PortfolioPageState extends State<PortfolioPage> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: selectedTokenTypes.isNotEmpty 
-              ? Theme.of(context).primaryColor.withOpacity(0.2)
-              : Theme.of(context).primaryColor.withOpacity(0.1),
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
+              : Theme.of(context).primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: selectedTokenTypes.isNotEmpty 
               ? Border.all(color: Theme.of(context).primaryColor, width: 2)

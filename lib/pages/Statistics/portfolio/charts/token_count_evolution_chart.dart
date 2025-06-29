@@ -34,7 +34,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -44,7 +44,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -86,7 +86,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
                         color: Theme.of(context).primaryColor,
                       ),
                       style: IconButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                        backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -225,7 +225,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
             drawVerticalLine: false,
             getDrawingHorizontalLine: (value) {
               return FlLine(
-                color: Colors.grey.withOpacity(0.15),
+                color: Colors.grey.withValues(alpha: 0.15),
                 strokeWidth: 1,
               );
             },
@@ -241,7 +241,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
           drawVerticalLine: false,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey.withOpacity(0.15),
+              color: Colors.grey.withValues(alpha: 0.15),
               strokeWidth: 1,
             );
           },
@@ -313,8 +313,8 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
               show: true,
               gradient: LinearGradient(
                 colors: [
-                  const Color(0xFF34C759).withOpacity(0.3),
-                  const Color(0xFF34C759).withOpacity(0.05),
+                  const Color(0xFF34C759).withValues(alpha: 0.3),
+                  const Color(0xFF34C759).withValues(alpha: 0.05),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,

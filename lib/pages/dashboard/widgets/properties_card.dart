@@ -153,7 +153,7 @@ class PropertiesCard extends StatelessWidget {
               radius: 17, // Taille de la section non louée
               gradient: LinearGradient(
                 colors: [
-                  theme.primaryColor.withOpacity(0.6),
+                  theme.primaryColor.withValues(alpha: 0.6),
                   theme.primaryColor,
                 ],
                 begin: Alignment.topLeft,

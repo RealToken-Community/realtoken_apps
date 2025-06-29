@@ -81,7 +81,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
     if (recentChanges.isEmpty) {
       return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          backgroundColor: CupertinoColors.systemBackground.resolveFrom(context).withOpacity(0.8),
+          backgroundColor: CupertinoColors.systemBackground.resolveFrom(context).withValues(alpha: 0.8),
           border: null,
           middle: Text(
             S.of(context).recentUpdatesTitle,
@@ -144,7 +144,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBackground.resolveFrom(context).withOpacity(0.8),
+        backgroundColor: CupertinoColors.systemBackground.resolveFrom(context).withValues(alpha: 0.8),
         border: null,
         middle: Text(
           S.of(context).recentUpdatesTitle,
@@ -164,10 +164,10 @@ class _UpdatesPageState extends State<UpdatesPage> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                   decoration: BoxDecoration(
-                    color: CupertinoColors.systemBackground.resolveFrom(context).withOpacity(0.7),
+                    color: CupertinoColors.systemBackground.resolveFrom(context).withValues(alpha: 0.7),
                     border: Border(
                       bottom: BorderSide(
-                        color: CupertinoColors.systemGrey5.resolveFrom(context).withOpacity(0.5),
+                        color: CupertinoColors.systemGrey5.resolveFrom(context).withValues(alpha: 0.5),
                         width: 0.5,
                       ),
                     ),
@@ -308,7 +308,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Theme.of(context).primaryColor.withOpacity(0.3),
+                                          color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
                                           blurRadius: 8,
                                           spreadRadius: 2,
                                         ),
@@ -340,7 +340,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
                                                                     Container(
                                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                    color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(
@@ -442,7 +442,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: CupertinoColors.systemGrey6.resolveFrom(context).withOpacity(0.6),
+                          color: CupertinoColors.systemGrey6.resolveFrom(context).withValues(alpha: 0.6),
                           blurRadius: 12,
                           spreadRadius: 0,
                           offset: Offset(0, 4),
@@ -586,8 +586,8 @@ class _UpdatesPageState extends State<UpdatesPage> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            CupertinoColors.systemGrey4.resolveFrom(context).withOpacity(0.6),
-                            CupertinoColors.systemGrey3.resolveFrom(context).withOpacity(0.8),
+                            CupertinoColors.systemGrey4.resolveFrom(context).withValues(alpha: 0.6),
+                            CupertinoColors.systemGrey3.resolveFrom(context).withValues(alpha: 0.8),
                           ],
                         ),
                       ),
@@ -607,8 +607,8 @@ class _UpdatesPageState extends State<UpdatesPage> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            CupertinoColors.systemGrey3.resolveFrom(context).withOpacity(0.8),
-                            CupertinoColors.systemGrey4.resolveFrom(context).withOpacity(0.6),
+                            CupertinoColors.systemGrey3.resolveFrom(context).withValues(alpha: 0.8),
+                            CupertinoColors.systemGrey4.resolveFrom(context).withValues(alpha: 0.6),
                           ],
                         ),
                       ),
@@ -631,7 +631,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: changeColor.withOpacity(0.3),
+                  color: changeColor.withValues(alpha: 0.3),
                   blurRadius: 8,
                   spreadRadius: 2,
                 ),
@@ -666,10 +666,10 @@ class _UpdatesPageState extends State<UpdatesPage> {
       margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: changeColor.withOpacity(0.05),
+        color: changeColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: changeColor.withOpacity(0.2),
+          color: changeColor.withValues(alpha: 0.2),
           width: 1,
         ),
       ),

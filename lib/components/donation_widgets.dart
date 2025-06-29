@@ -49,7 +49,7 @@ class DonationWidgets {
             S.of(context).donationTotal,
             style: TextStyle(
               fontSize: 15 + appState.getTextSizeOffset(),
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
             ),
           ),
           SizedBox(height: 4 + appState.getTextSizeOffset()),
@@ -228,7 +228,7 @@ class DonationWidgets {
                 icon: Icon(
                   Icons.copy_rounded,
                   size: 20,
-                  color: Theme.of(context).iconTheme.color?.withOpacity(0.7),
+                  color: Theme.of(context).iconTheme.color?.withValues(alpha: 0.7),
                 ),
                 tooltip: S.of(context).copy,
                 onPressed: () => _copyAddressToClipboard(context),
@@ -249,7 +249,7 @@ class DonationWidgets {
       S.of(context).everyContributionCounts,
       style: TextStyle(
         fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
-        color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
+        color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
       ),
       textAlign: TextAlign.center,
     );

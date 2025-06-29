@@ -57,7 +57,7 @@ class _TokenDistributionCardState extends State<TokenDistributionCard> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -67,7 +67,7 @@ class _TokenDistributionCardState extends State<TokenDistributionCard> {
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -139,7 +139,7 @@ class _TokenDistributionCardState extends State<TokenDistributionCard> {
         PieChartSectionData(
           value: 1,
           title: '',
-          color: Colors.grey.withOpacity(0.3),
+          color: Colors.grey.withValues(alpha: 0.3),
           radius: 45,
         )
       ];
@@ -174,7 +174,7 @@ class _TokenDistributionCardState extends State<TokenDistributionCard> {
       return PieChartSectionData(
         value: data['count'].toDouble(),
         title: percentage < 5 ? '' : '${percentage.toStringAsFixed(1)}%',
-        color: baseColor.withOpacity(opacity),
+        color: baseColor.withValues(alpha: opacity),
         radius: isSelected ? 52 : 45,
         titleStyle: TextStyle(
           fontSize: isSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
@@ -182,7 +182,7 @@ class _TokenDistributionCardState extends State<TokenDistributionCard> {
           fontWeight: FontWeight.w600,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(1, 1),
             ),
@@ -207,7 +207,7 @@ class _TokenDistributionCardState extends State<TokenDistributionCard> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -305,7 +305,7 @@ class _TokenDistributionCardState extends State<TokenDistributionCard> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifierToken.value == index ? color.withOpacity(0.1) : Colors.transparent,
+              color: _selectedIndexNotifierToken.value == index ? color.withValues(alpha: 0.1) : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: _selectedIndexNotifierToken.value == index ? color : Colors.transparent,
@@ -323,7 +323,7 @@ class _TokenDistributionCardState extends State<TokenDistributionCard> {
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 2,
                         offset: const Offset(1, 1),
                       )

@@ -491,8 +491,8 @@ class MapsPageState extends State<MapsPage> {
                             shape: BoxShape.circle,
                             gradient: RadialGradient(
                               colors: [
-                                clusterColor.withOpacity(0.9),
-                                clusterColor.withOpacity(0.2),
+                                clusterColor.withValues(alpha: 0.9),
+                                clusterColor.withValues(alpha: 0.2),
                               ],
                               stops: [0.4, 1.0],
                             ),
@@ -566,7 +566,7 @@ class MapsPageState extends State<MapsPage> {
                     width: 280, // Largeur fixe pour le panneau
                     padding: const EdgeInsets.fromLTRB(8, 4, 4, 4), // Padding réduit haut/bas et à droite
                     decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor.withOpacity(0.9),
+                      color: Theme.of(context).cardColor.withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
@@ -1096,7 +1096,7 @@ class MapsPageState extends State<MapsPage> {
       width: 300,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor.withOpacity(0.95),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -1264,7 +1264,7 @@ class MapsPageState extends State<MapsPage> {
       width: 320,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor.withOpacity(0.95),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -1552,7 +1552,7 @@ class MapsPageState extends State<MapsPage> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -1659,7 +1659,7 @@ class MapsPageState extends State<MapsPage> {
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   blurRadius: 4,
                   offset: Offset(2, 2),
                 ),
@@ -1687,7 +1687,7 @@ class MapsPageState extends State<MapsPage> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 3,
                       offset: Offset(0, 1),
                     ),
@@ -1708,17 +1708,17 @@ class MapsPageState extends State<MapsPage> {
                               fadeInDuration: Duration(milliseconds: 300),
                               fadeOutDuration: Duration(milliseconds: 100),
                               placeholder: (context, url) => Container(
-                                color: markerColor.withOpacity(0.1),
+                                color: markerColor.withValues(alpha: 0.1),
                                 child: Icon(
                                   Icons.home,
-                                  color: markerColor.withOpacity(0.7),
+                                  color: markerColor.withValues(alpha: 0.7),
                                   size: 16,
                                 ),
                               ),
                               errorWidget: (context, url, error) {
                                 debugPrint("❌ Erreur chargement image pour ${matchingToken['shortName']}: $error");
                                 return Container(
-                                  color: markerColor.withOpacity(0.1),
+                                  color: markerColor.withValues(alpha: 0.1),
                                   child: Icon(
                                     Icons.home,
                                     color: markerColor,
@@ -1732,7 +1732,7 @@ class MapsPageState extends State<MapsPage> {
                               },
                             )
                       : Container(
-                          color: markerColor.withOpacity(0.1),
+                          color: markerColor.withValues(alpha: 0.1),
                           child: Icon(
                             Icons.home,
                             color: markerColor,
@@ -1776,7 +1776,7 @@ class _PointerTipPainter extends CustomPainter {
 
     // Ombre de la pointe
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
       
     final shadowPath = ui.Path();

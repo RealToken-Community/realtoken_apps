@@ -118,7 +118,7 @@ class DetailRowWidget extends StatelessWidget {
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: (iconColor ?? Colors.blue).withOpacity(0.1),
+                          color: (iconColor ?? Colors.blue).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(

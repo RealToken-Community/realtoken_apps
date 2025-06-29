@@ -130,7 +130,7 @@ class DistributionChartBuilders {
         PieChartSectionData(
           value: 1,
           title: '',
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           radius: 40,
         )
       ];
@@ -161,7 +161,7 @@ class DistributionChartBuilders {
         sections.add(PieChartSectionData(
           value: value.toDouble(),
           title: '${percentage.toStringAsFixed(1)}%',
-          color: baseColor.withOpacity(opacity),
+          color: baseColor.withValues(alpha: opacity),
           radius: isSelected ? 52 : 45,
           titleStyle: TextStyle(
             fontSize: isSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
@@ -169,7 +169,7 @@ class DistributionChartBuilders {
             fontWeight: FontWeight.w600,
             shadows: [
               Shadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 3,
                 offset: const Offset(1, 1),
               ),
@@ -189,7 +189,7 @@ class DistributionChartBuilders {
       sections.add(PieChartSectionData(
         value: othersValue.toDouble(),
         title: '${S.of(context).others} ${othersPercentage.toStringAsFixed(1)}%',
-        color: Colors.grey.shade400.withOpacity(isOthersSelected ? 1.0 : (selectedIndex != null ? 0.5 : 1.0)),
+        color: Colors.grey.shade400.withValues(alpha: isOthersSelected ? 1.0 : (selectedIndex != null ? 0.5 : 1.0)),
         radius: isOthersSelected ? 52 : 45,
         titleStyle: TextStyle(
           fontSize: isOthersSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
@@ -197,7 +197,7 @@ class DistributionChartBuilders {
           fontWeight: FontWeight.w600,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(1, 1),
             ),
@@ -360,7 +360,7 @@ class DistributionChartBuilders {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
                   decoration: BoxDecoration(
-                    color: selectedIndexNotifier.value == indexCounter ? color.withOpacity(0.1) : Colors.transparent,
+                    color: selectedIndexNotifier.value == indexCounter ? color.withValues(alpha: 0.1) : Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: selectedIndexNotifier.value == indexCounter ? color : Colors.transparent,
@@ -378,7 +378,7 @@ class DistributionChartBuilders {
                           borderRadius: BorderRadius.circular(4),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 2,
                               offset: const Offset(1, 1),
                             )
@@ -420,7 +420,7 @@ class DistributionChartBuilders {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
                 decoration: BoxDecoration(
-                  color: selectedIndexNotifier.value == indexOthers ? Colors.grey.withOpacity(0.1) : Colors.transparent,
+                  color: selectedIndexNotifier.value == indexOthers ? Colors.grey.withValues(alpha: 0.1) : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: selectedIndexNotifier.value == indexOthers ? Colors.grey : Colors.transparent,
@@ -438,7 +438,7 @@ class DistributionChartBuilders {
                         borderRadius: BorderRadius.circular(4),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 2,
                             offset: const Offset(1, 1),
                           )
@@ -485,7 +485,7 @@ class DistributionChartBuilders {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),

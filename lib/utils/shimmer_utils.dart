@@ -20,8 +20,8 @@ class ShimmerUtils {
           child: Shimmer.fromColors(
             baseColor: Colors.transparent,
             highlightColor: color != null 
-                ? color.withOpacity(0.6) 
-                : Colors.white.withOpacity(0.7),
+                ? color.withValues(alpha: 0.6) 
+                : Colors.white.withValues(alpha: 0.7),
             period: duration,
             child: Container(
               decoration: BoxDecoration(
@@ -29,8 +29,8 @@ class ShimmerUtils {
                   colors: [
                     Colors.transparent,
                     color != null 
-                        ? color.withOpacity(0.5) 
-                        : Colors.white.withOpacity(0.6),
+                        ? color.withValues(alpha: 0.5) 
+                        : Colors.white.withValues(alpha: 0.6),
                     Colors.transparent,
                   ],
                   stops: const [0.0, 0.5, 1.0],

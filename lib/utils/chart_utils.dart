@@ -19,7 +19,7 @@ class ChartUtils {
       height: 28,
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.black.withOpacity(0.05),
+        color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.black.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Padding(

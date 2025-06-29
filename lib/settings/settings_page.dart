@@ -110,7 +110,7 @@ class SettingsPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -153,7 +153,7 @@ class SettingsPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Icon(icon, size: 18, color: color),
@@ -176,7 +176,7 @@ class SettingsPage extends StatelessWidget {
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 46),
-            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withOpacity(0.3)),
+            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );

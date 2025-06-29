@@ -138,7 +138,7 @@ class RealTokensPageState extends State<RealTokensPage> {
       onSelected: onSelected,
       offset: const Offset(0, 40),
       elevation: 8,
-      color: Theme.of(context).cardColor.withOpacity(0.97),
+      color: Theme.of(context).cardColor.withValues(alpha: 0.97),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -147,8 +147,8 @@ class RealTokensPageState extends State<RealTokensPage> {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: isActive 
-            ? Theme.of(context).primaryColor.withOpacity(0.2)
-            : Theme.of(context).primaryColor.withOpacity(0.1),
+            ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
+            : Theme.of(context).primaryColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: isActive 
             ? Border.all(color: Theme.of(context).primaryColor, width: 2)
@@ -240,7 +240,7 @@ class RealTokensPageState extends State<RealTokensPage> {
                                       borderRadius: BorderRadius.circular(24),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.03),
+                                          color: Colors.black.withValues(alpha: 0.03),
                                           blurRadius: 8,
                                           offset: const Offset(0, 2),
                                         ),
@@ -470,14 +470,14 @@ class RealTokensPageState extends State<RealTokensPage> {
                                       },
                                       offset: const Offset(0, 40),
                                       elevation: 8,
-                                      color: Theme.of(context).cardColor.withOpacity(0.97),
+                                      color: Theme.of(context).cardColor.withValues(alpha: 0.97),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(16),
                                       ),
                                       child: Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                          color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                                           borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: Row(
@@ -562,11 +562,11 @@ class RealTokensPageState extends State<RealTokensPage> {
                         onTap: () => showTokenDetails(context, token),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor.withOpacity(0.9),
+                            color: Theme.of(context).cardColor.withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 spreadRadius: 0,
                                 offset: const Offset(0, 2),
@@ -592,7 +592,7 @@ class RealTokensPageState extends State<RealTokensPage> {
                                             imageUrl: token['imageLink'][0],
                                             fit: BoxFit.cover,
                                             errorWidget: (context, url, error) => Container(
-                                              color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                              color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                                               child: const Icon(Icons.image_not_supported, size: 40),
                                             ),
                                           ),
@@ -609,7 +609,7 @@ class RealTokensPageState extends State<RealTokensPage> {
                                           begin: Alignment.topCenter,
                                           end: Alignment.bottomCenter,
                                           colors: [
-                                            Colors.black.withOpacity(0.7),
+                                            Colors.black.withValues(alpha: 0.7),
                                             Colors.transparent,
                                           ],
                                         ),
@@ -622,7 +622,7 @@ class RealTokensPageState extends State<RealTokensPage> {
                                             Container(
                                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                               decoration: BoxDecoration(
-                                                color: Colors.white.withOpacity(0.2),
+                                                color: Colors.white.withValues(alpha: 0.2),
                                                 borderRadius: BorderRadius.circular(12),
                                               ),
                                               child: Row(
@@ -717,7 +717,7 @@ class RealTokensPageState extends State<RealTokensPage> {
                                       Container(
                                         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).cardColor.withOpacity(0.5),
+                                          color: Theme.of(context).cardColor.withValues(alpha: 0.5),
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Column(
@@ -772,7 +772,7 @@ class RealTokensPageState extends State<RealTokensPage> {
                                       Container(
                                         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                          color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                                           borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: Row(

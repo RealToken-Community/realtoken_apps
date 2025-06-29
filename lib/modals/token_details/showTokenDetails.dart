@@ -179,7 +179,7 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                     height: 5,
                     margin: const EdgeInsets.only(top: 10, bottom: 5),
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Colors.grey.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(2.5),
                     ),
                   ),
@@ -225,7 +225,7 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                               borderRadius: BorderRadius.circular(15),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.black.withOpacity(0.1),
+                                                  color: Colors.black.withValues(alpha: 0.1),
                                                   spreadRadius: 1,
                                                   blurRadius: 5,
                                                   offset: const Offset(0, 2),
@@ -278,7 +278,7 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                               margin: const EdgeInsets.symmetric(horizontal: 4.0),
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: _currentCarouselIndex == entry.key ? Theme.of(context).primaryColor : Colors.grey.withOpacity(0.4),
+                                                color: _currentCarouselIndex == entry.key ? Theme.of(context).primaryColor : Colors.grey.withValues(alpha: 0.4),
                                               ),
                                             );
                                           }).toList(),
@@ -293,7 +293,7 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                       : Container(
                           height: 200,
                           decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.2),
+                            color: Colors.grey.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Center(
@@ -386,10 +386,10 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                           margin: const EdgeInsets.only(top: 8.0),
                           padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor.withOpacity(0.9),
+                            color: Theme.of(context).cardColor.withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: Colors.grey.withOpacity(0.2),
+                              color: Colors.grey.withValues(alpha: 0.2),
                               width: 0.5,
                             ),
                           ),
@@ -433,7 +433,7 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                 Container(
                                   height: 24,
                                   width: 1,
-                                  color: Colors.grey.withOpacity(0.3),
+                                  color: Colors.grey.withValues(alpha: 0.3),
                                   margin: const EdgeInsets.symmetric(horizontal: 8),
                                 ),
                               // Valeur totale
@@ -444,7 +444,7 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                       Icon(
                                         Icons.attach_money,
                                         size: 16,
-                                        color: Theme.of(context).primaryColor.withOpacity(0.8),
+                                        color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
                                       ),
                                       const SizedBox(width: 4),
                                       Column(
@@ -454,7 +454,7 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                             "Value",
                                             style: TextStyle(
                                               fontSize: 11 + appState.getTextSizeOffset(),
-                                              color: Theme.of(context).primaryColor.withOpacity(0.8),
+                                              color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
                                             ),
                                           ),
                                           Text(
@@ -558,11 +558,11 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
       height: 35,
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withOpacity(0.8) : Theme.of(context).cardColor.withOpacity(0.95),
+        color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withValues(alpha: 0.8) : Theme.of(context).cardColor.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -620,7 +620,7 @@ Future<void> showTokenDetails(BuildContext context, Map<String, dynamic> token) 
                       color: Theme.of(context).cardColor,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 4,
                           offset: const Offset(0, -2),
                         ),

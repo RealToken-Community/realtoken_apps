@@ -138,7 +138,7 @@ class UIUtils {
         borderRadius: BorderRadius.circular(16),
       ),
       elevation: 0.3,
-      shadowColor: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.1) : Colors.white.withOpacity(0.05),
+      shadowColor: Theme.of(context).brightness == Brightness.light ? Colors.black.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
       color: Theme.of(context).brightness == Brightness.light ? Colors.white : Color(0xFF1C1C1E),
       margin: EdgeInsets.symmetric(vertical: 6.0, horizontal: 2.0),
       child: Padding(
@@ -158,7 +158,7 @@ class UIUtils {
                       Container(
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: getIconColor(title, context).withOpacity(0.15),
+                          color: getIconColor(title, context).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(

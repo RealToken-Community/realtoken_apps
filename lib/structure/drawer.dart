@@ -172,7 +172,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               children: [
                 // En-tête avec sa propre SafeArea
                 Material(
-                  color: Theme.of(context).primaryColor.withOpacity(0.9),
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.9),
                   child: SafeArea(
                     bottom: false,
                     child: Padding(
@@ -190,7 +190,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 Container(
                                   padding: const EdgeInsets.all(6),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Image.asset(
@@ -215,7 +215,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       Text(
                                         S.of(context).appDescription,
                                         style: TextStyle(
-                                          color: Colors.white.withOpacity(0.9),
+                                          color: Colors.white.withValues(alpha: 0.9),
                                           fontSize: 14 + appState.getTextSizeOffset(),
                                         ),
                                       ),

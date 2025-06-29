@@ -142,7 +142,7 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -488,7 +488,7 @@ class AgendaCalendarState extends State<AgendaCalendar> {
         markersAlignment: Alignment.bottomCenter,
         markersAnchor: 0.7,
         todayDecoration: BoxDecoration(
-          color: CupertinoColors.systemBlue.resolveFrom(context).withOpacity(0.3),
+          color: CupertinoColors.systemBlue.resolveFrom(context).withValues(alpha: 0.3),
           shape: BoxShape.circle,
         ),
         todayTextStyle: TextStyle(

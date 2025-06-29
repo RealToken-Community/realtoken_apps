@@ -240,7 +240,7 @@ List<PieChartSectionData> _buildOtherDetailsDonutData(List<Map<String, dynamic>>
     sections.add(PieChartSectionData(
       value: value,
       title: '${percentage.toStringAsFixed(1)}%',
-      color: color.withOpacity(selectedIndex != null && !isSelected ? 0.5 : 1.0),
+      color: color.withValues(alpha: selectedIndex != null && !isSelected ? 0.5 : 1.0),
       radius: radius,
       titleStyle: TextStyle(
         fontSize: isSelected ? 14 : 12,
@@ -294,7 +294,7 @@ Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key, in
         onTap: () => onTap(index),
         child: Container(
           decoration: BoxDecoration(
-            color: isSelected ? color.withOpacity(0.1) : CupertinoColors.white,
+            color: isSelected ? color.withValues(alpha: 0.1) : CupertinoColors.white,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: isSelected ? color : Colors.transparent,
@@ -302,7 +302,7 @@ Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key, in
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.03),
+                color: Colors.black.withValues(alpha: 0.03),
                 spreadRadius: 0,
                 blurRadius: 2,
                 offset: Offset(0, 1),
@@ -362,7 +362,7 @@ Widget _buildSelectedIndicator(Color color) {
       ),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.2),
+          color: Colors.black.withValues(alpha: 0.2),
           blurRadius: 2,
           offset: const Offset(0, 1),
         ),

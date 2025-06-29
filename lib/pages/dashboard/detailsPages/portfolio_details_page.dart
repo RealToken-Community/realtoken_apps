@@ -104,7 +104,7 @@ class PortfolioDetailsPage extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            theme.primaryColor.withOpacity(0.9),
+            theme.primaryColor.withValues(alpha: 0.9),
             theme.primaryColor,
           ],
           begin: Alignment.topCenter,
@@ -114,7 +114,7 @@ class PortfolioDetailsPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: theme.primaryColor.withOpacity(0.2),
+            color: theme.primaryColor.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
             spreadRadius: -2,
@@ -142,7 +142,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
+                    color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -270,7 +270,7 @@ class PortfolioDetailsPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.black.withOpacity(0.2),
+            color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -289,7 +289,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: theme.primaryColor.withOpacity(0.1),
+                        color: theme.primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -317,7 +317,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                   },
                   tooltip: S.of(context).copyAddress,
                   style: IconButton.styleFrom(
-                    backgroundColor: theme.brightness == Brightness.light ? Colors.grey.withOpacity(0.1) : Colors.grey.shade800.withOpacity(0.3),
+                    backgroundColor: theme.brightness == Brightness.light ? Colors.grey.withValues(alpha: 0.1) : Colors.grey.shade800.withValues(alpha: 0.3),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -329,7 +329,7 @@ class PortfolioDetailsPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.light ? Colors.grey.shade50 : theme.cardColor.withOpacity(0.7),
+                color: theme.brightness == Brightness.light ? Colors.grey.shade50 : theme.cardColor.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: theme.brightness == Brightness.light ? Colors.grey.shade200 : theme.dividerColor,
@@ -337,7 +337,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.02) : Colors.black.withOpacity(0.1),
+                    color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.02) : Colors.black.withValues(alpha: 0.1),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   ),
@@ -382,7 +382,7 @@ class PortfolioDetailsPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.light ? Colors.grey.shade50 : theme.cardColor.withOpacity(0.7),
+                color: theme.brightness == Brightness.light ? Colors.grey.shade50 : theme.cardColor.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: theme.brightness == Brightness.light ? Colors.grey.shade200 : theme.dividerColor,
@@ -390,7 +390,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.02) : Colors.black.withOpacity(0.1),
+                    color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.02) : Colors.black.withValues(alpha: 0.1),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   ),
@@ -459,7 +459,7 @@ class PortfolioDetailsPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.light ? Colors.grey.shade50 : theme.cardColor.withOpacity(0.7),
+                color: theme.brightness == Brightness.light ? Colors.grey.shade50 : theme.cardColor.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: theme.brightness == Brightness.light ? Colors.grey.shade200 : theme.dividerColor,
@@ -467,7 +467,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.02) : Colors.black.withOpacity(0.1),
+                    color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.02) : Colors.black.withValues(alpha: 0.1),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   ),
@@ -600,7 +600,7 @@ class PortfolioDetailsPage extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: isWhite ? Colors.white24 : theme.primaryColor.withOpacity(0.1),
+            color: isWhite ? Colors.white24 : theme.primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(

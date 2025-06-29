@@ -35,7 +35,7 @@ class StyleConstants {
   // Ombres standardisées
   static List<BoxShadow> get cardShadow => [
     BoxShadow(
-      color: Colors.black.withOpacity(0.05),
+      color: Colors.black.withValues(alpha: 0.05),
       blurRadius: 10,
       offset: const Offset(0, 2),
     ),
@@ -43,7 +43,7 @@ class StyleConstants {
 
   static List<BoxShadow> get subtleShadow => [
     BoxShadow(
-      color: Colors.black.withOpacity(0.03),
+      color: Colors.black.withValues(alpha: 0.03),
       blurRadius: 4,
       offset: const Offset(0, 1),
     ),
@@ -51,7 +51,7 @@ class StyleConstants {
 
   static List<BoxShadow> get modalShadow => [
     BoxShadow(
-      color: Colors.black.withOpacity(0.1),
+      color: Colors.black.withValues(alpha: 0.1),
       blurRadius: 10,
       spreadRadius: 0,
     ),
@@ -74,8 +74,8 @@ class StyleConstants {
   // Décoration de modal standardisée
   static BoxDecoration modalDecoration(BuildContext context) => BoxDecoration(
     color: Theme.of(context).brightness == Brightness.dark 
-        ? Colors.black.withOpacity(0.9) 
-        : Colors.white.withOpacity(0.9),
+        ? Colors.black.withValues(alpha: 0.9) 
+        : Colors.white.withValues(alpha: 0.9),
     borderRadius: const BorderRadius.vertical(top: Radius.circular(modalBorderRadius)),
     boxShadow: modalShadow,
   );
@@ -100,29 +100,29 @@ class StyleConstants {
 
   static TextStyle captionStyle(BuildContext context, double textSizeOffset) => TextStyle(
     fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
-    color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+    color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
   );
 
   static TextStyle smallStyle(BuildContext context, double textSizeOffset) => TextStyle(
     fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
-    color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+    color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
   );
 
   // Decorations spécialisées
   static BoxDecoration primaryColorDecoration(BuildContext context, {double opacity = 0.1}) => BoxDecoration(
-    color: Theme.of(context).primaryColor.withOpacity(opacity),
+    color: Theme.of(context).primaryColor.withValues(alpha: opacity),
     borderRadius: BorderRadius.circular(smallBorderRadius),
   );
 
   static BoxDecoration glassmorphismDecoration(BuildContext context, {double opacity = 0.05}) => BoxDecoration(
     color: Theme.of(context).brightness == Brightness.dark 
-        ? Colors.white.withOpacity(opacity) 
-        : Colors.black.withOpacity(opacity),
+        ? Colors.white.withValues(alpha: opacity) 
+        : Colors.black.withValues(alpha: opacity),
     borderRadius: BorderRadius.circular(cardBorderRadius),
     border: Border.all(
       color: Theme.of(context).brightness == Brightness.dark 
-          ? Colors.white.withOpacity(0.1) 
-          : Colors.black.withOpacity(0.05),
+          ? Colors.white.withValues(alpha: 0.1) 
+          : Colors.black.withValues(alpha: 0.05),
       width: borderMedium,
     ),
   );

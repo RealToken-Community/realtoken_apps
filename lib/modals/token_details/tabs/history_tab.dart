@@ -172,7 +172,7 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
+                          color: Colors.black.withValues(alpha: 0.03),
                           blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
@@ -186,8 +186,8 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                           onTap: () {
                             // Optionnellement: afficher plus de détails sur la transaction
                           },
-                          splashColor: bgColor.withOpacity(0.1),
-                          highlightColor: bgColor.withOpacity(0.05),
+                          splashColor: bgColor.withValues(alpha: 0.1),
+                          highlightColor: bgColor.withValues(alpha: 0.05),
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Row(
@@ -251,7 +251,7 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                         DateFormat('dd MMMM yyyy, HH:mm').format(DateTime.parse(dateTime)),
                                         style: TextStyle(
                                           fontSize: 12 + appState.getTextSizeOffset(),
-                                          color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                                          color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                                         ),
                                       ),
                                     ],
@@ -324,7 +324,7 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
+                          color: Colors.black.withValues(alpha: 0.03),
                           blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
@@ -360,7 +360,7 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                     width: 24,
                                     height: 24,
                                     decoration: BoxDecoration(
-                                      color: changeColor.withOpacity(0.1),
+                                      color: changeColor.withValues(alpha: 0.1),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Icon(
@@ -388,7 +388,7 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                           _formatChangeDescription(change, currencyUtils),
                                           style: TextStyle(
                                             fontSize: 12 + appState.getTextSizeOffset(),
-                                            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+                                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                                           ),
                                         ),
                                       ],
@@ -445,7 +445,7 @@ Widget _buildSectionCard(BuildContext context, {required String title, required 
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.05),
+          color: Colors.black.withValues(alpha: 0.05),
           blurRadius: 10,
           offset: const Offset(0, 2),
         ),

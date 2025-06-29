@@ -216,7 +216,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                 hideNonWhitelisted = !hideNonWhitelisted;
                               });
                             },
-                            customColor: hideNonWhitelisted ? Colors.red.withOpacity(0.2) : Colors.green.withOpacity(0.2),
+                            customColor: hideNonWhitelisted ? Colors.red.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.2),
                           ),
                         ],
                       ),
@@ -231,7 +231,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                       borderRadius: BorderRadius.circular(6),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 3,
                           offset: Offset(0, 1),
                         ),
@@ -361,7 +361,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                 borderRadius: BorderRadius.circular(14),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
+                                    color: Colors.black.withValues(alpha: 0.05),
                                     blurRadius: 8,
                                     offset: Offset(0, 2),
                                   ),
@@ -396,7 +396,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                             child: Container(
                                               padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                               decoration: BoxDecoration(
-                                                color: isWhitelisted ? Colors.green.withOpacity(0.8) : Colors.red.withOpacity(0.8),
+                                                color: isWhitelisted ? Colors.green.withValues(alpha: 0.8) : Colors.red.withValues(alpha: 0.8),
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: Row(
@@ -490,7 +490,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
   Widget _buildFilterChip(String type, IconData icon, bool isSelected, BuildContext context, {VoidCallback? onTap, Color? customColor}) {
     final color = customColor ??
         (isSelected
-            ? Theme.of(context).primaryColor.withOpacity(0.2)
+            ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
             : Theme.of(context).brightness == Brightness.light
                 ? Colors.white
                 : Color(0xFF1C1C1E));
@@ -513,7 +513,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 4,
               offset: Offset(0, 2),
             ),
@@ -595,7 +595,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 6,
                 offset: Offset(0, 1),
               ),
@@ -614,7 +614,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         Container(
                           padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Image.asset(
@@ -688,7 +688,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: deltaColor.withOpacity(0.1),
+                              color: deltaColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
@@ -733,8 +733,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.blue.withOpacity(0.1),
-                            deltaColor.withOpacity(0.1),
+                            Colors.blue.withValues(alpha: 0.1),
+                            deltaColor.withValues(alpha: 0.1),
                           ],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -803,8 +803,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.blue.withOpacity(0.1),
-                            deltaColor.withOpacity(0.1),
+                            Colors.blue.withValues(alpha: 0.1),
+                            deltaColor.withValues(alpha: 0.1),
                           ],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -875,7 +875,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 6),
                             decoration: BoxDecoration(
-                              color: Color(0xFFFF9500).withOpacity(0.2), // Orange iOS
+                              color: Color(0xFFFF9500).withValues(alpha: 0.2), // Orange iOS
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
@@ -940,7 +940,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),
@@ -960,7 +960,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),
@@ -1015,7 +1015,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 6,
                 offset: Offset(0, 1),
               ),
@@ -1034,7 +1034,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         Container(
                           padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Image.asset(
@@ -1140,7 +1140,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: deltaColor.withOpacity(0.1),
+                        color: deltaColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -1215,7 +1215,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),
@@ -1235,7 +1235,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),

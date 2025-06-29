@@ -218,7 +218,7 @@ class PortfolioCard extends StatelessWidget {
                   width: 40,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Colors.grey.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2.5),
                   ),
                 ),
@@ -277,7 +277,7 @@ class PortfolioCard extends StatelessWidget {
                   margin: EdgeInsets.only(left: 8),
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.15),
+                    color: theme.primaryColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -303,14 +303,14 @@ class PortfolioCard extends StatelessWidget {
                     fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
                     fontWeight: FontWeight.w500,
                     letterSpacing: -0.3,
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                    color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 8),
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.1),
+                    color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -318,7 +318,7 @@ class PortfolioCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
                       fontWeight: FontWeight.w500,
-                      color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                     ),
                   ),
                 ),
@@ -362,7 +362,7 @@ class PortfolioCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
               letterSpacing: -0.2,
-              color: theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -519,7 +519,7 @@ class PortfolioCard extends StatelessWidget {
             width: 26,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(13),
-              color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+              color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.1),
             ),
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -542,7 +542,7 @@ class PortfolioCard extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: theme.primaryColor.withOpacity(0.15),
+              color: theme.primaryColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(

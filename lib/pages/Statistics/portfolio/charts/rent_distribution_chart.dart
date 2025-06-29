@@ -43,7 +43,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -53,7 +53,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -167,7 +167,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
         PieChartSectionData(
           value: 1,
           title: '',
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           radius: 40,
         )
       ];
@@ -186,7 +186,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
       return PieChartSectionData(
         value: data.value,
         title: percentage < 5 ? '' : '${percentage.toStringAsFixed(1)}%',
-        color: generateColor(index).withOpacity(opacity),
+        color: generateColor(index).withValues(alpha: opacity),
         radius: isSelected ? 52 : 45,
         titleStyle: TextStyle(
           fontSize: isSelected ? 14 + Provider.of<AppState>(context).getTextSizeOffset() : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
@@ -194,7 +194,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
           fontWeight: FontWeight.w600,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(1, 1),
             ),
@@ -219,7 +219,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -314,7 +314,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifier.value == index ? color.withOpacity(0.1) : Colors.transparent,
+              color: _selectedIndexNotifier.value == index ? color.withValues(alpha: 0.1) : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: _selectedIndexNotifier.value == index ? color : Colors.transparent,
@@ -332,7 +332,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 2,
                         offset: const Offset(1, 1),
                       ),

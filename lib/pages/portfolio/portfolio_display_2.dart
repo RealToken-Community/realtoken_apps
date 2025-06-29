@@ -98,7 +98,7 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                 height: 16,
                 width: maxWidth,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).dividerColor.withOpacity(0.2),
+                  color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -109,7 +109,7 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Theme.of(context).primaryColor.withOpacity(0.7),
+                      Theme.of(context).primaryColor.withValues(alpha: 0.7),
                       Theme.of(context).primaryColor,
                     ],
                     begin: Alignment.centerLeft,
@@ -132,7 +132,7 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                     Shadow(
                                       offset: const Offset(0, 1),
                                       blurRadius: 1,
-                                      color: Colors.black.withOpacity(0.5),
+                                      color: Colors.black.withValues(alpha: 0.5),
                                     ),
                                   ],
                                 ),
@@ -149,7 +149,7 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                   Shadow(
                                     offset: const Offset(0, 1),
                                     blurRadius: 1,
-                                    color: Colors.black.withOpacity(0.5),
+                                    color: Colors.black.withValues(alpha: 0.5),
                                   ),
                                 ],
                               ),
@@ -274,7 +274,7 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
+                              color: Colors.black.withValues(alpha: 0.06),
                               blurRadius: 12,
                               spreadRadius: 0,
                               offset: const Offset(0, 4),
@@ -378,7 +378,7 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                                   end: Alignment.bottomCenter,
                                                   colors: [
                                                     Colors.transparent,
-                                                    Colors.black.withOpacity(0.6),
+                                                    Colors.black.withValues(alpha: 0.6),
                                                   ],
                                                 ),
                                               ),
@@ -392,7 +392,7 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                                     Shadow(
                                                       offset: const Offset(0, 1),
                                                       blurRadius: 2,
-                                                      color: Colors.black.withOpacity(0.5),
+                                                      color: Colors.black.withValues(alpha: 0.5),
                                                     ),
                                                   ],
                                                 ),
@@ -620,7 +620,7 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                         // Section Revenus
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).primaryColor.withOpacity(0.08),
+                                            color: Theme.of(context).primaryColor.withValues(alpha: 0.08),
                                             borderRadius: BorderRadius.circular(12),
                                           ),
                                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),

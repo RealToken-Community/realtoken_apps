@@ -92,7 +92,7 @@ class TokensCard extends StatelessWidget {
         radius: 23,
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).primaryColor.withOpacity(0.7),
+            Theme.of(context).primaryColor.withValues(alpha: 0.7),
             Theme.of(context).primaryColor,
           ],
           begin: Alignment.topLeft,

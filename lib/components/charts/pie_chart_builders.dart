@@ -30,7 +30,7 @@ class PieChartBuilders {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -117,7 +117,7 @@ class PieChartBuilders {
     return PieChartSectionData(
       value: value,
       title: title,
-      color: color.withOpacity(opacity),
+      color: color.withValues(alpha: opacity),
       radius: radius,
       titleStyle: TextStyle(
         fontSize: fontSize + appState.getTextSizeOffset(),
@@ -125,7 +125,7 @@ class PieChartBuilders {
         fontWeight: FontWeight.w600,
         shadows: [
           Shadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 3,
             offset: const Offset(1, 1),
           ),
@@ -150,7 +150,7 @@ class PieChartBuilders {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),

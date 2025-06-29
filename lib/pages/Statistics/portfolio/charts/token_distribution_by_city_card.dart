@@ -36,7 +36,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -46,7 +46,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -154,7 +154,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
         sections.add(PieChartSectionData(
           value: value.toDouble(),
           title: '${percentage.toStringAsFixed(1)}%',
-          color: baseColor.withOpacity(opacity),
+          color: baseColor.withValues(alpha: opacity),
           radius: isSelected ? 52 : 45,
           titleStyle: TextStyle(
             fontSize: isSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
@@ -162,7 +162,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
             fontWeight: FontWeight.w600,
             shadows: [
               Shadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 3,
                 offset: const Offset(1, 1),
               ),
@@ -180,7 +180,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
       sections.add(PieChartSectionData(
         value: othersValue.toDouble(),
         title: '${S.of(context).others} ${othersPercentage.toStringAsFixed(1)}%',
-        color: Colors.grey.shade400.withOpacity(selectedIndex != null && selectedIndex == sections.length ? 1.0 : 0.5),
+        color: Colors.grey.shade400.withValues(alpha: selectedIndex != null && selectedIndex == sections.length ? 1.0 : 0.5),
         radius: selectedIndex != null && selectedIndex == sections.length ? 52 : 45,
         titleStyle: TextStyle(
           fontSize: selectedIndex != null && selectedIndex == sections.length ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
@@ -188,7 +188,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
           fontWeight: FontWeight.w600,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(1, 1),
             ),
@@ -215,7 +215,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -359,7 +359,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
               decoration: BoxDecoration(
-                color: _selectedIndexNotifierCity.value == index ? color.withOpacity(0.1) : Colors.transparent,
+                color: _selectedIndexNotifierCity.value == index ? color.withValues(alpha: 0.1) : Colors.transparent,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: _selectedIndexNotifierCity.value == index ? color : Colors.transparent,
@@ -377,7 +377,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
                       borderRadius: BorderRadius.circular(4),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 2,
                           offset: const Offset(1, 1),
                         )
@@ -418,7 +418,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifierCity.value == indexOthers ? Colors.grey.withOpacity(0.1) : Colors.transparent,
+              color: _selectedIndexNotifierCity.value == indexOthers ? Colors.grey.withValues(alpha: 0.1) : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: _selectedIndexNotifierCity.value == indexOthers ? Colors.grey : Colors.transparent,
@@ -436,7 +436,7 @@ class _TokenDistributionByCityCardState extends State<TokenDistributionByCityCar
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 2,
                         offset: const Offset(1, 1),
                       )

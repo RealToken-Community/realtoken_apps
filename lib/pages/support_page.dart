@@ -107,7 +107,7 @@ class RealtPageState extends State<SupportPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -129,7 +129,7 @@ class RealtPageState extends State<SupportPage> {
                       Container(
                         padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                          color: iconColor.withOpacity(0.1),
+                          color: iconColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
@@ -198,7 +198,7 @@ class RealtPageState extends State<SupportPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -214,7 +214,7 @@ class RealtPageState extends State<SupportPage> {
                 Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: CupertinoColors.systemGreen.resolveFrom(context).withOpacity(0.1),
+                    color: CupertinoColors.systemGreen.resolveFrom(context).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -471,7 +471,7 @@ class RealtPageState extends State<SupportPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: CupertinoColors.systemGrey.withOpacity(0.9),
+                color: CupertinoColors.systemGrey.withValues(alpha: 0.9),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(

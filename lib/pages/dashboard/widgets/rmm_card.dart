@@ -224,7 +224,7 @@ class RmmCard extends StatelessWidget {
             height: 22,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: tokenType.toLowerCase() == 'usdc' ? Color(0xFF2775CA).withOpacity(0.15) : Color(0xFFEDB047).withOpacity(0.15),
+              color: tokenType.toLowerCase() == 'usdc' ? Color(0xFF2775CA).withValues(alpha: 0.15) : Color(0xFFEDB047).withValues(alpha: 0.15),
             ),
             child: Center(
               child: Image.asset(
@@ -272,7 +272,7 @@ class RmmCard extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: (apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30)).withOpacity(0.15),
+                            color: (apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30)).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -290,7 +290,7 @@ class RmmCard extends StatelessWidget {
                     : Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: (apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30)).withOpacity(0.15),
+                          color: (apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30)).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -405,7 +405,7 @@ class RmmCard extends StatelessWidget {
                     width: 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+                      color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.1),
                     ),
                     child: Stack(
                       children: [
@@ -437,7 +437,7 @@ class RmmCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(1),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color(0xFFFF3B30).withOpacity(0.5),
+                                  color: Color(0xFFFF3B30).withValues(alpha: 0.5),
                                   blurRadius: 2,
                                   spreadRadius: 0,
                                 ),
@@ -452,7 +452,7 @@ class RmmCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: hfGaugeColor.withOpacity(0.15),
+                      color: hfGaugeColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
@@ -485,7 +485,7 @@ class RmmCard extends StatelessWidget {
                     width: 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+                      color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.1),
                     ),
                     child: Stack(
                       children: [
@@ -525,7 +525,7 @@ class RmmCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: ltvGaugeColor.withOpacity(0.15),
+                      color: ltvGaugeColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
@@ -549,7 +549,7 @@ class RmmCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+                color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -620,15 +620,15 @@ class RmmCard extends StatelessWidget {
     if (timeStatus == "danger") {
       iconData = Icons.error_rounded;
       iconColor = Color(0xFFFF3B30);
-      bgColor = Color(0xFFFF3B30).withOpacity(0.15);
+      bgColor = Color(0xFFFF3B30).withValues(alpha: 0.15);
     } else if (timeStatus == "warning") {
       iconData = Icons.warning_rounded;
       iconColor = Color(0xFFFF9500);
-      bgColor = Color(0xFFFF9500).withOpacity(0.15);
+      bgColor = Color(0xFFFF9500).withValues(alpha: 0.15);
     } else {
       iconData = Icons.check_circle_rounded;
       iconColor = Color(0xFF34C759);
-      bgColor = Color(0xFF34C759).withOpacity(0.15);
+      bgColor = Color(0xFF34C759).withValues(alpha: 0.15);
     }
 
     return Container(

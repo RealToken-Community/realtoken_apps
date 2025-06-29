@@ -179,7 +179,7 @@ class _MarketTabState extends State<MarketTab> {
             color: isDarkMode ? Colors.black : _iosSurfaceColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 1),
               ),
@@ -296,14 +296,14 @@ class _MarketTabState extends State<MarketTab> {
         color: isDarkMode ? const Color(0xFF1C1C1E) : _iosSurfaceColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
         border: Border(
           bottom: BorderSide(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             width: 0.5,
           ),
         ),
@@ -472,7 +472,7 @@ class _MarketTabState extends State<MarketTab> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final color = customColor ??
         (isSelected
-            ? Theme.of(context).primaryColor.withOpacity(0.2)
+            ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
             : isDarkMode
                 ? const Color(0xFF1C1C1E)
                 : Colors.white);
@@ -495,7 +495,7 @@ class _MarketTabState extends State<MarketTab> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -524,7 +524,7 @@ class _MarketTabState extends State<MarketTab> {
         borderRadius: BorderRadius.circular(6),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -658,7 +658,7 @@ class _MarketTabState extends State<MarketTab> {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 6,
                 offset: const Offset(0, 1),
               ),
@@ -677,9 +677,9 @@ class _MarketTabState extends State<MarketTab> {
                         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                         margin: const EdgeInsets.only(bottom: 8),
                         decoration: BoxDecoration(
-                          color: _iosDangerColor.withOpacity(0.1),
+                          color: _iosDangerColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: _iosDangerColor.withOpacity(0.3), width: 0.5),
+                          border: Border.all(color: _iosDangerColor.withValues(alpha: 0.3), width: 0.5),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -710,7 +710,7 @@ class _MarketTabState extends State<MarketTab> {
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Image.asset(
@@ -784,7 +784,7 @@ class _MarketTabState extends State<MarketTab> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: deltaColor.withOpacity(0.1),
+                              color: deltaColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
@@ -829,8 +829,8 @@ class _MarketTabState extends State<MarketTab> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.blue.withOpacity(0.1),
-                            deltaColor.withOpacity(0.1),
+                            Colors.blue.withValues(alpha: 0.1),
+                            deltaColor.withValues(alpha: 0.1),
                           ],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -899,8 +899,8 @@ class _MarketTabState extends State<MarketTab> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.blue.withOpacity(0.1),
-                            deltaColor.withOpacity(0.1),
+                            Colors.blue.withValues(alpha: 0.1),
+                            deltaColor.withValues(alpha: 0.1),
                           ],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -971,7 +971,7 @@ class _MarketTabState extends State<MarketTab> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 6),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFF9500).withOpacity(0.2), // Orange iOS
+                              color: const Color(0xFFFF9500).withValues(alpha: 0.2), // Orange iOS
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
@@ -1038,7 +1038,7 @@ class _MarketTabState extends State<MarketTab> {
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: const Offset(0, 1),
                             ),
@@ -1058,7 +1058,7 @@ class _MarketTabState extends State<MarketTab> {
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: const Offset(0, 1),
                             ),
@@ -1108,7 +1108,7 @@ class _MarketTabState extends State<MarketTab> {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 6,
                 offset: const Offset(0, 1),
               ),
@@ -1127,9 +1127,9 @@ class _MarketTabState extends State<MarketTab> {
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         margin: const EdgeInsets.only(bottom: 8),
                         decoration: BoxDecoration(
-                          color: _iosDangerColor.withOpacity(0.1),
+                          color: _iosDangerColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: _iosDangerColor.withOpacity(0.3), width: 0.5),
+                          border: Border.all(color: _iosDangerColor.withValues(alpha: 0.3), width: 0.5),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -1160,7 +1160,7 @@ class _MarketTabState extends State<MarketTab> {
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Image.asset(
@@ -1266,7 +1266,7 @@ class _MarketTabState extends State<MarketTab> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: deltaColor.withOpacity(0.1),
+                        color: deltaColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -1344,7 +1344,7 @@ class _MarketTabState extends State<MarketTab> {
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: const Offset(0, 1),
                             ),
@@ -1364,7 +1364,7 @@ class _MarketTabState extends State<MarketTab> {
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: const Offset(0, 1),
                             ),
@@ -1401,10 +1401,10 @@ class _MarketTabState extends State<MarketTab> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
-        color: isDarkMode ? Colors.black12 : valueColor.withOpacity(0.05),
+        color: isDarkMode ? Colors.black12 : valueColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: valueColor.withOpacity(0.2),
+          color: valueColor.withValues(alpha: 0.2),
           width: 0.5,
         ),
       ),

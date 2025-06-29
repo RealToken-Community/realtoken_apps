@@ -72,7 +72,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
 
     return Card(
       elevation: 4,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -85,7 +85,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               end: Alignment.bottomRight,
               colors: [
                 Theme.of(context).cardColor,
-                Theme.of(context).cardColor.withOpacity(0.95),
+                Theme.of(context).cardColor.withValues(alpha: 0.95),
               ],
             ),
           ),
@@ -109,7 +109,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.black.withOpacity(0.05),
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.black.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -135,7 +135,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                               },
                               activeColor: const Color(0xFF007AFF), // Bleu iOS
                               trackColor: WidgetStateProperty.resolveWith(
-                                (states) => states.contains(WidgetState.selected) ? Theme.of(context).primaryColor : Colors.grey.withOpacity(0.3),
+                                (states) => states.contains(WidgetState.selected) ? Theme.of(context).primaryColor : Colors.grey.withValues(alpha: 0.3),
                               ),
                             ),
                           ),
@@ -154,7 +154,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                     // Bouton pour changer de type de graphique
                     Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.black.withOpacity(0.05),
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.black.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: IconButton(
@@ -200,8 +200,8 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: showHealthFactor
-                          ? const Color(0xFF34C759).withOpacity(0.1) // Vert iOS
-                          : const Color(0xFFFF9500).withOpacity(0.1), // Orange iOS
+                          ? const Color(0xFF34C759).withValues(alpha: 0.1) // Vert iOS
+                          : const Color(0xFFFF9500).withValues(alpha: 0.1), // Orange iOS
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -237,7 +237,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
           drawVerticalLine: false,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey.withOpacity(0.15),
+              color: Colors.grey.withValues(alpha: 0.15),
               strokeWidth: 1,
               dashArray: [5, 5],
             );
@@ -360,11 +360,11 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                     colors: showHealthFactor
                         ? [
                             const Color(0xFF34C759), // Vert iOS
-                            const Color(0xFF34C759).withOpacity(0.7),
+                            const Color(0xFF34C759).withValues(alpha: 0.7),
                           ]
                         : [
                             const Color(0xFFFF9500), // Orange iOS
-                            const Color(0xFFFF9500).withOpacity(0.7),
+                            const Color(0xFFFF9500).withValues(alpha: 0.7),
                           ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -377,7 +377,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
                     toY: showHealthFactor ? 3.0 : 100,
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                   ),
                 ),
               ],
@@ -441,7 +441,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
           drawVerticalLine: false,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey.withOpacity(0.15),
+              color: Colors.grey.withValues(alpha: 0.15),
               strokeWidth: 1,
               dashArray: [5, 5],
             );
@@ -537,12 +537,12 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               gradient: LinearGradient(
                 colors: showHealthFactor
                     ? [
-                        const Color(0xFF34C759).withOpacity(0.3), // Vert iOS
-                        const Color(0xFF34C759).withOpacity(0.0),
+                        const Color(0xFF34C759).withValues(alpha: 0.3), // Vert iOS
+                        const Color(0xFF34C759).withValues(alpha: 0.0),
                       ]
                     : [
-                        const Color(0xFFFF9500).withOpacity(0.3), // Orange iOS
-                        const Color(0xFFFF9500).withOpacity(0.0),
+                        const Color(0xFFFF9500).withValues(alpha: 0.3), // Orange iOS
+                        const Color(0xFFFF9500).withValues(alpha: 0.0),
                       ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,

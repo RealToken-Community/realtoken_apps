@@ -38,7 +38,7 @@ class ChartOptionsUtils {
             visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
             leading: Icon(
               CupertinoIcons.chart_bar,
-              color: primaryColor.withOpacity(0.8),
+              color: primaryColor.withValues(alpha: 0.8),
               size: 22,
             ),
             title: Text(
@@ -70,7 +70,7 @@ class ChartOptionsUtils {
             visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
             leading: Icon(
               CupertinoIcons.chart_bar_alt_fill,
-              color: primaryColor.withOpacity(0.8),
+              color: primaryColor.withValues(alpha: 0.8),
               size: 22,
             ),
             title: Text(
@@ -136,7 +136,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -168,7 +168,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -200,7 +200,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -232,7 +232,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -300,7 +300,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar_today,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -332,7 +332,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar_badge_plus,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -364,7 +364,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar_circle,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -396,7 +396,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar_circle_fill,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -453,7 +453,7 @@ class ChartOptionsUtils {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),
@@ -472,7 +472,7 @@ class ChartOptionsUtils {
                       width: 36,
                       height: 5,
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: Colors.grey.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(3),
                       ),
                     ),
@@ -534,7 +534,7 @@ class ChartOptionsUtils {
                             visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                             leading: Icon(
                               CupertinoIcons.pencil,
-                              color: Theme.of(context).primaryColor.withOpacity(0.8),
+                              color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
                               size: 22,
                             ),
                             title: Text(

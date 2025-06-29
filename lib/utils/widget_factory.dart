@@ -50,7 +50,7 @@ class WidgetFactory {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
         child: Container(
-          color: backgroundColor?.withOpacity(opacity ?? 0.3),
+          color: backgroundColor?.withValues(alpha: opacity ?? 0.3),
           child: child,
         ),
       ),
@@ -69,8 +69,8 @@ class WidgetFactory {
         child: Container(
           height: height,
           color: Theme.of(context).brightness == Brightness.dark 
-              ? Colors.black.withOpacity(0.3) 
-              : Colors.white.withOpacity(0.3),
+              ? Colors.black.withValues(alpha: 0.3) 
+              : Colors.white.withValues(alpha: 0.3),
           child: child,
         ),
       ),
@@ -94,7 +94,7 @@ class WidgetFactory {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: backgroundColor ?? Colors.black.withOpacity(0.3),
+            color: backgroundColor ?? Colors.black.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -151,7 +151,7 @@ class WidgetFactory {
       borderRadius: BorderRadius.circular(borderRadius),
       boxShadow: withShadow ? [
         BoxShadow(
-          color: Colors.black.withOpacity(0.05),
+          color: Colors.black.withValues(alpha: 0.05),
           blurRadius: 10,
           offset: const Offset(0, 2),
         ),
@@ -161,7 +161,7 @@ class WidgetFactory {
         end: Alignment.bottomRight,
         colors: [
           Theme.of(context).cardColor,
-          Theme.of(context).cardColor.withOpacity(0.8),
+          Theme.of(context).cardColor.withValues(alpha: 0.8),
         ],
       ) : null,
       color: withGradient ? null : Theme.of(context).cardColor,
@@ -174,7 +174,7 @@ class WidgetFactory {
     return BoxDecoration(
       color: theme.brightness == Brightness.light 
           ? Colors.grey.shade50 
-          : theme.cardColor.withOpacity(0.7),
+          : theme.cardColor.withValues(alpha: 0.7),
       borderRadius: BorderRadius.circular(16),
       border: Border.all(
         color: theme.brightness == Brightness.light 
@@ -185,8 +185,8 @@ class WidgetFactory {
       boxShadow: [
         BoxShadow(
           color: theme.brightness == Brightness.light 
-              ? Colors.black.withOpacity(0.02) 
-              : Colors.black.withOpacity(0.1),
+              ? Colors.black.withValues(alpha: 0.02) 
+              : Colors.black.withValues(alpha: 0.1),
           blurRadius: 3,
           offset: const Offset(0, 1),
         ),
@@ -202,7 +202,7 @@ class WidgetFactory {
     return BoxDecoration(
       gradient: LinearGradient(
         colors: [
-          theme.primaryColor.withOpacity(0.9),
+          theme.primaryColor.withValues(alpha: 0.9),
           theme.primaryColor,
         ],
         begin: Alignment.topCenter,
@@ -212,7 +212,7 @@ class WidgetFactory {
       borderRadius: BorderRadius.circular(borderRadius),
       boxShadow: [
         BoxShadow(
-          color: theme.primaryColor.withOpacity(0.2),
+          color: theme.primaryColor.withValues(alpha: 0.2),
           blurRadius: 10,
           offset: const Offset(0, 4),
           spreadRadius: -2,
@@ -258,7 +258,7 @@ class WidgetFactory {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-          color: Theme.of(context).dividerColor.withOpacity(0.5),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.5),
         ),
       ),
       focusedBorder: OutlineInputBorder(
@@ -287,7 +287,7 @@ class WidgetFactory {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -308,8 +308,8 @@ class WidgetFactory {
       height: 4,
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark 
-            ? Colors.white.withOpacity(0.2) 
-            : Colors.black.withOpacity(0.2),
+            ? Colors.white.withValues(alpha: 0.2) 
+            : Colors.black.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(4),
       ),
     );
@@ -438,7 +438,7 @@ class WidgetFactory {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 1,
                 offset: const Offset(0, 1),
               ),
@@ -536,7 +536,7 @@ class WidgetFactory {
             child: Divider(
               height: 1, 
               thickness: 0.5, 
-              color: Colors.grey.withOpacity(0.3)
+              color: Colors.grey.withValues(alpha: 0.3)
             ),
           ),
       ],

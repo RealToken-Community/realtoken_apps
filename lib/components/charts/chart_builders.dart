@@ -18,7 +18,7 @@ class ChartBuilders {
       drawVerticalLine: false,
       getDrawingHorizontalLine: (value) {
         return FlLine(
-          color: Colors.grey.withOpacity(0.15),
+          color: Colors.grey.withValues(alpha: 0.15),
           strokeWidth: 1,
         );
       },
@@ -238,7 +238,7 @@ class ChartBuilders {
       backDrawRodData: BackgroundBarChartRodData(
         show: true,
         toY: maxY,
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
       ),
     );
   }
@@ -289,8 +289,8 @@ class ChartBuilders {
         show: true,
         gradient: LinearGradient(
           colors: [
-            color.withOpacity(0.3),
-            color.withOpacity(0.05),
+            color.withValues(alpha: 0.3),
+            color.withValues(alpha: 0.05),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,

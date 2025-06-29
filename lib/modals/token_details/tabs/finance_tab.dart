@@ -59,7 +59,7 @@ Widget buildFinanceTab(BuildContext context, Map<String, dynamic> token, bool co
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
+                            color: Colors.red.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
@@ -167,7 +167,7 @@ Widget buildFinanceTab(BuildContext context, Map<String, dynamic> token, bool co
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   ),
@@ -286,7 +286,7 @@ Widget buildFinanceTab(BuildContext context, Map<String, dynamic> token, bool co
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
+                            color: Colors.red.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
@@ -369,7 +369,7 @@ Widget buildFinanceTab(BuildContext context, Map<String, dynamic> token, bool co
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   ),
@@ -554,7 +554,7 @@ Widget _buildSectionCard(BuildContext context, {required String title, required 
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.05),
+          color: Colors.black.withValues(alpha: 0.05),
           blurRadius: 10,
           offset: const Offset(0, 2),
         ),
@@ -602,7 +602,7 @@ Widget _buildDetailRow(BuildContext context, String label, String value, {IconDa
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
-                        color: (iconColor ?? Colors.blue).withOpacity(0.1),
+                        color: (iconColor ?? Colors.blue).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(

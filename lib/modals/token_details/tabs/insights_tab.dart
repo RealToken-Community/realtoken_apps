@@ -116,7 +116,7 @@ Widget _buildSectionCard(
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.05),
+          color: Colors.black.withValues(alpha: 0.05),
           blurRadius: 10,
           offset: const Offset(0, 2),
         ),
@@ -179,7 +179,7 @@ Widget _buildGaugeForROI(double roiValue, BuildContext context) {
                 height: 14,
                 width: maxWidth,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 78, 78, 78).withOpacity(0.2),
+                  color: const Color.fromARGB(255, 78, 78, 78).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(7),
                 ),
               ),
@@ -214,7 +214,7 @@ Widget _buildGaugeForROI(double roiValue, BuildContext context) {
         "Retour sur investissement basé sur les loyers perçus",
         style: TextStyle(
           fontSize: 12 + appState.getTextSizeOffset(),
-          color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+          color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
         ),
       ),
     ],
@@ -322,11 +322,11 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
         drawHorizontalLine: true,
         horizontalInterval: 1,
         getDrawingHorizontalLine: (value) => FlLine(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           strokeWidth: 0.5,
         ),
         getDrawingVerticalLine: (value) => FlLine(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           strokeWidth: 0.5,
         ),
       ),
@@ -397,7 +397,7 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
           ),
         ),
       ],
@@ -542,11 +542,11 @@ Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProv
         drawVerticalLine: true,
         drawHorizontalLine: true,
         getDrawingHorizontalLine: (value) => FlLine(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           strokeWidth: 0.5,
         ),
         getDrawingVerticalLine: (value) => FlLine(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           strokeWidth: 0.5,
         ),
       ),
@@ -618,7 +618,7 @@ Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProv
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
           ),
         ),
       ],
@@ -782,11 +782,11 @@ Widget _buildRentCumulativeChart(BuildContext context, List<Map<String, dynamic>
         drawVerticalLine: true,
         drawHorizontalLine: true,
         getDrawingHorizontalLine: (value) => FlLine(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           strokeWidth: 0.5,
         ),
         getDrawingVerticalLine: (value) => FlLine(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           strokeWidth: 0.5,
         ),
       ),
@@ -849,7 +849,7 @@ Widget _buildRentCumulativeChart(BuildContext context, List<Map<String, dynamic>
           dotData: FlDotData(show: false),
           belowBarData: BarAreaData(
             show: true,
-            color: Colors.green.withOpacity(0.1),
+            color: Colors.green.withValues(alpha: 0.1),
           ),
         ),
       ],

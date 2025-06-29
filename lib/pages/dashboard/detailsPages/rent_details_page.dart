@@ -95,7 +95,7 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: theme.primaryColor.withOpacity(0.1),
+                color: theme.primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Image.asset(
@@ -213,7 +213,7 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.primaryColor.withOpacity(0.2),
+                          color: theme.primaryColor.withValues(alpha: 0.2),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -318,7 +318,7 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.03) : Colors.black.withOpacity(0.15),
+            color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.03) : Colors.black.withValues(alpha: 0.15),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -334,7 +334,7 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.1),
+                    color: theme.primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(

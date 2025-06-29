@@ -34,7 +34,7 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -44,7 +44,7 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -144,7 +144,7 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
       return PieChartSectionData(
         value: value.toDouble(),
         title: percentage < 5 ? '' : '${percentage.toStringAsFixed(1)}%',
-        color: baseColor.withOpacity(opacity),
+        color: baseColor.withValues(alpha: opacity),
         radius: isSelected ? 52 : 45,
         titleStyle: TextStyle(
           fontSize: isSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
@@ -152,7 +152,7 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
           fontWeight: FontWeight.w600,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(1, 1),
             ),
@@ -177,7 +177,7 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -297,7 +297,7 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifierWallet.value == index ? color.withOpacity(0.1) : Colors.transparent,
+              color: _selectedIndexNotifierWallet.value == index ? color.withValues(alpha: 0.1) : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: _selectedIndexNotifierWallet.value == index ? color : Colors.transparent,
@@ -315,7 +315,7 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 2,
                         offset: const Offset(1, 1),
                       ),

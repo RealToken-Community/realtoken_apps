@@ -175,8 +175,8 @@ class RentsCard extends StatelessWidget {
                 show: true,
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).primaryColor.withOpacity(0.4),
-                    Theme.of(context).primaryColor.withOpacity(0),
+                    Theme.of(context).primaryColor.withValues(alpha: 0.4),
+                    Theme.of(context).primaryColor.withValues(alpha: 0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

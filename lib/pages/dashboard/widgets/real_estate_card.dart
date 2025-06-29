@@ -141,7 +141,7 @@ class RealEstateCard extends StatelessWidget {
                   radius: 13,
                   gradient: LinearGradient(
                     colors: [
-                      theme.primaryColor.withOpacity(0.6),
+                      theme.primaryColor.withValues(alpha: 0.6),
                       theme.primaryColor,
                     ],
                     begin: Alignment.topLeft,

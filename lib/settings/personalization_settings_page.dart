@@ -209,7 +209,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -253,7 +253,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                         decoration: BoxDecoration(
                           color: isDarkMode(context) ? const Color(0xFF2C2C2E) : Colors.white,
                           borderRadius: const BorderRadius.horizontal(left: Radius.circular(6), right: Radius.zero),
-                          border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                          border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
                         ),
                         style: TextStyle(fontSize: 14),
                       ),
@@ -340,7 +340,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                         decoration: BoxDecoration(
                           color: isDarkMode(context) ? const Color(0xFF2C2C2E) : Colors.white,
                           borderRadius: const BorderRadius.horizontal(left: Radius.circular(6), right: Radius.zero),
-                          border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                          border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
                         ),
                         style: TextStyle(fontSize: 14),
                       ),
@@ -422,7 +422,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -490,7 +490,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 12),
-            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withOpacity(0.3)),
+            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );
@@ -536,7 +536,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
               height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.5)),
+                border: Border(bottom: BorderSide(color: Colors.grey.withValues(alpha: 0.3), width: 0.5)),
                 color: isDarkMode(context) ? const Color(0xFF2C2C2E) : Colors.white,
               ),
               child: Row(

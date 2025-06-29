@@ -13,23 +13,32 @@ class RmmWalletDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dataManager = Provider.of<DataManager>(context);
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
-    final List<Map<String, dynamic>> walletDetails = dataManager.perWalletBalances;
+    final List<Map<String, dynamic>> walletDetails =
+        dataManager.perWalletBalances;
 
     // Séparer les wallets avec utilisation de ceux sans utilisation
-    final List<Map<String, dynamic>> walletsWithUsage = walletDetails.where((wallet) {
+    final List<Map<String, dynamic>> walletsWithUsage =
+        walletDetails.where((wallet) {
       final double usdcDeposit = wallet['usdcDeposit'] as double? ?? 0;
       final double xdaiDeposit = wallet['xdaiDeposit'] as double? ?? 0;
       final double usdcBorrow = wallet['usdcBorrow'] as double? ?? 0;
       final double xdaiBorrow = wallet['xdaiBorrow'] as double? ?? 0;
-      return !(usdcDeposit == 0 && xdaiDeposit == 0 && usdcBorrow == 0 && xdaiBorrow == 0);
+      return !(usdcDeposit == 0 &&
+          xdaiDeposit == 0 &&
+          usdcBorrow == 0 &&
+          xdaiBorrow == 0);
     }).toList();
 
-    final List<Map<String, dynamic>> walletsNoUsage = walletDetails.where((wallet) {
+    final List<Map<String, dynamic>> walletsNoUsage =
+        walletDetails.where((wallet) {
       final double usdcDeposit = wallet['usdcDeposit'] as double? ?? 0;
       final double xdaiDeposit = wallet['xdaiDeposit'] as double? ?? 0;
       final double usdcBorrow = wallet['usdcBorrow'] as double? ?? 0;
       final double xdaiBorrow = wallet['xdaiBorrow'] as double? ?? 0;
-      return (usdcDeposit == 0 && xdaiDeposit == 0 && usdcBorrow == 0 && xdaiBorrow == 0);
+      return (usdcDeposit == 0 &&
+          xdaiDeposit == 0 &&
+          usdcBorrow == 0 &&
+          xdaiBorrow == 0);
     }).toList();
 
     // Trier les wallets avec utilisation par HealthFactor croissant
@@ -76,14 +85,21 @@ class RmmWalletDetailsPage extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
-                        child: index < walletsWithUsage.length ? _WalletDetailCard(wallet: walletsWithUsage[index], currencyUtils: currencyUtils) : _NoUsageWalletsCard(noUsageWallets: walletsNoUsage),
+                        child: index < walletsWithUsage.length
+                            ? _WalletDetailCard(
+                                wallet: walletsWithUsage[index],
+                                currencyUtils: currencyUtils)
+                            : _NoUsageWalletsCard(
+                                noUsageWallets: walletsNoUsage),
                       ),
-                      childCount: walletsWithUsage.length + (walletsNoUsage.isNotEmpty ? 1 : 0),
+                      childCount: walletsWithUsage.length +
+                          (walletsNoUsage.isNotEmpty ? 1 : 0),
                     ),
                   ),
                 ),
@@ -118,8 +134,10 @@ class _WalletDetailCard extends StatelessWidget {
 
     // Calcul du Health Factor (HF) et du LTV
     final double walletBorrowSum = usdcBorrow + xdaiBorrow;
-    final double walletHF = walletBorrowSum > 0 ? (walletRmmValue * 0.7 / walletBorrowSum) : 10;
-    final double walletLTV = walletRmmValue > 0 ? (walletBorrowSum / walletRmmValue * 100) : 0;
+    final double walletHF =
+        walletBorrowSum > 0 ? (walletRmmValue * 0.7 / walletBorrowSum) : 10;
+    final double walletLTV =
+        walletRmmValue > 0 ? (walletBorrowSum / walletRmmValue * 100) : 0;
 
     // Couleurs pour les health factors
     final Color hfColor = walletHF < 1.5
@@ -134,7 +152,7 @@ class _WalletDetailCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -153,7 +171,7 @@ class _WalletDetailCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -166,7 +184,9 @@ class _WalletDetailCard extends StatelessWidget {
                     Text(
                       TextUtils.truncateWallet(address),
                       style: TextStyle(
-                        fontSize: 15 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                        fontSize: 15 +
+                            Provider.of<AppState>(context, listen: false)
+                                .getTextSizeOffset(),
                         fontWeight: FontWeight.w600,
                         letterSpacing: -0.5,
                         color: Theme.of(context).primaryColor,
@@ -174,7 +194,6 @@ class _WalletDetailCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                
               ],
             ),
             const SizedBox(height: 20),
@@ -211,10 +230,8 @@ class _WalletDetailCard extends StatelessWidget {
                             context,
                             appState,
                             valueColor: Colors.green.shade700,
-                            ),
+                          ),
                           const SizedBox(height: 8),
-                    
-                            
                         ],
                         context,
                         appState,
@@ -277,7 +294,8 @@ class _WalletDetailCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoSection(String title, List<Widget> children, BuildContext context, AppState appState) {
+  Widget _buildInfoSection(String title, List<Widget> children,
+      BuildContext context, AppState appState) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -302,7 +320,9 @@ class _WalletDetailCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoItem(String label, String value, BuildContext context, AppState appState, {bool isBold = false, Color? valueColor, double textSize = 14}) {
+  Widget _buildInfoItem(
+      String label, String value, BuildContext context, AppState appState,
+      {bool isBold = false, Color? valueColor, double textSize = 14}) {
     return Row(
       children: [
         Text(
@@ -338,7 +358,8 @@ class _WalletDetailCard extends StatelessWidget {
     // Définition des couleurs pour la jauge HF en fonction du facteur
     Color getHFColor(double hfValue) {
       if (hfValue <= 1.1) {
-        return Color(0xFFFF3B30); // Rouge pour valeurs dangereuses (HF proche de 1)
+        return Color(
+            0xFFFF3B30); // Rouge pour valeurs dangereuses (HF proche de 1)
       } else if (hfValue <= 1.5) {
         return Color(0xFFFF9500); // Orange pour valeurs à risque modéré
       } else if (hfValue <= 2.5) {
@@ -351,7 +372,8 @@ class _WalletDetailCard extends StatelessWidget {
     // Fonction pour déterminer la couleur de la jauge LTV en fonction de sa valeur
     Color getLTVColor(double ltvPercent) {
       if (ltvPercent >= 65) {
-        return Color(0xFFFF3B30); // Rouge pour valeurs dangereuses (LTV proche de 70%)
+        return Color(
+            0xFFFF3B30); // Rouge pour valeurs dangereuses (LTV proche de 70%)
       } else if (ltvPercent >= 55) {
         return Color(0xFFFF9500); // Orange pour valeurs à risque modéré
       } else if (ltvPercent >= 40) {
@@ -397,9 +419,9 @@ class _WalletDetailCard extends StatelessWidget {
                     width: 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: theme.brightness == Brightness.light 
-                          ? Colors.black.withOpacity(0.05) 
-                          : Colors.white.withOpacity(0.1),
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black.withValues(alpha: 0.05)
+                          : Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
                   // Niveau de la jauge
@@ -410,8 +432,12 @@ class _WalletDetailCard extends StatelessWidget {
                       width: 20,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft: progressHF > 0.95 ? Radius.circular(12) : Radius.zero,
-                          topRight: progressHF > 0.95 ? Radius.circular(12) : Radius.zero,
+                          topLeft: progressHF > 0.95
+                              ? Radius.circular(12)
+                              : Radius.zero,
+                          topRight: progressHF > 0.95
+                              ? Radius.circular(12)
+                              : Radius.zero,
                           bottomLeft: Radius.circular(12),
                           bottomRight: Radius.circular(12),
                         ),
@@ -427,7 +453,7 @@ class _WalletDetailCard extends StatelessWidget {
                       child: Container(
                         height: 1,
                         width: 20,
-                        color: Colors.white.withOpacity(0.4),
+                        color: Colors.white.withValues(alpha: 0.4),
                       ),
                     ),
                 ],
@@ -436,7 +462,7 @@ class _WalletDetailCard extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: hfGaugeColor.withOpacity(0.15),
+                  color: hfGaugeColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -473,9 +499,9 @@ class _WalletDetailCard extends StatelessWidget {
                     width: 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: theme.brightness == Brightness.light 
-                          ? Colors.black.withOpacity(0.05) 
-                          : Colors.white.withOpacity(0.1),
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black.withValues(alpha: 0.05)
+                          : Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
                   // Niveau de la jauge
@@ -486,8 +512,12 @@ class _WalletDetailCard extends StatelessWidget {
                       width: 20,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft: progressLTV > 0.95 ? Radius.circular(12) : Radius.zero,
-                          topRight: progressLTV > 0.95 ? Radius.circular(12) : Radius.zero,
+                          topLeft: progressLTV > 0.95
+                              ? Radius.circular(12)
+                              : Radius.zero,
+                          topRight: progressLTV > 0.95
+                              ? Radius.circular(12)
+                              : Radius.zero,
                           bottomLeft: Radius.circular(12),
                           bottomRight: Radius.circular(12),
                         ),
@@ -503,7 +533,7 @@ class _WalletDetailCard extends StatelessWidget {
                       child: Container(
                         height: 1,
                         width: 20,
-                        color: Colors.white.withOpacity(0.4),
+                        color: Colors.white.withValues(alpha: 0.4),
                       ),
                     ),
                 ],
@@ -512,7 +542,7 @@ class _WalletDetailCard extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: ltvGaugeColor.withOpacity(0.15),
+                  color: ltvGaugeColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -541,7 +571,11 @@ class _NoUsageWalletsCard extends StatelessWidget {
     final appState = Provider.of<AppState>(context);
 
     // Récupérer les adresses complètes sans tronquage, chaque adresse sur une nouvelle ligne
-    final List<String> addresses = noUsageWallets.map((wallet) => TextUtils.truncateWallet(wallet['address']) as String? ?? S.of(context).unknown).toList();
+    final List<String> addresses = noUsageWallets
+        .map((wallet) =>
+            TextUtils.truncateWallet(wallet['address']) as String? ??
+            S.of(context).unknown)
+        .toList();
 
     return Container(
       decoration: BoxDecoration(
@@ -549,7 +583,7 @@ class _NoUsageWalletsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -578,7 +612,9 @@ class _NoUsageWalletsCard extends StatelessWidget {
                 Text(
                   S.of(context).walletsWithoutRmmUsage,
                   style: TextStyle(
-                    fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 16 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
@@ -604,14 +640,25 @@ class _NoUsageWalletsCard extends StatelessWidget {
                               Icon(
                                 Icons.circle,
                                 size: 8,
-                                color: Theme.of(context).textTheme.bodyMedium?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color,
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                appState.showAmounts ? address : TextUtils.truncateWallet(address),
+                                appState.showAmounts
+                                    ? address
+                                    : TextUtils.truncateWallet(address),
                                 style: TextStyle(
-                                  fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
-                                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                                  fontSize: 14 +
+                                      Provider.of<AppState>(context,
+                                              listen: false)
+                                          .getTextSizeOffset(),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.color,
                                 ),
                               ),
                             ],
