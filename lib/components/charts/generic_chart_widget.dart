@@ -381,8 +381,9 @@ class GenericChartWidget<T> extends StatelessWidget {
 
           // Vérifier les valeurs invalides
           if (startValue.isNaN || startValue.isInfinite) startValue = j * 1.0;
-          if (cumulativeValue.isNaN || cumulativeValue.isInfinite)
+          if (cumulativeValue.isNaN || cumulativeValue.isInfinite) {
             cumulativeValue = (j + 1) * 1.0;
+          }
 
           stackItems.add(BarChartRodStackItem(
               startValue, cumulativeValue, stackColors![j]));
@@ -459,8 +460,9 @@ class GenericChartWidget<T> extends StatelessWidget {
       if (periodKey.isEmpty) continue;
 
       List<APYRecord>? records = groupedData[periodKey];
-      if (records == null)
+      if (records == null) {
         continue; // Cette clé peut ne pas exister dans groupedData après le step
+      }
 
       // Calculer les moyennes des valeurs net et gross pour cette période
       double netApyAvg = 0;
@@ -907,7 +909,8 @@ class GenericChartWidget<T> extends StatelessWidget {
             color: Theme.of(context).primaryColor,
           ),
           style: IconButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+            backgroundColor:
+                Theme.of(context).primaryColor.withValues(alpha: 0.1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),

@@ -12,7 +12,9 @@ class DrawerMenuFactory {
     required List<DrawerMenuItem> items,
   }) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: StyleConstants.marginLarge, vertical: StyleConstants.marginSmall),
+      margin: const EdgeInsets.symmetric(
+          horizontal: StyleConstants.marginLarge,
+          vertical: StyleConstants.marginSmall),
       decoration: StyleConstants.cardDecoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +37,8 @@ class DrawerMenuFactory {
   }
 
   /// Crée un titre de section
-  static Widget _buildSectionTitle(BuildContext context, String title, AppState appState) {
+  static Widget _buildSectionTitle(
+      BuildContext context, String title, AppState appState) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         StyleConstants.paddingMedium,
@@ -45,7 +48,8 @@ class DrawerMenuFactory {
       ),
       child: Text(
         title,
-        style: StyleConstants.titleStyle(context, appState.getTextSizeOffset()).copyWith(
+        style: StyleConstants.titleStyle(context, appState.getTextSizeOffset())
+            .copyWith(
           fontSize: 18 + appState.getTextSizeOffset(),
           color: Theme.of(context).primaryColor,
         ),
@@ -67,7 +71,8 @@ class DrawerMenuFactory {
           color: Colors.transparent,
           child: InkWell(
             onTap: item.onTap,
-            borderRadius: BorderRadius.circular(StyleConstants.buttonBorderRadius),
+            borderRadius:
+                BorderRadius.circular(StyleConstants.buttonBorderRadius),
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: StyleConstants.paddingLarge,
@@ -80,7 +85,9 @@ class DrawerMenuFactory {
                   Expanded(
                     child: Text(
                       item.title,
-                      style: StyleConstants.bodyStyle(context, appState.getTextSizeOffset()).copyWith(
+                      style: StyleConstants.bodyStyle(
+                              context, appState.getTextSizeOffset())
+                          .copyWith(
                         fontWeight: FontWeight.w400,
                         color: CupertinoColors.label.resolveFrom(context),
                       ),
@@ -107,7 +114,8 @@ class DrawerMenuFactory {
       width: 32,
       height: 32,
       decoration: BoxDecoration(
-        color: (item.iconColor ?? Theme.of(context).primaryColor).withValues(alpha: 0.1),
+        color: (item.iconColor ?? Theme.of(context).primaryColor)
+            .withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(StyleConstants.buttonBorderRadius),
       ),
       child: Icon(
@@ -181,13 +189,17 @@ class DrawerMenuFactory {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          backgroundColor: CupertinoColors.systemBackground.resolveFrom(context),
+          backgroundColor:
+              CupertinoColors.systemBackground.resolveFrom(context),
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(StyleConstants.modalBorderRadius + 4)),
+            borderRadius: BorderRadius.vertical(
+                top: Radius.circular(StyleConstants.modalBorderRadius + 4)),
           ),
           builder: (BuildContext context) {
             return SizedBox(
-              height: modalHeight ?? MediaQuery.of(context).size.height * StyleConstants.maxModalHeight,
+              height: modalHeight ??
+                  MediaQuery.of(context).size.height *
+                      StyleConstants.maxModalHeight,
               child: modal,
             );
           },
@@ -210,4 +222,4 @@ class DrawerMenuItem {
     required this.onTap,
     this.iconColor,
   });
-} 
+}

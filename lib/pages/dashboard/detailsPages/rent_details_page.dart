@@ -15,10 +15,12 @@ class DashboardRentsDetailsPage extends StatefulWidget {
   const DashboardRentsDetailsPage({super.key});
 
   @override
-  _DashboardRentsDetailsPageState createState() => _DashboardRentsDetailsPageState();
+  _DashboardRentsDetailsPageState createState() =>
+      _DashboardRentsDetailsPageState();
 }
 
-class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> with SingleTickerProviderStateMixin {
+class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage>
+    with SingleTickerProviderStateMixin {
   bool _isGraphVisible = true;
   late ScrollController _scrollController;
   late AnimationController _animationController;
@@ -42,10 +44,12 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
       duration: const Duration(milliseconds: 300),
     );
 
-    _animation = Tween<double>(begin: 1.0, end: 0.0).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+    _animation = Tween<double>(begin: 1.0, end: 0.0).animate(
+        CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
 
     // Initialiser la période par défaut
-    _selectedRentPeriod = 'Mois'; // ou S.of(context).month si besoin de la traduction
+    _selectedRentPeriod =
+        'Mois'; // ou S.of(context).month si besoin de la traduction
   }
 
   void _onScroll() {
@@ -83,7 +87,9 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
           'Détails des loyers',
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: 18 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+            fontSize: 18 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset(),
           ),
         ),
         centerTitle: true,
@@ -106,7 +112,8 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
             ),
             onPressed: () async {
               if (dataManager.rentData.isNotEmpty) {
-                final csvData = _generateCSV(dataManager.rentData, currencyUtils);
+                final csvData =
+                    _generateCSV(dataManager.rentData, currencyUtils);
                 final fileName = 'rents_${_getFormattedToday()}.csv';
                 final directory = await getTemporaryDirectory();
                 final filePath = '${directory.path}/$fileName';
@@ -123,7 +130,9 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Aucune donnée de loyer à partager.', style: TextStyle(color: theme.textTheme.bodyLarge?.color)),
+                    content: Text('Aucune donnée de loyer à partager.',
+                        style:
+                            TextStyle(color: theme.textTheme.bodyLarge?.color)),
                     behavior: SnackBarBehavior.floating,
                     backgroundColor: theme.cardColor,
                     shape: RoundedRectangleBorder(
@@ -207,7 +216,8 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
                 SliverToBoxAdapter(
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 20),
                     decoration: BoxDecoration(
                       color: theme.primaryColor,
                       borderRadius: BorderRadius.circular(16),
@@ -248,11 +258,14 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         // Trier les données par date décroissante
-                        final sortedData = List<dynamic>.from(dataManager.rentData)
-                          ..sort((a, b) => DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
-                        
+                        final sortedData =
+                            List<dynamic>.from(dataManager.rentData)
+                              ..sort((a, b) => DateTime.parse(b['date'])
+                                  .compareTo(DateTime.parse(a['date'])));
+
                         final rentEntry = sortedData[index];
-                        final rentDate = CustomDateUtils.formatDate(rentEntry['date']);
+                        final rentDate =
+                            CustomDateUtils.formatDate(rentEntry['date']);
                         final rentAmount = currencyUtils.formatCurrency(
                           currencyUtils.convert(rentEntry['rent']),
                           currencyUtils.currencySymbol,
@@ -264,21 +277,25 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
                           isNewMonth = true;
                         } else {
                           final currentDate = DateTime.parse(rentEntry['date']);
-                          final previousDate = DateTime.parse(sortedData[index - 1]['date']);
-                          isNewMonth = currentDate.year != previousDate.year || currentDate.month != previousDate.month;
+                          final previousDate =
+                              DateTime.parse(sortedData[index - 1]['date']);
+                          isNewMonth = currentDate.year != previousDate.year ||
+                              currentDate.month != previousDate.month;
                         }
 
                         // Si c'est un nouveau mois, ajouter un en-tête
                         if (isNewMonth) {
                           final date = DateTime.parse(rentEntry['date']);
-                          final monthName = DateFormat('MMMM yyyy', 'fr_FR').format(date);
+                          final monthName =
+                              DateFormat('MMMM yyyy', 'fr_FR').format(date);
 
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (index != 0) const SizedBox(height: 16),
                               Padding(
-                                padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
+                                padding: const EdgeInsets.only(
+                                    top: 8, bottom: 8, left: 8),
                                 child: Text(
                                   monthName.toUpperCase(),
                                   style: TextStyle(
@@ -318,7 +335,9 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: theme.brightness == Brightness.light ? Colors.black.withValues(alpha: 0.03) : Colors.black.withValues(alpha: 0.15),
+            color: theme.brightness == Brightness.light
+                ? Colors.black.withValues(alpha: 0.03)
+                : Colors.black.withValues(alpha: 0.15),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -397,8 +416,12 @@ class _DashboardRentsDetailsPageState extends State<DashboardRentsDetailsPage> w
       String monthKey = DateFormat('yyyy/MM').format(date);
       groupedData[monthKey] = (groupedData[monthKey] ?? 0) + entry['rent'];
     }
-    List<Map<String, dynamic>> list = groupedData.entries.map((e) => {'date': e.key, 'rent': e.value}).toList();
-    list.sort((a, b) => DateFormat('yyyy/MM').parse(a['date']).compareTo(DateFormat('yyyy/MM').parse(b['date'])));
+    List<Map<String, dynamic>> list = groupedData.entries
+        .map((e) => {'date': e.key, 'rent': e.value})
+        .toList();
+    list.sort((a, b) => DateFormat('yyyy/MM')
+        .parse(a['date'])
+        .compareTo(DateFormat('yyyy/MM').parse(b['date'])));
     return list;
   }
 }

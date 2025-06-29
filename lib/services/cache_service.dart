@@ -26,17 +26,17 @@ class CacheService {
   }) async {
     final DateTime now = DateTime.now();
     final lastFetchTime = _box.get('lastFetchTime_$cacheKey');
-    
+
     // 1. Toujours charger le cache en premier si disponible
     List<Map<String, dynamic>> cachedData = [];
     try {
       String? cachedJson = _box.get(cacheKey);
-      
+
       // Essayer la clé alternative si la principale est vide
       if (cachedJson == null && alternativeCacheKey != null) {
         cachedJson = _box.get(alternativeCacheKey);
       }
-      
+
       if (cachedJson != null) {
         cachedData = List<Map<String, dynamic>>.from(json.decode(cachedJson));
         debugPrint("🔵 Cache $debugName chargé: ${cachedData.length} éléments");
@@ -64,7 +64,7 @@ class CacheService {
     try {
       debugPrint("🔄 Mise à jour API $debugName...");
       final apiResult = await apiCall();
-      
+
       if (apiResult.isNotEmpty) {
         // Sauvegarder le nouveau cache
         final newData = List<Map<String, dynamic>>.from(apiResult);
@@ -101,20 +101,21 @@ class CacheService {
   }) async {
     final DateTime now = DateTime.now();
     final lastFetchTime = _box.get('lastFetchTime_$cacheKey');
-    
+
     // 1. Charger et notifier immédiatement avec le cache si disponible
     List<Map<String, dynamic>> cachedData = [];
     try {
       String? cachedJson = _box.get(cacheKey);
-      
+
       if (cachedJson == null && alternativeCacheKey != null) {
         cachedJson = _box.get(alternativeCacheKey);
       }
-      
+
       if (cachedJson != null) {
         cachedData = List<Map<String, dynamic>>.from(json.decode(cachedJson));
         onDataUpdated(cachedData); // Notification immédiate pour l'UI
-        debugPrint("🔵 Cache $debugName restauré et notifié: ${cachedData.length} éléments");
+        debugPrint(
+            "🔵 Cache $debugName restauré et notifié: ${cachedData.length} éléments");
       }
     } catch (e) {
       debugPrint("⚠️ Erreur chargement cache $debugName: $e");
@@ -138,16 +139,17 @@ class CacheService {
     try {
       debugPrint("🔄 Mise à jour API $debugName en arrière-plan...");
       final apiResult = await apiCall();
-      
+
       if (apiResult.isNotEmpty) {
         final newData = List<Map<String, dynamic>>.from(apiResult);
-        
+
         // Vérifier si les données ont changé avant de notifier
         if (!_areDataListsEqual(cachedData, newData)) {
           await _box.put(cacheKey, json.encode(newData));
           await _box.put('lastFetchTime_$cacheKey', now.toIso8601String());
           onDataUpdated(newData); // Notification avec les nouvelles données
-          debugPrint("💾 $debugName mis à jour et notifié: ${newData.length} éléments");
+          debugPrint(
+              "💾 $debugName mis à jour et notifié: ${newData.length} éléments");
         } else {
           // Mettre à jour le timestamp même si les données sont identiques
           await _box.put('lastFetchTime_$cacheKey', now.toIso8601String());
@@ -158,15 +160,17 @@ class CacheService {
       }
     } catch (e) {
       debugPrint("❌ Erreur API $debugName: $e");
-      
+
       // En cas d'erreur, s'assurer que les données du cache sont notifiées
       if (cachedData.isEmpty) {
         try {
           String? cachedJson = _box.get(cacheKey);
           if (cachedJson != null) {
-            var fallbackData = List<Map<String, dynamic>>.from(json.decode(cachedJson));
+            var fallbackData =
+                List<Map<String, dynamic>>.from(json.decode(cachedJson));
             onDataUpdated(fallbackData);
-            debugPrint("🔄 Fallback cache $debugName notifié: ${fallbackData.length} éléments");
+            debugPrint(
+                "🔄 Fallback cache $debugName notifié: ${fallbackData.length} éléments");
           }
         } catch (cacheError) {
           debugPrint("❌ Erreur fallback cache $debugName: $cacheError");
@@ -176,16 +180,17 @@ class CacheService {
   }
 
   /// Compare deux listes de données pour détecter les changements
-  bool _areDataListsEqual(List<Map<String, dynamic>> list1, List<Map<String, dynamic>> list2) {
+  bool _areDataListsEqual(
+      List<Map<String, dynamic>> list1, List<Map<String, dynamic>> list2) {
     if (list1.length != list2.length) return false;
     if (list1.isEmpty && list2.isEmpty) return true;
-    
+
     try {
       // Comparaison rapide basée sur la taille et les premiers/derniers éléments
       if (list1.length != list2.length) return false;
       if (list1.isNotEmpty && list2.isNotEmpty) {
         return json.encode(list1.first) == json.encode(list2.first) &&
-               json.encode(list1.last) == json.encode(list2.last);
+            json.encode(list1.last) == json.encode(list2.last);
       }
       return true;
     } catch (e) {
@@ -195,14 +200,15 @@ class CacheService {
   }
 
   /// Méthode pour obtenir des données du cache uniquement
-  List<Map<String, dynamic>> getCachedData(String cacheKey, {String? alternativeCacheKey}) {
+  List<Map<String, dynamic>> getCachedData(String cacheKey,
+      {String? alternativeCacheKey}) {
     try {
       String? cachedJson = _box.get(cacheKey);
-      
+
       if (cachedJson == null && alternativeCacheKey != null) {
         cachedJson = _box.get(alternativeCacheKey);
       }
-      
+
       if (cachedJson != null) {
         return List<Map<String, dynamic>>.from(json.decode(cachedJson));
       }
@@ -216,7 +222,7 @@ class CacheService {
   bool isCacheValid(String cacheKey) {
     final lastFetchTime = _box.get('lastFetchTime_$cacheKey');
     if (lastFetchTime == null) return false;
-    
+
     try {
       final DateTime lastFetch = DateTime.parse(lastFetchTime);
       return DateTime.now().difference(lastFetch) < Parameters.apiCacheDuration;
@@ -236,4 +242,4 @@ class CacheService {
     await _box.clear();
     debugPrint("🗑️ Tout le cache effacé");
   }
-} 
+}

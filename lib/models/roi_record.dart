@@ -1,5 +1,6 @@
 /// Modèle pour représenter les données de Retour sur Investissement (ROI)
 library;
+
 import 'package:flutter/foundation.dart'; // Pour debugPrint
 
 class ROIRecord {
@@ -15,7 +16,7 @@ class ROIRecord {
     // Gestion flexible du format de timestamp (millisecondes ou ISO8601)
     DateTime parsedTimestamp;
     var timestampValue = json['timestamp'];
-    
+
     if (timestampValue is int) {
       // Format milliseconds
       parsedTimestamp = DateTime.fromMillisecondsSinceEpoch(timestampValue);
@@ -32,7 +33,7 @@ class ROIRecord {
       debugPrint("❌ Format de timestamp ROI non reconnu: $timestampValue");
       parsedTimestamp = DateTime.now();
     }
-    
+
     return ROIRecord(
       timestamp: parsedTimestamp,
       roi: json['roi']?.toDouble() ?? 0.0,

@@ -12,7 +12,8 @@ class TokenCountEvolutionChart extends StatefulWidget {
   const TokenCountEvolutionChart({super.key, required this.dataManager});
 
   @override
-  _TokenCountEvolutionChartState createState() => _TokenCountEvolutionChartState();
+  _TokenCountEvolutionChartState createState() =>
+      _TokenCountEvolutionChartState();
 }
 
 class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
@@ -57,7 +58,9 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
                 Text(
                   S.of(context).tokenCountEvolution,
                   style: TextStyle(
-                    fontSize: 20 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 20 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.bold,
                     letterSpacing: -0.5,
                   ),
@@ -68,9 +71,12 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
                     DropdownButton<String>(
                       value: _selectedPeriod,
                       items: [
-                        DropdownMenuItem(value: 'week', child: Text(S.of(context).week)),
-                        DropdownMenuItem(value: 'month', child: Text(S.of(context).month)),
-                        DropdownMenuItem(value: 'year', child: Text(S.of(context).year)),
+                        DropdownMenuItem(
+                            value: 'week', child: Text(S.of(context).week)),
+                        DropdownMenuItem(
+                            value: 'month', child: Text(S.of(context).month)),
+                        DropdownMenuItem(
+                            value: 'year', child: Text(S.of(context).year)),
                       ],
                       onChanged: (String? value) {
                         setState(() {
@@ -81,12 +87,16 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
                     const SizedBox(width: 8),
                     IconButton(
                       icon: Icon(
-                        _isBarChart ? Icons.show_chart_rounded : Icons.bar_chart_rounded,
+                        _isBarChart
+                            ? Icons.show_chart_rounded
+                            : Icons.bar_chart_rounded,
                         size: 20.0,
                         color: Theme.of(context).primaryColor,
                       ),
                       style: IconButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                        backgroundColor: Theme.of(context)
+                            .primaryColor
+                            .withValues(alpha: 0.1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -131,7 +141,8 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
       return BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: tokenCountData.map((e) => e.y).reduce((a, b) => a > b ? a : b) * 1.1,
+          maxY: tokenCountData.map((e) => e.y).reduce((a, b) => a > b ? a : b) *
+              1.1,
           barTouchData: BarTouchData(
             touchTooltipData: BarTouchTooltipData(
               getTooltipItem: (group, groupIndex, rod, rodIndex) {
@@ -329,7 +340,8 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
                 final index = touchedSpot.x.toInt();
                 final value = touchedSpot.y;
                 final labels = _buildDateLabels();
-                final String periodLabel = index < labels.length ? labels[index] : '';
+                final String periodLabel =
+                    index < labels.length ? labels[index] : '';
 
                 return LineTooltipItem(
                   '$periodLabel\n${value.toStringAsFixed(0)} tokens',
@@ -358,8 +370,9 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
   List<FlSpot> _calculateTokenCountEvolution() {
     // Collecter toutes les transactions avec leurs dates
     List<Map<String, dynamic>> allTransactions = [];
-    
-    for (var tokenTransactions in widget.dataManager.transactionsByToken.values) {
+
+    for (var tokenTransactions
+        in widget.dataManager.transactionsByToken.values) {
       for (var transaction in tokenTransactions) {
         final timestamp = transaction['timestamp'];
         if (timestamp != null) {
@@ -375,7 +388,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
           } else {
             continue;
           }
-          
+
           allTransactions.add({
             'date': date,
             'type': transaction['transactionType'] ?? 'unknown',
@@ -400,7 +413,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
       final DateTime date = transaction['date'];
       final String tokenId = transaction['tokenId'];
       final String type = transaction['type'];
-      
+
       String periodKey;
       if (_selectedPeriod == 'week') {
         final weekStart = date.subtract(Duration(days: date.weekday - 1));
@@ -434,8 +447,9 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
 
   List<String> _buildDateLabels() {
     List<Map<String, dynamic>> allTransactions = [];
-    
-    for (var tokenTransactions in widget.dataManager.transactionsByToken.values) {
+
+    for (var tokenTransactions
+        in widget.dataManager.transactionsByToken.values) {
       for (var transaction in tokenTransactions) {
         final timestamp = transaction['timestamp'];
         if (timestamp != null) {
@@ -451,7 +465,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
           } else {
             continue;
           }
-          
+
           allTransactions.add({
             'date': date,
             'type': transaction['transactionType'] ?? 'unknown',
@@ -474,7 +488,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
       final DateTime date = transaction['date'];
       final String tokenId = transaction['tokenId'];
       final String type = transaction['type'];
-      
+
       String periodKey;
       if (_selectedPeriod == 'week') {
         final weekStart = date.subtract(Duration(days: date.weekday - 1));
@@ -494,4 +508,4 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
 
     return tokensByPeriod.keys.toList()..sort();
   }
-} 
+}

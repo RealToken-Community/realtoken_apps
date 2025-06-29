@@ -7,7 +7,8 @@ import 'package:realtoken_asset_tracker/utils/location_utils.dart';
 import 'package:realtoken_asset_tracker/utils/parameters.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 
-Widget buildPropertiesTab(BuildContext context, Map<String, dynamic> token, bool convertToSquareMeters) {
+Widget buildPropertiesTab(BuildContext context, Map<String, dynamic> token,
+    bool convertToSquareMeters) {
   final appState = Provider.of<AppState>(context, listen: false);
 
   return Padding(
@@ -52,7 +53,8 @@ Widget buildPropertiesTab(BuildContext context, Map<String, dynamic> token, bool
             _buildDetailRow(
               context,
               S.of(context).constructionYear,
-              token['constructionYear']?.toString() ?? S.of(context).notSpecified,
+              token['constructionYear']?.toString() ??
+                  S.of(context).notSpecified,
               icon: Icons.calendar_today,
               iconColor: Colors.blue,
             ),
@@ -60,7 +62,8 @@ Widget buildPropertiesTab(BuildContext context, Map<String, dynamic> token, bool
             _buildDetailRow(
               context,
               S.of(context).propertyType,
-              Parameters.getPropertyTypeName(token['propertyType'] ?? -1, context),
+              Parameters.getPropertyTypeName(
+                  token['propertyType'] ?? -1, context),
               icon: Icons.home,
               iconColor: Colors.teal,
             ),
@@ -110,7 +113,8 @@ Widget buildPropertiesTab(BuildContext context, Map<String, dynamic> token, bool
 }
 
 // Méthode pour construire une section avec carte
-Widget _buildSectionCard(BuildContext context, {required String title, required List<Widget> children}) {
+Widget _buildSectionCard(BuildContext context,
+    {required String title, required List<Widget> children}) {
   return Container(
     margin: const EdgeInsets.only(bottom: 6),
     decoration: BoxDecoration(
@@ -145,7 +149,8 @@ Widget _buildSectionCard(BuildContext context, {required String title, required 
 }
 
 // Méthode pour construire les lignes de détails
-Widget _buildDetailRow(BuildContext context, String label, String value, {IconData? icon, Color? iconColor}) {
+Widget _buildDetailRow(BuildContext context, String label, String value,
+    {IconData? icon, Color? iconColor}) {
   final appState = Provider.of<AppState>(context, listen: false);
 
   return Padding(
@@ -194,7 +199,8 @@ Widget _buildDetailRow(BuildContext context, String label, String value, {IconDa
 }
 
 // Méthode spécifique pour la ligne d'état de location
-Widget _buildRentalStatusRow(BuildContext context, {required Map<String, dynamic> token, required AppState appState}) {
+Widget _buildRentalStatusRow(BuildContext context,
+    {required Map<String, dynamic> token, required AppState appState}) {
   final rentedUnits = token['rentedUnits'] ?? 0;
   final totalUnits = token['totalUnits'] ?? 1;
   final occupancyRate = (rentedUnits / totalUnits * 100).round();
@@ -226,7 +232,7 @@ Widget _buildRentalStatusRow(BuildContext context, {required Map<String, dynamic
                 ),
                 const SizedBox(width: 10),
                 Text(
-          S.of(context).rented,
+                  S.of(context).rented,
                   style: TextStyle(
                     fontSize: 14 + appState.getTextSizeOffset(),
                     fontWeight: FontWeight.w500,
@@ -292,7 +298,8 @@ Widget _buildRentalStatusRow(BuildContext context, {required Map<String, dynamic
 }
 
 // Méthode spécifique pour la ligne de date de début de location
-Widget _buildRentStartDateRow(BuildContext context, {required Map<String, dynamic> token, required AppState appState}) {
+Widget _buildRentStartDateRow(BuildContext context,
+    {required Map<String, dynamic> token, required AppState appState}) {
   final rentStartDate = token['rentStartDate'] ?? '';
   final isActive = DateTime.parse(rentStartDate).isBefore(DateTime.now());
   final statusColor = isActive ? Colors.green : Colors.red;

@@ -12,8 +12,8 @@ class RentRecord {
 
   factory RentRecord.fromJson(Map<String, dynamic> json) {
     return RentRecord(
-      timestamp: json['timestamp'] is String 
-          ? DateTime.parse(json['timestamp']) 
+      timestamp: json['timestamp'] is String
+          ? DateTime.parse(json['timestamp'])
           : DateTime.fromMillisecondsSinceEpoch(json['timestamp']),
       rent: json['rent']?.toDouble() ?? 0.0,
       cumulativeRent: json['cumulativeRent']?.toDouble() ?? 0.0,
@@ -27,4 +27,4 @@ class RentRecord {
       'cumulativeRent': cumulativeRent,
     };
   }
-} 
+}

@@ -11,7 +11,8 @@ class NotificationsSettingsPage extends StatefulWidget {
   const NotificationsSettingsPage({super.key});
 
   @override
-  _NotificationsSettingsPageState createState() => _NotificationsSettingsPageState();
+  _NotificationsSettingsPageState createState() =>
+      _NotificationsSettingsPageState();
 }
 
 class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
@@ -27,8 +28,9 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
   Future<void> _loadNotificationStatus() async {
     final prefs = await SharedPreferences.getInstance();
     bool isSubscribed = OneSignal.User.pushSubscription.optedIn ?? false;
-    bool hasRefused = prefs.getBool(PreferenceKeys.hasRefusedNotifications) ?? false;
-    
+    bool hasRefused =
+        prefs.getBool(PreferenceKeys.hasRefusedNotifications) ?? false;
+
     setState(() {
       _notificationsEnabled = isSubscribed;
       _hasRefusedNotifications = hasRefused;
@@ -57,7 +59,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(PreferenceKeys.hasRefusedNotifications, false);
     await prefs.setBool(PreferenceKeys.hasAskedNotifications, false);
-    
+
     setState(() {
       _hasRefusedNotifications = false;
     });
@@ -65,18 +67,20 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
     // Redemander la permission
     final hasPermission = await OneSignal.Notifications.requestPermission(true);
     await prefs.setBool(PreferenceKeys.hasAskedNotifications, true);
-    
+
     if (hasPermission) {
       setState(() {
         _notificationsEnabled = true;
       });
-      debugPrint("✅ Permissions de notifications accordées après réinitialisation");
+      debugPrint(
+          "✅ Permissions de notifications accordées après réinitialisation");
     } else {
       await prefs.setBool(PreferenceKeys.hasRefusedNotifications, true);
       setState(() {
         _hasRefusedNotifications = true;
       });
-      debugPrint("🚫 Permissions de notifications refusées après réinitialisation");
+      debugPrint(
+          "🚫 Permissions de notifications refusées après réinitialisation");
     }
   }
 
@@ -131,7 +135,8 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 2),
       child: Row(
@@ -296,7 +301,9 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: !isLast ? Colors.grey.withValues(alpha: 0.2) : Colors.transparent,
+                color: !isLast
+                    ? Colors.grey.withValues(alpha: 0.2)
+                    : Colors.transparent,
                 width: 0.5,
               ),
             ),

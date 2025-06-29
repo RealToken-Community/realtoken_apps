@@ -79,7 +79,7 @@ class _DepositChartState extends State<DepositChart> {
   /// Convertit les historiques de balance en liste de DepositRecord
   void _updateDepositRecords() {
     final Map<DateTime, DepositRecord> recordsMap = {};
-    
+
     // Traiter les dépôts USDC
     if (widget.allHistories['usdcDeposit'] != null) {
       for (final record in widget.allHistories['usdcDeposit']!) {
@@ -99,7 +99,7 @@ class _DepositChartState extends State<DepositChart> {
         }
       }
     }
-    
+
     // Traiter les dépôts xDai
     if (widget.allHistories['xdaiDeposit'] != null) {
       for (final record in widget.allHistories['xdaiDeposit']!) {
@@ -119,7 +119,7 @@ class _DepositChartState extends State<DepositChart> {
         }
       }
     }
-    
+
     // Convertir la Map en List et trier par date
     _depositRecords = recordsMap.values.toList()
       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
@@ -144,11 +144,11 @@ class _DepositChartState extends State<DepositChart> {
   @override
   Widget build(BuildContext context) {
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
-    
+
     // Deux couleurs pour les données empilées
     final Color primaryColor = const Color(0xFF34C759); // Vert iOS pour USDC
     final Color secondaryColor = const Color(0xFF007AFF); // Bleu iOS pour xDai
-    
+
     return GenericChartWidget<DepositRecord>(
       title: S.of(context).depositBalance,
       chartColor: primaryColor,

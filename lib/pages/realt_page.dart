@@ -42,7 +42,8 @@ class RealtPageState extends State<RealtPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -51,12 +52,16 @@ class RealtPageState extends State<RealtPage> {
                   context,
                   'investment',
                   CupertinoIcons.money_dollar_circle,
-                  currencyUtils.formatCurrency(currencyUtils.convert(dataManager.totalRealtInvestment), currencyUtils.currencySymbol),
+                  currencyUtils.formatCurrency(
+                      currencyUtils.convert(dataManager.totalRealtInvestment),
+                      currencyUtils.currencySymbol),
                   S.of(context).totalInvestment,
                   [
                     _buildIOSValueRow(
                       context,
-                      currencyUtils.formatCurrency(currencyUtils.convert(dataManager.netRealtRentYear), currencyUtils.currencySymbol),
+                      currencyUtils.formatCurrency(
+                          currencyUtils.convert(dataManager.netRealtRentYear),
+                          currencyUtils.currencySymbol),
                       'net rent',
                     ),
                   ],
@@ -78,7 +83,9 @@ class RealtPageState extends State<RealtPage> {
                     _buildIOSValueRow(
                       context,
                       '${dataManager.rentedRealtUnits}',
-          S.of(context).rentedUnits(dataManager.rentedUnits.toString(), dataManager.totalUnits.toString()),
+                      S.of(context).rentedUnits(
+                          dataManager.rentedUnits.toString(),
+                          dataManager.totalUnits.toString()),
                     ),
                     _buildIOSValueRow(
                       context,
@@ -157,7 +164,9 @@ class RealtPageState extends State<RealtPage> {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 18 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 18 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.w600,
                     color: CupertinoColors.label.resolveFrom(context),
                   ),
@@ -207,7 +216,9 @@ class RealtPageState extends State<RealtPage> {
           Text(
             label,
             style: TextStyle(
-              fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+              fontSize: 14 +
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset(),
               color: CupertinoColors.secondaryLabel.resolveFrom(context),
             ),
           ),

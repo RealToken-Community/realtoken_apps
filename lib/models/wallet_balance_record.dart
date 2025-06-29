@@ -20,4 +20,4 @@ class BalanceRecord {
       timestamp: DateTime.parse(json['timestamp'] as String),
     );
   }
-} 
+}

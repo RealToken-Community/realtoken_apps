@@ -9,7 +9,6 @@ import 'package:realtoken_asset_tracker/utils/location_utils.dart';
 /// Factory pour construire les graphiques de distribution standardisés
 /// Factorisation des patterns répétitifs dans les graphiques en secteurs
 class DistributionChartBuilders {
-  
   /// Construit les données pour un graphique de distribution par ville
   static List<PieChartSectionData> buildCityDistributionData({
     required BuildContext context,
@@ -22,7 +21,8 @@ class DistributionChartBuilders {
 
     // Remplir le dictionnaire avec les counts par ville
     for (var token in portfolio) {
-      String city = token['city'] ?? LocationUtils.extractCity(token['fullName'] ?? '');
+      String city =
+          token['city'] ?? LocationUtils.extractCity(token['fullName'] ?? '');
       cityCount[city] = (cityCount[city] ?? 0) + 1;
     }
 
@@ -47,7 +47,8 @@ class DistributionChartBuilders {
 
     // Remplir le dictionnaire avec les counts par région
     for (var token in portfolio) {
-      String regionCode = token['regionCode'] ?? LocationUtils.extractRegion(token['fullName'] ?? '');
+      String regionCode = token['regionCode'] ??
+          LocationUtils.extractRegion(token['fullName'] ?? '');
       String regionName = Parameters.getRegionDisplayName(regionCode);
       regionCount[regionName] = (regionCount[regionName] ?? 0) + 1;
     }
@@ -72,7 +73,8 @@ class DistributionChartBuilders {
 
     // Remplir le dictionnaire avec les counts par pays
     for (var token in portfolio) {
-      String country = token['country'] ?? LocationUtils.extractCountry(token['fullName'] ?? '');
+      String country = token['country'] ??
+          LocationUtils.extractCountry(token['fullName'] ?? '');
       countryCount[country] = (countryCount[country] ?? 0) + 1;
     }
 
@@ -98,7 +100,8 @@ class DistributionChartBuilders {
     for (var token in portfolio) {
       List<String> wallets = List<String>.from(token['wallets'] ?? []);
       for (String wallet in wallets) {
-        String shortWallet = '${wallet.substring(0, 6)}...${wallet.substring(wallet.length - 4)}';
+        String shortWallet =
+            '${wallet.substring(0, 6)}...${wallet.substring(wallet.length - 4)}';
         walletCount[shortWallet] = (walletCount[shortWallet] ?? 0) + 1;
       }
     }
@@ -121,10 +124,10 @@ class DistributionChartBuilders {
     required String othersKey,
   }) {
     final appState = Provider.of<AppState>(context);
-    
+
     // Calculer le total
     int totalCount = dataCount.values.fold(0, (sum, value) => sum + value);
-    
+
     if (totalCount == 0) {
       return [
         PieChartSectionData(
@@ -137,7 +140,8 @@ class DistributionChartBuilders {
     }
 
     // Trier par count décroissant
-    final sortedEntries = dataCount.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = dataCount.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     List<PieChartSectionData> sections = [];
     othersDetails.clear();
@@ -164,7 +168,9 @@ class DistributionChartBuilders {
           color: baseColor.withValues(alpha: opacity),
           radius: isSelected ? 52 : 45,
           titleStyle: TextStyle(
-            fontSize: isSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
+            fontSize: isSelected
+                ? 14 + appState.getTextSizeOffset()
+                : 10 + appState.getTextSizeOffset(),
             color: Colors.white,
             fontWeight: FontWeight.w600,
             shadows: [
@@ -188,11 +194,16 @@ class DistributionChartBuilders {
       final bool isOthersSelected = selectedIndex == indexCounter;
       sections.add(PieChartSectionData(
         value: othersValue.toDouble(),
-        title: '${S.of(context).others} ${othersPercentage.toStringAsFixed(1)}%',
-        color: Colors.grey.shade400.withValues(alpha: isOthersSelected ? 1.0 : (selectedIndex != null ? 0.5 : 1.0)),
+        title:
+            '${S.of(context).others} ${othersPercentage.toStringAsFixed(1)}%',
+        color: Colors.grey.shade400.withValues(
+            alpha:
+                isOthersSelected ? 1.0 : (selectedIndex != null ? 0.5 : 1.0)),
         radius: isOthersSelected ? 52 : 45,
         titleStyle: TextStyle(
-          fontSize: isOthersSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
+          fontSize: isOthersSelected
+              ? 14 + appState.getTextSizeOffset()
+              : 10 + appState.getTextSizeOffset(),
           color: Colors.white,
           fontWeight: FontWeight.w600,
           shadows: [
@@ -249,7 +260,8 @@ class DistributionChartBuilders {
     }
 
     // Trier par count décroissant pour correspondre aux sections
-    final sortedEntries = dataCount.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = dataCount.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     // Filtrer les entrées dont le pourcentage est < 2%
     List<MapEntry<String, int>> visibleEntries = [];
@@ -304,7 +316,9 @@ class DistributionChartBuilders {
           ),
           const SizedBox(height: 4),
           Text(
-            othersDetails.fold<int>(0, (sum, item) => sum + (item['count'] as int)).toString(),
+            othersDetails
+                .fold<int>(0, (sum, item) => sum + (item['count'] as int))
+                .toString(),
             style: TextStyle(
               fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
               color: Colors.grey.shade600,
@@ -325,12 +339,13 @@ class DistributionChartBuilders {
     required String othersKey,
   }) {
     final appState = Provider.of<AppState>(context);
-    
+
     // Calculer le total
     int totalCount = dataCount.values.fold(0, (sum, value) => sum + value);
 
     // Trier par count décroissant
-    final sortedEntries = dataCount.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = dataCount.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     List<Widget> legendItems = [];
     int othersValue = 0;
@@ -354,16 +369,24 @@ class DistributionChartBuilders {
             builder: (context, selectedIndex, child) {
               return InkWell(
                 onTap: () {
-                  selectedIndexNotifier.value = (selectedIndexNotifier.value == indexCounter) ? null : indexCounter;
+                  selectedIndexNotifier.value =
+                      (selectedIndexNotifier.value == indexCounter)
+                          ? null
+                          : indexCounter;
                 },
                 borderRadius: BorderRadius.circular(8),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 6.0, vertical: 2.0),
                   decoration: BoxDecoration(
-                    color: selectedIndexNotifier.value == indexCounter ? color.withValues(alpha: 0.1) : Colors.transparent,
+                    color: selectedIndexNotifier.value == indexCounter
+                        ? color.withValues(alpha: 0.1)
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: selectedIndexNotifier.value == indexCounter ? color : Colors.transparent,
+                      color: selectedIndexNotifier.value == indexCounter
+                          ? color
+                          : Colors.transparent,
                       width: 1,
                     ),
                   ),
@@ -390,8 +413,13 @@ class DistributionChartBuilders {
                         key,
                         style: TextStyle(
                           fontSize: 12 + appState.getTextSizeOffset(),
-                          color: selectedIndexNotifier.value == indexCounter ? color : Theme.of(context).textTheme.bodyMedium?.color,
-                          fontWeight: selectedIndexNotifier.value == indexCounter ? FontWeight.w600 : FontWeight.normal,
+                          color: selectedIndexNotifier.value == indexCounter
+                              ? color
+                              : Theme.of(context).textTheme.bodyMedium?.color,
+                          fontWeight:
+                              selectedIndexNotifier.value == indexCounter
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                         ),
                       ),
                     ],
@@ -414,16 +442,24 @@ class DistributionChartBuilders {
           builder: (context, selectedIndex, child) {
             return InkWell(
               onTap: () {
-                selectedIndexNotifier.value = (selectedIndexNotifier.value == indexOthers) ? null : indexOthers;
+                selectedIndexNotifier.value =
+                    (selectedIndexNotifier.value == indexOthers)
+                        ? null
+                        : indexOthers;
               },
               borderRadius: BorderRadius.circular(8),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
                 decoration: BoxDecoration(
-                  color: selectedIndexNotifier.value == indexOthers ? Colors.grey.withValues(alpha: 0.1) : Colors.transparent,
+                  color: selectedIndexNotifier.value == indexOthers
+                      ? Colors.grey.withValues(alpha: 0.1)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: selectedIndexNotifier.value == indexOthers ? Colors.grey : Colors.transparent,
+                    color: selectedIndexNotifier.value == indexOthers
+                        ? Colors.grey
+                        : Colors.transparent,
                     width: 1,
                   ),
                 ),
@@ -450,8 +486,12 @@ class DistributionChartBuilders {
                       S.of(context).others,
                       style: TextStyle(
                         fontSize: 12 + appState.getTextSizeOffset(),
-                        color: selectedIndexNotifier.value == indexOthers ? Colors.grey.shade700 : Theme.of(context).textTheme.bodyMedium?.color,
-                        fontWeight: selectedIndexNotifier.value == indexOthers ? FontWeight.w600 : FontWeight.normal,
+                        color: selectedIndexNotifier.value == indexOthers
+                            ? Colors.grey.shade700
+                            : Theme.of(context).textTheme.bodyMedium?.color,
+                        fontWeight: selectedIndexNotifier.value == indexOthers
+                            ? FontWeight.w600
+                            : FontWeight.normal,
                       ),
                     ),
                   ],
@@ -499,6 +539,7 @@ class DistributionChartBuilders {
     final hue = ((index * 57) + 193 * (index % 3)) % 360;
     final saturation = (0.7 + (index % 5) * 0.06).clamp(0.4, 0.7);
     final brightness = (0.8 + (index % 3) * 0.2).clamp(0.6, 0.9);
-    return HSVColor.fromAHSV(1.0, hue.toDouble(), saturation, brightness).toColor();
+    return HSVColor.fromAHSV(1.0, hue.toDouble(), saturation, brightness)
+        .toColor();
   }
-} 
+}

@@ -11,7 +11,8 @@ class TextUtils {
             : 0.0;
   }
 
-  static String truncateWallet(String wallet, {int prefixLength = 6, int suffixLength = 4}) {
+  static String truncateWallet(String wallet,
+      {int prefixLength = 6, int suffixLength = 4}) {
     if (wallet.length <= prefixLength + suffixLength) {
       return wallet;
     }

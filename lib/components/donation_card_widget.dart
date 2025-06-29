@@ -6,12 +6,9 @@ import 'package:realtoken_asset_tracker/components/donation_widgets.dart';
 class DonationCardWidget extends StatelessWidget {
   final String? montantWallet;
   final bool isLoading;
-  
-  const DonationCardWidget({
-    super.key, 
-    this.montantWallet, 
-    this.isLoading = false
-  });
+
+  const DonationCardWidget(
+      {super.key, this.montantWallet, this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,4 +24,4 @@ class DonationCardWidget extends StatelessWidget {
       ),
     );
   }
-} 
+}

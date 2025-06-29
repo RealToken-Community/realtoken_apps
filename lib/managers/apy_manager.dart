@@ -8,7 +8,8 @@ import 'package:realtoken_asset_tracker/models/apy_record.dart';
 class ApyManager extends ChangeNotifier {
   // Facteur d'alpha pour la moyenne mobile exponentielle (EMA)
   // Plus ce facteur est élevé (max 1.0), plus les valeurs récentes ont du poids
-  double emaAlpha = 0.2; // Valeur par défaut, ajustable selon les besoins de réactivité
+  double emaAlpha =
+      0.2; // Valeur par défaut, ajustable selon les besoins de réactivité
 
   // Période maximale à considérer pour le calcul de l'APY (en jours)
   int maxHistoryDays = 30; // Valeur par défaut, ajustable
@@ -35,31 +36,29 @@ class ApyManager extends ChangeNotifier {
 
     // Vérifier les valeurs invalides
     if (initialBalance <= 0 || finalBalance <= 0) {
-     
       return 0;
     }
 
     // Calculer la différence en pourcentage
-    double percentageChange = ((finalBalance - initialBalance) / initialBalance) * 100;
+    double percentageChange =
+        ((finalBalance - initialBalance) / initialBalance) * 100;
 
     // Ignorer si la différence est trop faible ou nulle (seuil réduit à 0.00001%)
     if (percentageChange.abs() < 0.00001) {
-     
       return 0; // Ne pas prendre en compte cette paire
     }
 
     // Ignorer si la différence est supérieure à 25% ou inférieure à 0% (dépôt ou retrait)
     if (percentageChange > 25 || percentageChange < 0) {
-    
       return 0; // Ne pas prendre en compte cette paire
     }
 
     // Calculer la durée en secondes
-    double timePeriodInSeconds = current.timestamp.difference(previous.timestamp).inSeconds.toDouble();
+    double timePeriodInSeconds =
+        current.timestamp.difference(previous.timestamp).inSeconds.toDouble();
 
     // Si la durée est trop courte (moins d'une minute), ignorer la paire
     if (timePeriodInSeconds < 60) {
-     
       return 0;
     }
 
@@ -68,28 +67,26 @@ class ApyManager extends ChangeNotifier {
 
     // Si la période est trop courte, cela peut causer des NaN dans le calcul
     if (timePeriodInYears <= 0) {
-    
       return 0;
     }
 
     // Calculer l'APY annualisé
     double apy;
     try {
-      apy = (math.pow((1 + percentageChange / 100), (1 / timePeriodInYears)) - 1) * 100;
+      apy = (math.pow((1 + percentageChange / 100), (1 / timePeriodInYears)) -
+              1) *
+          100;
     } catch (e) {
-    
       return 0;
     }
 
     // Vérifier si le résultat est NaN
     if (apy.isNaN) {
-     
       return 0;
     }
 
     // Vérifier que l'APY calculé est dans les limites acceptables
     if (apy <= 0 || apy > 25) {
-     
       return 0;
     }
 
@@ -109,12 +106,21 @@ class ApyManager extends ChangeNotifier {
     sortedHistory.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
     // Périodes de temps à essayer (en minutes)
-    final List<int> timePeriods = [180, 120, 60, 30, 15]; // 3h, 2h, 1h, 30min, 15min
+    final List<int> timePeriods = [
+      180,
+      120,
+      60,
+      30,
+      15
+    ]; // 3h, 2h, 1h, 30min, 15min
 
     // Parcourir l'historique pour trouver des paires valides
     for (int i = 0; i < sortedHistory.length - 1 && validPairsFound < 3; i++) {
-      for (int j = i + 1; j < sortedHistory.length && validPairsFound < 3; j++) {
-        Duration timeDiff = sortedHistory[i].timestamp.difference(sortedHistory[j].timestamp);
+      for (int j = i + 1;
+          j < sortedHistory.length && validPairsFound < 3;
+          j++) {
+        Duration timeDiff =
+            sortedHistory[i].timestamp.difference(sortedHistory[j].timestamp);
 
         // Vérifier si l'intervalle de temps correspond à une des périodes recherchées
         if (timePeriods.contains(timeDiff.inMinutes)) {
@@ -124,7 +130,7 @@ class ApyManager extends ChangeNotifier {
             totalAPY += apy;
             count++;
             validPairsFound++;
-       
+
             break; // Passer à la prochaine paire de base
           }
         }
@@ -138,7 +144,6 @@ class ApyManager extends ChangeNotifier {
 
     // Vérification finale pour NaN
     if (result.isNaN) {
-    
       return 0;
     }
 
@@ -180,8 +185,11 @@ class ApyManager extends ChangeNotifier {
     if (history.length < 2) return 0;
 
     // Filtrer les enregistrements pour ne considérer que ceux des derniers "maxDays" jours
-    final DateTime cutoffDate = DateTime.now().subtract(Duration(days: useMaxDays));
-    final List<BalanceRecord> recentHistory = history.where((record) => record.timestamp.isAfter(cutoffDate)).toList();
+    final DateTime cutoffDate =
+        DateTime.now().subtract(Duration(days: useMaxDays));
+    final List<BalanceRecord> recentHistory = history
+        .where((record) => record.timestamp.isAfter(cutoffDate))
+        .toList();
 
     if (recentHistory.length < 2) return 0;
 
@@ -212,7 +220,6 @@ class ApyManager extends ChangeNotifier {
 
     // Vérification finale pour NaN
     if (ema.isNaN) {
-      
       return 0;
     }
 
@@ -233,8 +240,11 @@ class ApyManager extends ChangeNotifier {
     if (history.length < 2) return 0;
 
     // Filtrer les enregistrements pour ne considérer que ceux des derniers "maxDays" jours
-    final DateTime cutoffDate = DateTime.now().subtract(Duration(days: useMaxDays));
-    final List<BalanceRecord> recentHistory = history.where((record) => record.timestamp.isAfter(cutoffDate)).toList();
+    final DateTime cutoffDate =
+        DateTime.now().subtract(Duration(days: useMaxDays));
+    final List<BalanceRecord> recentHistory = history
+        .where((record) => record.timestamp.isAfter(cutoffDate))
+        .toList();
 
     if (recentHistory.length < 2) return 0;
 
@@ -251,10 +261,15 @@ class ApyManager extends ChangeNotifier {
       if (apy > 0 && apy <= 25 && !apy.isNaN) {
         // Calculer un poids en fonction de la récence (les plus récents ont plus de poids)
         // et de la durée entre les mesures (les mesures plus rapprochées ont plus de poids)
-        final double recencyWeight = math.exp(0.1 * (i - recentHistory.length + 1));
+        final double recencyWeight =
+            math.exp(0.1 * (i - recentHistory.length + 1));
 
         // La durée entre les mesures (en jours) - inversement proportionnelle au poids
-        final double durationInDays = recentHistory[i].timestamp.difference(recentHistory[i - 1].timestamp).inHours / 24;
+        final double durationInDays = recentHistory[i]
+                .timestamp
+                .difference(recentHistory[i - 1].timestamp)
+                .inHours /
+            24;
 
         // Plus la durée est courte, plus le poids est élevé
         final double frequencyWeight = 1.0 / math.max(1.0, durationInDays);
@@ -274,7 +289,6 @@ class ApyManager extends ChangeNotifier {
 
     // Vérification finale pour NaN
     if (result.isNaN) {
-     
       return 0;
     }
 
@@ -305,7 +319,6 @@ class ApyManager extends ChangeNotifier {
 
     // Vérifier si le résultat est NaN et le remplacer par 0 le cas échéant
     if (result.isNaN) {
-     
       return 0.0;
     }
 
@@ -382,9 +395,12 @@ class ApyManager extends ChangeNotifier {
     );
 
     // Calcul des intérêts gagnés sur les dépôts
-    final double usdcDepositInterest = usdcDepositBalance * (usdcDepositApy / 100);
-    final double xdaiDepositInterest = xdaiDepositBalance * (xdaiDepositApy / 100);
-    final double totalDepositInterest = usdcDepositInterest + xdaiDepositInterest;
+    final double usdcDepositInterest =
+        usdcDepositBalance * (usdcDepositApy / 100);
+    final double xdaiDepositInterest =
+        xdaiDepositBalance * (xdaiDepositApy / 100);
+    final double totalDepositInterest =
+        usdcDepositInterest + xdaiDepositInterest;
 
     // Calcul des intérêts payés sur les emprunts
     final double usdcBorrowInterest = usdcBorrowBalance * (usdcBorrowApy / 100);
@@ -440,12 +456,14 @@ class ApyManager extends ChangeNotifier {
     }
 
     // Calcul du ROI simple (en pourcentage)
-    final double simpleRoi = ((currentValue - initialInvestment) / initialInvestment) * 100;
+    final double simpleRoi =
+        ((currentValue - initialInvestment) / initialInvestment) * 100;
 
     // Calcul du ROI annualisé si la période est différente d'un an
     if (timeInYears != 1.0 && timeInYears > 0) {
       // Formule du ROI annualisé : (1 + ROI)^(1/temps) - 1
-      final double annualizedRoi = (math.pow((1 + simpleRoi / 100), (1 / timeInYears)) - 1) * 100;
+      final double annualizedRoi =
+          (math.pow((1 + simpleRoi / 100), (1 / timeInYears)) - 1) * 100;
       return annualizedRoi;
     }
 
@@ -497,5 +515,4 @@ class ApyManager extends ChangeNotifier {
       return Colors.green;
     }
   }
-
 }

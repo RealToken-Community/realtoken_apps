@@ -27,7 +27,8 @@ class PortfolioStats extends StatefulWidget {
 class _PortfolioStats extends State<PortfolioStats> {
   late String _selectedPeriod;
   late String _selectedFilter;
-  bool _rentedIsBarChart = true; // Ajoutez cette variable pour gérer le type de graphique
+  bool _rentedIsBarChart =
+      true; // Ajoutez cette variable pour gérer le type de graphique
 
   @override
   void initState() {
@@ -37,9 +38,11 @@ class _PortfolioStats extends State<PortfolioStats> {
       try {
         // Vérifier si les données sont déjà disponibles
         final dataManager = Provider.of<DataManager>(context, listen: false);
-        
-        if (!dataManager.isLoadingMain && dataManager.evmAddresses.isNotEmpty && 
-            dataManager.portfolio.isNotEmpty && dataManager.rentHistory.isNotEmpty) {
+
+        if (!dataManager.isLoadingMain &&
+            dataManager.evmAddresses.isNotEmpty &&
+            dataManager.portfolio.isNotEmpty &&
+            dataManager.rentHistory.isNotEmpty) {
           debugPrint("📊 Stats: données déjà chargées, skip chargement");
         } else {
           debugPrint("📊 Stats: chargement des données nécessaire");
@@ -73,7 +76,9 @@ class _PortfolioStats extends State<PortfolioStats> {
               end: Alignment.bottomCenter,
               colors: [
                 Theme.of(context).scaffoldBackgroundColor,
-                Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
+                Theme.of(context)
+                    .scaffoldBackgroundColor
+                    .withValues(alpha: 0.9),
               ],
             ),
           ),
@@ -81,7 +86,8 @@ class _PortfolioStats extends State<PortfolioStats> {
             physics: const BouncingScrollPhysics(),
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 80.0, left: 8.0, right: 8.0),
+                padding: const EdgeInsets.only(
+                    top: 8.0, bottom: 80.0, left: 8.0, right: 8.0),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: isWideScreen ? 2 : 1,
@@ -93,7 +99,7 @@ class _PortfolioStats extends State<PortfolioStats> {
                     (BuildContext context, int index) {
                       // Vérification de sécurité pour éviter les erreurs de renderObject
                       if (!mounted) return const SizedBox.shrink();
-                      
+
                       return _buildChartWidget(context, index, dataManager);
                     },
                     childCount: 12,
@@ -107,7 +113,8 @@ class _PortfolioStats extends State<PortfolioStats> {
     );
   }
 
-  Widget _buildChartWidget(BuildContext context, int index, DataManager dataManager) {
+  Widget _buildChartWidget(
+      BuildContext context, int index, DataManager dataManager) {
     try {
       switch (index) {
         case 0:

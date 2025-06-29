@@ -26,7 +26,8 @@ class SettingsPage extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           const SizedBox(height: 12),
-          _buildSectionHeader(context, S.of(context).settingsCategory, CupertinoIcons.gear),
+          _buildSectionHeader(
+              context, S.of(context).settingsCategory, CupertinoIcons.gear),
           _buildSettingsSection(
             context,
             children: [
@@ -43,14 +44,16 @@ class SettingsPage extends StatelessWidget {
                 icon: CupertinoIcons.slider_horizontal_3,
                 color: Colors.green,
                 title: S.of(context).personalization,
-                onTap: () => _navigateTo(context, PersonalizationSettingsPage()),
+                onTap: () =>
+                    _navigateTo(context, PersonalizationSettingsPage()),
               ),
               _buildSettingsItem(
                 context,
                 icon: CupertinoIcons.arrow_2_circlepath,
                 color: Colors.blue,
                 title: S.of(context).synchronization,
-                onTap: () => _navigateTo(context, SynchronizationSettingsPage()),
+                onTap: () =>
+                    _navigateTo(context, SynchronizationSettingsPage()),
               ),
               _buildSettingsItem(
                 context,
@@ -81,7 +84,8 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 2),
       child: Row(
@@ -102,7 +106,8 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsSection(BuildContext context, {required List<Widget> children}) {
+  Widget _buildSettingsSection(BuildContext context,
+      {required List<Widget> children}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -168,7 +173,8 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Icon(CupertinoIcons.chevron_right, size: 14, color: Colors.grey),
+                const Icon(CupertinoIcons.chevron_right,
+                    size: 14, color: Colors.grey),
               ],
             ),
           ),
@@ -176,7 +182,10 @@ class SettingsPage extends StatelessWidget {
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 46),
-            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
+            child: Divider(
+                height: 1,
+                thickness: 0.5,
+                color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );

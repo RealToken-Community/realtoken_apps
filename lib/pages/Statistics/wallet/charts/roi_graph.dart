@@ -59,39 +59,40 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
       return EditableROIRecord(
         record,
         TextEditingController(text: record.roi.toStringAsFixed(2)),
-        TextEditingController(text: DateFormat('yyyy-MM-dd HH:mm:ss').format(record.timestamp)),
+        TextEditingController(
+            text: DateFormat('yyyy-MM-dd HH:mm:ss').format(record.timestamp)),
       );
     }).toList();
   }
 
-  void _updateROIValue(DataManager dataManager, EditableROIRecord editableRecord, double newValue) {
+  void _updateROIValue(DataManager dataManager,
+      EditableROIRecord editableRecord, double newValue) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.roiHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.roi == editableRecord.original.roi
-    );
-    
+    final index = dataManager.roiHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.roi == editableRecord.original.roi);
+
     if (index != -1) {
       // Créer un nouvel enregistrement avec la valeur mise à jour
       final updatedRecord = ROIRecord(
         timestamp: editableRecord.original.timestamp,
         roi: newValue,
       );
-      
+
       // Mettre à jour la liste
       dataManager.roiHistory[index] = updatedRecord;
       // Mettre à jour l'original dans l'enregistrement éditable
       editableRecord.original = updatedRecord;
-      
+
       // Sauvegarder dans Hive
       dataManager.saveRoiHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Mettre à jour l'enregistrement éditable
       editableRecord.valueController.text = newValue.toStringAsFixed(2);
-      
+
       // Pour le débogage
       print('ROI mis à jour à l\'index $index: $newValue');
     } else {
@@ -99,66 +100,68 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
     }
   }
 
-  void _updateROIDate(DataManager dataManager, EditableROIRecord editableRecord, DateTime newDate) {
+  void _updateROIDate(DataManager dataManager, EditableROIRecord editableRecord,
+      DateTime newDate) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.roiHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.roi == editableRecord.original.roi
-    );
-    
+    final index = dataManager.roiHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.roi == editableRecord.original.roi);
+
     if (index != -1) {
       // Créer un nouvel enregistrement avec la date mise à jour
       final updatedRecord = ROIRecord(
         timestamp: newDate,
         roi: editableRecord.original.roi,
       );
-      
+
       // Mettre à jour la liste
       dataManager.roiHistory[index] = updatedRecord;
       // Mettre à jour l'original dans l'enregistrement éditable
       editableRecord.original = updatedRecord;
-      
+
       // Sauvegarder dans Hive
       dataManager.saveRoiHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Mettre à jour l'enregistrement éditable
-      editableRecord.dateController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(newDate);
-      
+      editableRecord.dateController.text =
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(newDate);
+
       // Pour le débogage
-      print('Date ROI mise à jour à l\'index $index: ${newDate.toIso8601String()}');
+      print(
+          'Date ROI mise à jour à l\'index $index: ${newDate.toIso8601String()}');
     } else {
       print('Enregistrement non trouvé pour la mise à jour de la date');
     }
   }
 
-  void _deleteROIRecord(DataManager dataManager, EditableROIRecord editableRecord, StateSetter setState) {
+  void _deleteROIRecord(DataManager dataManager,
+      EditableROIRecord editableRecord, StateSetter setState) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.roiHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.roi == editableRecord.original.roi
-    );
-    
+    final index = dataManager.roiHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.roi == editableRecord.original.roi);
+
     if (index != -1) {
       // Supprimer de la liste
       dataManager.roiHistory.removeAt(index);
-      
+
       // Sauvegarder dans Hive
       dataManager.saveRoiHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Pour le débogage
       print('ROI supprimé à l\'index $index');
-      
+
       // Recréer les enregistrements éditables
       setState(() {
         _editableRecords = _createEditableRecords(
-          List<ROIRecord>.from(dataManager.roiHistory)..sort((a, b) => b.timestamp.compareTo(a.timestamp))
-        );
+            List<ROIRecord>.from(dataManager.roiHistory)
+              ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
       });
     } else {
       print('Enregistrement non trouvé pour la suppression');
@@ -168,8 +171,8 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
   void _showEditModal(BuildContext context, DataManager dataManager) {
     // Créer des enregistrements éditables à partir des enregistrements triés
     _editableRecords = _createEditableRecords(
-      List<ROIRecord>.from(dataManager.roiHistory)..sort((a, b) => b.timestamp.compareTo(a.timestamp))
-    );
+        List<ROIRecord>.from(dataManager.roiHistory)
+          ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
 
     showModalBottomSheet(
       context: context,
@@ -207,7 +210,9 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                       Text(
                         'Éditer l\'historique ROI',
                         style: TextStyle(
-                          fontSize: 20 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                          fontSize: 20 +
+                              Provider.of<AppState>(context, listen: false)
+                                  .getTextSizeOffset(),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -226,7 +231,10 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                             child: Text(
                               "Aucun historique disponible",
                               style: TextStyle(
-                                fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                fontSize: 16 +
+                                    Provider.of<AppState>(context,
+                                            listen: false)
+                                        .getTextSizeOffset(),
                                 color: Colors.grey.shade600,
                               ),
                             ),
@@ -245,7 +253,10 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                                         "Date",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context,
+                                                      listen: false)
+                                                  .getTextSizeOffset(),
                                         ),
                                       ),
                                     ),
@@ -257,7 +268,10 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                                         "ROI",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context,
+                                                      listen: false)
+                                                  .getTextSizeOffset(),
                                         ),
                                       ),
                                     ),
@@ -269,7 +283,10 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                                         "Actions",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context,
+                                                      listen: false)
+                                                  .getTextSizeOffset(),
                                         ),
                                         textAlign: TextAlign.right,
                                       ),
@@ -283,59 +300,87 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                                         SizedBox(
                                           width: 150,
                                           child: TextField(
-                                            controller: editableRecord.dateController,
-                                            keyboardType: TextInputType.datetime,
-                                            textInputAction: TextInputAction.done,
+                                            controller:
+                                                editableRecord.dateController,
+                                            keyboardType:
+                                                TextInputType.datetime,
+                                            textInputAction:
+                                                TextInputAction.done,
                                             style: TextStyle(
-                                              fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  Provider.of<AppState>(context,
+                                                          listen: false)
+                                                      .getTextSizeOffset(),
                                             ),
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor: Colors.white,
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
-                                                  color: Theme.of(context).primaryColor,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                               ),
-                                              contentPadding: const EdgeInsets.symmetric(
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 12,
                                                 vertical: 8,
                                               ),
                                             ),
                                             onSubmitted: (value) {
                                               try {
-                                                DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(value);
-                                                _updateROIDate(dataManager, editableRecord, newDate);
-                                                FocusScope.of(context).unfocus();
+                                                DateTime newDate = DateFormat(
+                                                        'yyyy-MM-dd HH:mm:ss')
+                                                    .parse(value);
+                                                _updateROIDate(dataManager,
+                                                    editableRecord, newDate);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } catch (e) {
-                                                print('Erreur de format de date: $e');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Format de date invalide')),
+                                                print(
+                                                    'Erreur de format de date: $e');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Format de date invalide')),
                                                 );
                                               }
                                             },
                                             onEditingComplete: () {
                                               try {
-                                                DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(editableRecord.dateController.text);
-                                                _updateROIDate(dataManager, editableRecord, newDate);
-                                                FocusScope.of(context).unfocus();
+                                                DateTime newDate = DateFormat(
+                                                        'yyyy-MM-dd HH:mm:ss')
+                                                    .parse(editableRecord
+                                                        .dateController.text);
+                                                _updateROIDate(dataManager,
+                                                    editableRecord, newDate);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } catch (e) {
-                                                print('Erreur de format de date: $e');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Format de date invalide')),
+                                                print(
+                                                    'Erreur de format de date: $e');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Format de date invalide')),
                                                 );
                                               }
                                             },
@@ -346,62 +391,90 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                                         SizedBox(
                                           width: 100,
                                           child: TextField(
-                                            controller: editableRecord.valueController,
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                            textInputAction: TextInputAction.done,
+                                            controller:
+                                                editableRecord.valueController,
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(
+                                                decimal: true),
+                                            textInputAction:
+                                                TextInputAction.done,
                                             inputFormatters: [
-                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'^\d*\.?\d*')),
                                             ],
                                             style: TextStyle(
-                                              fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  Provider.of<AppState>(context,
+                                                          listen: false)
+                                                      .getTextSizeOffset(),
                                             ),
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor: Colors.white,
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
-                                                  color: Theme.of(context).primaryColor,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                               ),
-                                              contentPadding: const EdgeInsets.symmetric(
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 12,
                                                 vertical: 8,
                                               ),
                                             ),
                                             onSubmitted: (value) {
-                                              double? newValue = double.tryParse(value);
+                                              double? newValue =
+                                                  double.tryParse(value);
                                               if (newValue != null) {
-                                                _updateROIValue(dataManager, editableRecord, newValue);
-                                                FocusScope.of(context).unfocus();
+                                                _updateROIValue(dataManager,
+                                                    editableRecord, newValue);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } else {
-                                                print('Valeur non valide: $value');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Valeur non valide')),
+                                                print(
+                                                    'Valeur non valide: $value');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Valeur non valide')),
                                                 );
                                               }
                                             },
                                             onEditingComplete: () {
-                                              double? newValue = double.tryParse(editableRecord.valueController.text);
+                                              double? newValue =
+                                                  double.tryParse(editableRecord
+                                                      .valueController.text);
                                               if (newValue != null) {
-                                                _updateROIValue(dataManager, editableRecord, newValue);
-                                                FocusScope.of(context).unfocus();
+                                                _updateROIValue(dataManager,
+                                                    editableRecord, newValue);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } else {
-                                                print('Valeur non valide: ${editableRecord.valueController.text}');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Valeur non valide')),
+                                                print(
+                                                    'Valeur non valide: ${editableRecord.valueController.text}');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Valeur non valide')),
                                                 );
                                               }
                                             },
@@ -412,7 +485,8 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                                         SizedBox(
                                           width: 60,
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: [
                                               IconButton(
                                                 icon: Icon(
@@ -421,7 +495,8 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                                                   size: 20,
                                                 ),
                                                 onPressed: () {
-                                                  _deleteROIRecord(dataManager, editableRecord, setState);
+                                                  _deleteROIRecord(dataManager,
+                                                      editableRecord, setState);
                                                 },
                                               ),
                                             ],
@@ -445,46 +520,54 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                           for (var editableRecord in _editableRecords) {
                             try {
                               // Mettre à jour la date
-                              final dateText = editableRecord.dateController.text;
-                              final DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateText);
-                              
+                              final dateText =
+                                  editableRecord.dateController.text;
+                              final DateTime newDate =
+                                  DateFormat('yyyy-MM-dd HH:mm:ss')
+                                      .parse(dateText);
+
                               // Mettre à jour la valeur
-                              final valueText = editableRecord.valueController.text;
-                              final double? newValue = double.tryParse(valueText);
-                              
+                              final valueText =
+                                  editableRecord.valueController.text;
+                              final double? newValue =
+                                  double.tryParse(valueText);
+
                               if (newValue != null) {
                                 // Trouver l'index dans la liste originale
-                                final index = dataManager.roiHistory.indexWhere((r) => 
-                                  r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-                                  r.roi == editableRecord.original.roi
-                                );
-                                
+                                final index = dataManager.roiHistory.indexWhere(
+                                    (r) =>
+                                        r.timestamp.isAtSameMomentAs(
+                                            editableRecord
+                                                .original.timestamp) &&
+                                        r.roi == editableRecord.original.roi);
+
                                 if (index != -1) {
                                   // Créer un nouvel enregistrement avec les nouvelles valeurs
                                   final updatedRecord = ROIRecord(
                                     timestamp: newDate,
                                     roi: newValue,
                                   );
-                                  
+
                                   // Mettre à jour la liste
                                   dataManager.roiHistory[index] = updatedRecord;
-                                  print('Mise à jour index $index: ${newDate.toIso8601String()} -> $newValue');
+                                  print(
+                                      'Mise à jour index $index: ${newDate.toIso8601String()} -> $newValue');
                                 }
                               }
                             } catch (e) {
                               print('Erreur lors de la mise à jour: $e');
                             }
                           }
-                          
+
                           // Sauvegarder dans Hive
                           dataManager.saveRoiHistory();
-                          
+
                           // Notifier les écouteurs
                           dataManager.notifyListeners();
-                          
+
                           // Fermer le modal
                           Navigator.pop(context);
-                          
+
                           // Forcer la mise à jour du widget parent
                           setState(() {});
                         },
@@ -500,7 +583,9 @@ class _RoiHistoryGraphState extends State<RoiHistoryGraph> {
                         child: Text(
                           'Sauvegarder',
                           style: TextStyle(
-                            fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                            fontSize: 16 +
+                                Provider.of<AppState>(context, listen: false)
+                                    .getTextSizeOffset(),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

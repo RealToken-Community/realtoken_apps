@@ -57,7 +57,9 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
                 Text(
                   S.of(context).roiByToken,
                   style: TextStyle(
-                    fontSize: 20 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 20 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.bold,
                     letterSpacing: -0.5,
                   ),
@@ -70,7 +72,8 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
                     color: Theme.of(context).primaryColor,
                   ),
                   style: IconButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                    backgroundColor:
+                        Theme.of(context).primaryColor.withValues(alpha: 0.1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -132,7 +135,9 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
                       size: 28,
                     ),
                     title: Text(
-                      _showTopOnly ? S.of(context).showTop10 : S.of(context).showAll,
+                      _showTopOnly
+                          ? S.of(context).showTop10
+                          : S.of(context).showAll,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
@@ -167,7 +172,9 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
                       value: _sortBy,
                       items: [
                         DropdownMenuItem(value: 'roi', child: Text('ROI')),
-                        DropdownMenuItem(value: 'rent', child: Text(S.of(context).totalRent)),
+                        DropdownMenuItem(
+                            value: 'rent',
+                            child: Text(S.of(context).totalRent)),
                       ],
                       onChanged: (String? value) {
                         if (value != null) {
@@ -192,7 +199,7 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
 
   Widget _buildRoiChart(BuildContext context) {
     final List<Map<String, dynamic>> roiData = _calculateRoiData();
-    
+
     if (roiData.isEmpty) {
       return Center(
         child: Text(
@@ -216,7 +223,8 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
               touchTooltipData: BarTouchTooltipData(
                 getTooltipItem: (group, groupIndex, rod, rodIndex) {
                   final token = roiData[groupIndex];
-                  final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
+                  final currencyUtils =
+                      Provider.of<CurrencyProvider>(context, listen: false);
                   return BarTooltipItem(
                     '${token['shortName']}\nROI: ${token['roi'].toStringAsFixed(2)}%\n${S.of(context).totalRent}: ${currencyUtils.getFormattedAmount(currencyUtils.convert(token['totalRent']), currencyUtils.currencySymbol, true)}',
                     TextStyle(
@@ -234,7 +242,8 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
             ),
             titlesData: FlTitlesData(
               show: true,
-              rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              rightTitles:
+                  AxisTitles(sideTitles: SideTitles(showTitles: false)),
               topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
@@ -248,7 +257,9 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
                           child: Text(
                             roiData[value.toInt()]['shortName'],
                             style: TextStyle(
-                              fontSize: 10 + Provider.of<AppState>(context).getTextSizeOffset(),
+                              fontSize: 10 +
+                                  Provider.of<AppState>(context)
+                                      .getTextSizeOffset(),
                               color: Colors.grey.shade600,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -271,7 +282,9 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
                       child: Text(
                         '${value.toStringAsFixed(0)}%',
                         style: TextStyle(
-                          fontSize: 10 + Provider.of<AppState>(context).getTextSizeOffset(),
+                          fontSize: 10 +
+                              Provider.of<AppState>(context)
+                                  .getTextSizeOffset(),
                           color: Colors.grey.shade600,
                         ),
                       ),
@@ -285,7 +298,7 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
               final index = entry.key;
               final data = entry.value;
               final roi = data['roi'];
-              
+
               Color barColor;
               if (roi >= 10) {
                 barColor = const Color(0xFF34C759); // Vert pour ROI élevé
@@ -329,13 +342,15 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
     List<Map<String, dynamic>> roiData = [];
 
     for (var token in widget.dataManager.portfolio) {
-      final double totalRentReceived = (token['totalRentReceived'] ?? 0.0).toDouble();
-      final double initialTotalValue = (token['initialTotalValue'] ?? 0.0).toDouble();
-      
+      final double totalRentReceived =
+          (token['totalRentReceived'] ?? 0.0).toDouble();
+      final double initialTotalValue =
+          (token['initialTotalValue'] ?? 0.0).toDouble();
+
       // Calculer le ROI seulement si on a un investissement initial
       if (initialTotalValue > 0.001) {
         final double roi = (totalRentReceived / initialTotalValue) * 100;
-        
+
         roiData.add({
           'shortName': token['shortName'] ?? 'Unknown',
           'fullName': token['fullName'] ?? 'Unknown',
@@ -360,4 +375,4 @@ class _RoiByTokenChartState extends State<RoiByTokenChart> {
 
     return roiData;
   }
-} 
+}

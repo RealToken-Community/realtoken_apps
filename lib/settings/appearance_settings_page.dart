@@ -247,16 +247,12 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                 children: [
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    child: Text("Annuler",
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text("Annuler", style: TextStyle(fontSize: 14)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    child: Text("OK",
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text("OK", style: TextStyle(fontSize: 14)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -314,16 +310,12 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                 children: [
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    child: Text("Annuler",
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text("Annuler", style: TextStyle(fontSize: 14)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    child: Text("OK",
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text("OK", style: TextStyle(fontSize: 14)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -456,7 +448,9 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Divider(
-                height: 1, thickness: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
+                height: 1,
+                thickness: 0.5,
+                color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );

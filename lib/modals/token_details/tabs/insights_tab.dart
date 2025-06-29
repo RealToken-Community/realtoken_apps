@@ -47,7 +47,8 @@ Widget buildInsightsTab(BuildContext context, Map<String, dynamic> token) {
           },
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
               child: _buildGaugeForROI(
                 token['totalRentReceived'] / token['initialTotalValue'] * 100,
                 context,
@@ -64,8 +65,13 @@ Widget buildInsightsTab(BuildContext context, Map<String, dynamic> token) {
           title: S.of(context).yieldEvolution,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              child: _buildYieldChartOrMessage(context, token['historic']?['yields'] ?? [], token['historic']?['init_yield'], currencyUtils),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+              child: _buildYieldChartOrMessage(
+                  context,
+                  token['historic']?['yields'] ?? [],
+                  token['historic']?['init_yield'],
+                  currencyUtils),
             ),
           ],
         ),
@@ -78,8 +84,13 @@ Widget buildInsightsTab(BuildContext context, Map<String, dynamic> token) {
           title: S.of(context).priceEvolution,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              child: _buildPriceChartOrMessage(context, token['historic']?['prices'] ?? [], token['initPrice'], currencyUtils),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+              child: _buildPriceChartOrMessage(
+                  context,
+                  token['historic']?['prices'] ?? [],
+                  token['initPrice'],
+                  currencyUtils),
             ),
           ],
         ),
@@ -92,8 +103,10 @@ Widget buildInsightsTab(BuildContext context, Map<String, dynamic> token) {
           title: S.of(context).cumulativeRentGraph,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              child: _buildRentCumulativeChartOrMessage(context, token['uuid'], dataManager, currencyUtils),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+              child: _buildRentCumulativeChartOrMessage(
+                  context, token['uuid'], dataManager, currencyUtils),
             ),
           ],
         ),
@@ -132,7 +145,8 @@ Widget _buildSectionCard(
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 18 + Provider.of<AppState>(context).getTextSizeOffset(),
+                  fontSize:
+                      18 + Provider.of<AppState>(context).getTextSizeOffset(),
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor,
                 ),
@@ -179,7 +193,8 @@ Widget _buildGaugeForROI(double roiValue, BuildContext context) {
                 height: 14,
                 width: maxWidth,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 78, 78, 78).withValues(alpha: 0.2),
+                  color: const Color.fromARGB(255, 78, 78, 78)
+                      .withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(7),
                 ),
               ),
@@ -214,7 +229,11 @@ Widget _buildGaugeForROI(double roiValue, BuildContext context) {
         "Retour sur investissement basé sur les loyers perçus",
         style: TextStyle(
           fontSize: 12 + appState.getTextSizeOffset(),
-          color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+          color: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.color
+              ?.withValues(alpha: 0.8),
         ),
       ),
     ],
@@ -222,7 +241,8 @@ Widget _buildGaugeForROI(double roiValue, BuildContext context) {
 }
 
 // Méthode pour afficher soit le graphique du yield, soit un message
-Widget _buildYieldChartOrMessage(BuildContext context, List<dynamic> yields, double? initYield, CurrencyProvider currencyUtils) {
+Widget _buildYieldChartOrMessage(BuildContext context, List<dynamic> yields,
+    double? initYield, CurrencyProvider currencyUtils) {
   final appState = Provider.of<AppState>(context, listen: false);
 
   if (yields.length <= 1) {
@@ -236,7 +256,9 @@ Widget _buildYieldChartOrMessage(BuildContext context, List<dynamic> yields, dou
         ),
         children: [
           TextSpan(
-            text: yields.isNotEmpty ? yields.first['yield'].toStringAsFixed(2) : S.of(context).notSpecified,
+            text: yields.isNotEmpty
+                ? yields.first['yield'].toStringAsFixed(2)
+                : S.of(context).notSpecified,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).textTheme.bodyLarge?.color,
@@ -251,7 +273,9 @@ Widget _buildYieldChartOrMessage(BuildContext context, List<dynamic> yields, dou
   } else {
     // Calculer l'évolution en pourcentage
     double lastYield = yields.last['yield']?.toDouble() ?? 0;
-    double percentageChange = ((lastYield - (initYield ?? lastYield)) / (initYield ?? lastYield)) * 100;
+    double percentageChange =
+        ((lastYield - (initYield ?? lastYield)) / (initYield ?? lastYield)) *
+            100;
 
     // Afficher le graphique et le % d'évolution
     return Column(
@@ -286,7 +310,8 @@ Widget _buildYieldChartOrMessage(BuildContext context, List<dynamic> yields, dou
 }
 
 // Méthode pour construire le graphique du yield
-Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProvider currencyUtils) {
+Widget _buildYieldChart(BuildContext context, List<dynamic> yields,
+    CurrencyProvider currencyUtils) {
   final appState = Provider.of<AppState>(context, listen: false);
 
   List<FlSpot> spots = [];
@@ -296,7 +321,9 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
     if (yields[i]['timsync'] != null && yields[i]['timsync'] is String) {
       DateTime date = DateTime.parse(yields[i]['timsync']);
       double x = i.toDouble();
-      double y = yields[i]['yield'] != null ? double.tryParse(yields[i]['yield'].toString()) ?? 0 : 0;
+      double y = yields[i]['yield'] != null
+          ? double.tryParse(yields[i]['yield'].toString()) ?? 0
+          : 0;
       y = double.parse(y.toStringAsFixed(2));
 
       spots.add(FlSpot(x, y));
@@ -307,8 +334,12 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
   // Calcul des marges
   double minXValue = spots.isNotEmpty ? spots.first.x : 0;
   double maxXValue = spots.isNotEmpty ? spots.last.x : 0;
-  double minYValue = spots.isNotEmpty ? spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b) : 0;
-  double maxYValue = spots.isNotEmpty ? spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b) : 0;
+  double minYValue = spots.isNotEmpty
+      ? spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b)
+      : 0;
+  double maxYValue = spots.isNotEmpty
+      ? spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b)
+      : 0;
 
   // Ajouter des marges autour des valeurs min et max
   const double marginX = 0.2;
@@ -339,7 +370,8 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
             getTitlesWidget: (value, meta) {
               if (value.toInt() >= 0 && value.toInt() < dateLabels.length) {
                 // N'afficher que quelques étiquettes pour éviter l'encombrement
-                if (dateLabels.length <= 4 || value.toInt() % (dateLabels.length ~/ 4 + 1) == 0) {
+                if (dateLabels.length <= 4 ||
+                    value.toInt() % (dateLabels.length ~/ 4 + 1) == 0) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
@@ -373,7 +405,8 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
             interval: 1,
           ),
         ),
-        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles:
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
       minX: minXValue - marginX,
       maxX: maxXValue + marginX,
@@ -388,7 +421,8 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: true,
-            getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
+            getDotPainter: (spot, percent, barData, index) =>
+                FlDotCirclePainter(
               radius: 3,
               color: Theme.of(context).primaryColor,
               strokeWidth: 1,
@@ -408,7 +442,10 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
               final int index = touchedSpot.x.toInt();
               return LineTooltipItem(
                 '${dateLabels[index]}: ${touchedSpot.y.toStringAsFixed(2)}%',
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12 + appState.getTextSizeOffset()),
+                TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12 + appState.getTextSizeOffset()),
               );
             }).toList();
           },
@@ -426,7 +463,8 @@ Widget _buildYieldChart(BuildContext context, List<dynamic> yields, CurrencyProv
 }
 
 // Méthode pour afficher soit le graphique des prix, soit un message
-Widget _buildPriceChartOrMessage(BuildContext context, List<dynamic> prices, double? initPrice, CurrencyProvider currencyUtils) {
+Widget _buildPriceChartOrMessage(BuildContext context, List<dynamic> prices,
+    double? initPrice, CurrencyProvider currencyUtils) {
   final appState = Provider.of<AppState>(context, listen: false);
 
   if (prices.length <= 1) {
@@ -440,7 +478,11 @@ Widget _buildPriceChartOrMessage(BuildContext context, List<dynamic> prices, dou
         ),
         children: [
           TextSpan(
-            text: prices.isNotEmpty ? currencyUtils.formatCurrency(currencyUtils.convert(prices.first['price']), currencyUtils.currencySymbol) : S.of(context).notSpecified,
+            text: prices.isNotEmpty
+                ? currencyUtils.formatCurrency(
+                    currencyUtils.convert(prices.first['price']),
+                    currencyUtils.currencySymbol)
+                : S.of(context).notSpecified,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).textTheme.bodyLarge?.color,
@@ -452,7 +494,9 @@ Widget _buildPriceChartOrMessage(BuildContext context, List<dynamic> prices, dou
   } else {
     // Calculer l'évolution en pourcentage
     double lastPrice = prices.last['price']?.toDouble() ?? 0;
-    double percentageChange = ((lastPrice - (initPrice ?? lastPrice)) / (initPrice ?? lastPrice)) * 100;
+    double percentageChange =
+        ((lastPrice - (initPrice ?? lastPrice)) / (initPrice ?? lastPrice)) *
+            100;
 
     // Afficher le graphique et le % d'évolution
     return Column(
@@ -493,7 +537,9 @@ Widget _buildPriceChartOrMessage(BuildContext context, List<dynamic> prices, dou
                 ),
                 children: [
                   TextSpan(
-                    text: currencyUtils.formatCurrency(currencyUtils.convert(lastPrice), currencyUtils.currencySymbol),
+                    text: currencyUtils.formatCurrency(
+                        currencyUtils.convert(lastPrice),
+                        currencyUtils.currencySymbol),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).primaryColor,
@@ -510,7 +556,8 @@ Widget _buildPriceChartOrMessage(BuildContext context, List<dynamic> prices, dou
 }
 
 // Méthode pour construire le graphique des prix
-Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProvider currencyUtils) {
+Widget _buildPriceChart(BuildContext context, List<dynamic> prices,
+    CurrencyProvider currencyUtils) {
   final appState = Provider.of<AppState>(context, listen: false);
 
   List<FlSpot> spots = [];
@@ -528,8 +575,12 @@ Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProv
   // Calcul des marges
   double minXValue = spots.isNotEmpty ? spots.first.x : 0;
   double maxXValue = spots.isNotEmpty ? spots.last.x : 0;
-  double minYValue = spots.isNotEmpty ? spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b) : 0;
-  double maxYValue = spots.isNotEmpty ? spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b) : 0;
+  double minYValue = spots.isNotEmpty
+      ? spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b)
+      : 0;
+  double maxYValue = spots.isNotEmpty
+      ? spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b)
+      : 0;
 
   // Ajouter des marges autour des valeurs min et max
   const double marginX = 0.1;
@@ -559,7 +610,8 @@ Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProv
             getTitlesWidget: (value, meta) {
               if (value.toInt() >= 0 && value.toInt() < dateLabels.length) {
                 // N'afficher que quelques étiquettes pour éviter l'encombrement
-                if (dateLabels.length <= 4 || value.toInt() % (dateLabels.length ~/ 4 + 1) == 0) {
+                if (dateLabels.length <= 4 ||
+                    value.toInt() % (dateLabels.length ~/ 4 + 1) == 0) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
@@ -594,7 +646,8 @@ Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProv
             },
           ),
         ),
-        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles:
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
       minX: minXValue - marginX,
       maxX: maxXValue + marginX,
@@ -609,7 +662,8 @@ Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProv
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: true,
-            getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
+            getDotPainter: (spot, percent, barData, index) =>
+                FlDotCirclePainter(
               radius: 3,
               color: Theme.of(context).primaryColor,
               strokeWidth: 1,
@@ -630,7 +684,10 @@ Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProv
               final convertedValue = currencyUtils.convert(touchedSpot.y);
               return LineTooltipItem(
                 '${dateLabels[index]}: ${currencyUtils.formatCurrency(convertedValue, currencyUtils.currencySymbol)}',
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12 + appState.getTextSizeOffset()),
+                TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12 + appState.getTextSizeOffset()),
               );
             }).toList();
           },
@@ -648,11 +705,13 @@ Widget _buildPriceChart(BuildContext context, List<dynamic> prices, CurrencyProv
 }
 
 // Méthode pour afficher soit le graphique cumulatif des loyers, soit un message
-Widget _buildRentCumulativeChartOrMessage(BuildContext context, String tokenId, DataManager dataManager, CurrencyProvider currencyUtils) {
+Widget _buildRentCumulativeChartOrMessage(BuildContext context, String tokenId,
+    DataManager dataManager, CurrencyProvider currencyUtils) {
   final appState = Provider.of<AppState>(context, listen: false);
 
   // Récupérer l'historique des loyers pour ce token
-  List<Map<String, dynamic>> rentHistory = dataManager.getRentHistoryForToken(tokenId);
+  List<Map<String, dynamic>> rentHistory =
+      dataManager.getRentHistoryForToken(tokenId);
 
   // Récupérer le nombre de wallets qui possèdent ce token
   int walletCount = dataManager.getWalletCountForToken(tokenId);
@@ -668,7 +727,8 @@ Widget _buildRentCumulativeChartOrMessage(BuildContext context, String tokenId, 
     );
   } else {
     // Calculer le montant total des loyers
-    double totalRent = dataManager.cumulativeRentsByToken[tokenId.toLowerCase()] ?? 0.0;
+    double totalRent =
+        dataManager.cumulativeRentsByToken[tokenId.toLowerCase()] ?? 0.0;
 
     // Afficher le graphique et le montant total
     return Column(
@@ -698,7 +758,10 @@ Widget _buildRentCumulativeChartOrMessage(BuildContext context, String tokenId, 
                 ),
                 children: [
                   TextSpan(
-                    text: currencyUtils.getFormattedAmount(currencyUtils.convert(totalRent), currencyUtils.currencySymbol, appState.showAmounts),
+                    text: currencyUtils.getFormattedAmount(
+                        currencyUtils.convert(totalRent),
+                        currencyUtils.currencySymbol,
+                        appState.showAmounts),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.green[700],
@@ -715,7 +778,8 @@ Widget _buildRentCumulativeChartOrMessage(BuildContext context, String tokenId, 
 }
 
 // Méthode pour construire le graphique cumulatif des loyers
-Widget _buildRentCumulativeChart(BuildContext context, List<Map<String, dynamic>> rentHistory, CurrencyProvider currencyUtils) {
+Widget _buildRentCumulativeChart(BuildContext context,
+    List<Map<String, dynamic>> rentHistory, CurrencyProvider currencyUtils) {
   final appState = Provider.of<AppState>(context, listen: false);
 
   // Trier l'historique par date
@@ -769,7 +833,9 @@ Widget _buildRentCumulativeChart(BuildContext context, List<Map<String, dynamic>
   // Calcul des marges
   double minXValue = spots.isNotEmpty ? spots.first.x : 0;
   double maxXValue = spots.isNotEmpty ? spots.last.x : 0;
-  double maxYValue = spots.isNotEmpty ? spots.last.y : 0; // La dernière valeur est la plus élevée pour un cumul
+  double maxYValue = spots.isNotEmpty
+      ? spots.last.y
+      : 0; // La dernière valeur est la plus élevée pour un cumul
 
   // Ajouter des marges autour des valeurs min et max
   const double marginX = 0.2;
@@ -799,7 +865,8 @@ Widget _buildRentCumulativeChart(BuildContext context, List<Map<String, dynamic>
             getTitlesWidget: (value, meta) {
               if (value.toInt() >= 0 && value.toInt() < dateLabels.length) {
                 // N'afficher que quelques dates pour éviter la surcharge
-                if (dateLabels.length <= 4 || value.toInt() % (dateLabels.length ~/ 4 + 1) == 0) {
+                if (dateLabels.length <= 4 ||
+                    value.toInt() % (dateLabels.length ~/ 4 + 1) == 0) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
@@ -833,11 +900,13 @@ Widget _buildRentCumulativeChart(BuildContext context, List<Map<String, dynamic>
             },
           ),
         ),
-        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles:
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
       minX: minXValue - marginX,
       maxX: maxXValue + marginX,
-      minY: 0 - marginY / 2, // Le minimum est toujours 0 pour un graphique cumulatif
+      minY: 0 -
+          marginY / 2, // Le minimum est toujours 0 pour un graphique cumulatif
       maxY: maxYValue + marginY,
       lineBarsData: [
         LineChartBarData(
@@ -861,7 +930,10 @@ Widget _buildRentCumulativeChart(BuildContext context, List<Map<String, dynamic>
               final convertedValue = currencyUtils.convert(touchedSpot.y);
               return LineTooltipItem(
                 '${dateLabels[index]}: ${currencyUtils.formatCurrency(convertedValue, currencyUtils.currencySymbol)}',
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12 + appState.getTextSizeOffset()),
+                TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12 + appState.getTextSizeOffset()),
               );
             }).toList();
           },

@@ -42,24 +42,28 @@ class DashboardPageState extends State<DashboardPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Vérifier si les données sont déjà chargées
       final dataManager = Provider.of<DataManager>(context, listen: false);
-      
+
       // Si les données principales sont déjà chargées (depuis main.dart)
-      if (!dataManager.isLoadingMain && dataManager.evmAddresses.isNotEmpty && dataManager.portfolio.isNotEmpty) {
+      if (!dataManager.isLoadingMain &&
+          dataManager.evmAddresses.isNotEmpty &&
+          dataManager.portfolio.isNotEmpty) {
         debugPrint("📊 Dashboard: données principales déjà chargées");
         // Vérifier si les données de loyer sont aussi chargées
         if (dataManager.rentData.isNotEmpty) {
-          debugPrint("📊 Dashboard: données de loyer aussi chargées, skip chargement");
+          debugPrint(
+              "📊 Dashboard: données de loyer aussi chargées, skip chargement");
           setState(() {
             _isPageLoading = false;
           });
         } else {
-          debugPrint("📊 Dashboard: données de loyer manquantes, chargement nécessaire");
+          debugPrint(
+              "📊 Dashboard: données de loyer manquantes, chargement nécessaire");
           await DataFetchUtils.loadDataWithCache(context);
-        setState(() {
-          _isPageLoading = false;
-        });
+          setState(() {
+            _isPageLoading = false;
+          });
         }
-      } 
+      }
       // Sinon, charger les données avec cache
       else {
         debugPrint("📊 Dashboard: chargement des données nécessaire");
@@ -113,27 +117,31 @@ class DashboardPageState extends State<DashboardPage> {
             final prefs = await SharedPreferences.getInstance();
 
             // Restaurer les préférences sauvegardées
-            List<String> ethAddresses = List<String>.from(preferencesData['ethAddresses'] ?? []);
+            List<String> ethAddresses =
+                List<String>.from(preferencesData['ethAddresses'] ?? []);
             String? userIdToAddresses = preferencesData['userIdToAddresses'];
             String? selectedCurrency = preferencesData['selectedCurrency'];
-            bool convertToSquareMeters = preferencesData['convertToSquareMeters'] ?? false;
+            bool convertToSquareMeters =
+                preferencesData['convertToSquareMeters'] ?? false;
 
             // Sauvegarder les préférences restaurées
             await prefs.setStringList('evmAddresses', ethAddresses);
-            if (userIdToAddresses != null) await prefs.setString('userIdToAddresses', userIdToAddresses);
-            if (selectedCurrency != null) await prefs.setString('selectedCurrency', selectedCurrency);
+            if (userIdToAddresses != null)
+              await prefs.setString('userIdToAddresses', userIdToAddresses);
+            if (selectedCurrency != null)
+              await prefs.setString('selectedCurrency', selectedCurrency);
             await prefs.setBool('convertToSquareMeters', convertToSquareMeters);
           }
         }
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(S.of(context).importSuccess)),
           );
-          
+
           // Rafraîchir les données après l'import
           await DataFetchUtils.refreshData(context);
-          
+
           // Recharger la page pour refléter les changements
           setState(() {
             _isPageLoading = false;
@@ -175,19 +183,23 @@ class DashboardPageState extends State<DashboardPage> {
                     child: Text(
                       S.of(context).noDataAvailable,
                       style: TextStyle(
-                        fontSize: 18 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                        fontSize: 18 +
+                            Provider.of<AppState>(context, listen: false)
+                                .getTextSizeOffset(),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ],
               ),
-                             content: Text(
-                 S.of(context).noWalletMessage,
-                 style: TextStyle(
-                   fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
-                 ),
-               ),
+              content: Text(
+                S.of(context).noWalletMessage,
+                style: TextStyle(
+                  fontSize: 16 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
+                ),
+              ),
               actions: [
                 Column(
                   mainAxisSize: MainAxisSize.min,
@@ -222,7 +234,8 @@ class DashboardPageState extends State<DashboardPage> {
                               Navigator.of(context).pop();
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const ManageEvmAddressesPage(),
+                                  builder: (context) =>
+                                      const ManageEvmAddressesPage(),
                                 ),
                               );
                             },
@@ -249,7 +262,8 @@ class DashboardPageState extends State<DashboardPage> {
                         child: Text(
                           'Plus tard',
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyMedium?.color,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       ),
@@ -273,7 +287,8 @@ class DashboardPageState extends State<DashboardPage> {
     }
 
     // Trier les données par date (la plus ancienne en premier)
-    rentData.sort((a, b) => DateTime.parse(a['date']).compareTo(DateTime.parse(b['date'])));
+    rentData.sort((a, b) =>
+        DateTime.parse(a['date']).compareTo(DateTime.parse(b['date'])));
 
     // Date du premier loyer
     final firstRentDate = DateTime.parse(rentData.first['date']);
@@ -288,7 +303,9 @@ class DashboardPageState extends State<DashboardPage> {
 
     // Format plus lisible
     if (years > 0) {
-      return years == 1 ? "$years year ${months > 0 ? '$months month${months > 1 ? 's' : ''}' : ''}" : "$years years ${months > 0 ? '$months month${months > 1 ? 's' : ''}' : ''}";
+      return years == 1
+          ? "$years year ${months > 0 ? '$months month${months > 1 ? 's' : ''}' : ''}"
+          : "$years years ${months > 0 ? '$months month${months > 1 ? 's' : ''}' : ''}";
     } else if (months > 0) {
       return "$months month${months > 1 ? 's' : ''}";
     } else {
@@ -301,37 +318,47 @@ class DashboardPageState extends State<DashboardPage> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final List<String> wallets = prefs.getStringList('evmAddresses') ?? [];
-      
+
       if (wallets.isEmpty) return true; // Pas de wallets = pas de problème
-      
+
       final box = Hive.box('realTokens');
       final DateTime now = DateTime.now();
-      
+
       // Calculer le début de la semaine actuelle (lundi)
-      final DateTime startOfCurrentWeek = now.subtract(Duration(days: now.weekday - 1));
-      final DateTime startOfCurrentWeekMidnight = DateTime(startOfCurrentWeek.year, startOfCurrentWeek.month, startOfCurrentWeek.day);
-      
-      debugPrint('🔍 DEBUG ALERTE - Début de semaine: $startOfCurrentWeekMidnight');
+      final DateTime startOfCurrentWeek =
+          now.subtract(Duration(days: now.weekday - 1));
+      final DateTime startOfCurrentWeekMidnight = DateTime(
+          startOfCurrentWeek.year,
+          startOfCurrentWeek.month,
+          startOfCurrentWeek.day);
+
+      debugPrint(
+          '🔍 DEBUG ALERTE - Début de semaine: $startOfCurrentWeekMidnight');
       debugPrint('🔍 DEBUG ALERTE - Maintenant: $now');
-      debugPrint('🔍 DEBUG ALERTE - ${wallets.length} wallets à vérifier: ${wallets.join(", ")}');
-      
+      debugPrint(
+          '🔍 DEBUG ALERTE - ${wallets.length} wallets à vérifier: ${wallets.join(", ")}');
+
       // Vérifier le statut de chaque wallet pour les données basiques uniquement
       for (String wallet in wallets) {
         final lastSuccessTime = box.get('lastRentSuccess_$wallet');
         if (lastSuccessTime != null) {
           final DateTime lastSuccess = DateTime.parse(lastSuccessTime);
-          final bool isAfterWeekStart = lastSuccess.isAfter(startOfCurrentWeekMidnight);
-          debugPrint('🔍 DEBUG ALERTE - Wallet $wallet basique: $lastSuccess (après début semaine: $isAfterWeekStart)');
+          final bool isAfterWeekStart =
+              lastSuccess.isAfter(startOfCurrentWeekMidnight);
+          debugPrint(
+              '🔍 DEBUG ALERTE - Wallet $wallet basique: $lastSuccess (après début semaine: $isAfterWeekStart)');
           if (!isAfterWeekStart) {
-            debugPrint('🚨 DEBUG ALERTE - ALERTE: Wallet $wallet pas traité cette semaine (basique)');
+            debugPrint(
+                '🚨 DEBUG ALERTE - ALERTE: Wallet $wallet pas traité cette semaine (basique)');
             return false; // Ce wallet n'a pas été traité cette semaine
           }
         } else {
-          debugPrint('🚨 DEBUG ALERTE - ALERTE: Wallet $wallet sans timestamp de succès (basique)');
+          debugPrint(
+              '🚨 DEBUG ALERTE - ALERTE: Wallet $wallet sans timestamp de succès (basique)');
           return false; // Aucun timestamp de succès pour ce wallet
         }
       }
-      
+
       debugPrint('✅ DEBUG ALERTE - Tous les wallets OK, pas d\'alerte');
       return true; // Tous les wallets ont été traités avec succès
     } catch (e) {
@@ -348,13 +375,13 @@ class DashboardPageState extends State<DashboardPage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox.shrink(); // Pas d'icône pendant le chargement
         }
-        
+
         final bool allWalletsOk = snapshot.data ?? true;
-        
+
         if (allWalletsOk) {
           return const SizedBox.shrink(); // Pas d'icône si tout va bien
         }
-        
+
         // Afficher l'icône d'alerte
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -381,7 +408,9 @@ class DashboardPageState extends State<DashboardPage> {
               Text(
                 'Problème sync',
                 style: TextStyle(
-                  fontSize: 11 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 11 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
@@ -401,11 +430,13 @@ class DashboardPageState extends State<DashboardPage> {
     final appState = Provider.of<AppState>(context);
 
     final lastRentReceived = _getLastRentReceived(dataManager);
-    final totalRentReceived = _getTotalRentReceived(dataManager, currencyUtils, appState);
+    final totalRentReceived =
+        _getTotalRentReceived(dataManager, currencyUtils, appState);
     final timeElapsed = _getTimeElapsedSinceFirstRent(dataManager);
-    
+
     // Vérifier si des données sont en cours de mise à jour pour les shimmers
-    final bool shouldShowShimmers = _isPageLoading || dataManager.isUpdatingData;
+    final bool shouldShowShimmers =
+        _isPageLoading || dataManager.isUpdatingData;
 
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.light
@@ -429,7 +460,10 @@ class DashboardPageState extends State<DashboardPage> {
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Padding(
-                padding: EdgeInsets.only(top: UIUtils.getAppBarHeight(context), left: 12.0, right: 12.0),
+                padding: EdgeInsets.only(
+                    top: UIUtils.getAppBarHeight(context),
+                    left: 12.0,
+                    right: 12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -440,7 +474,14 @@ class DashboardPageState extends State<DashboardPage> {
                         children: [
                           Text(
                             S.of(context).hello,
-                            style: TextStyle(fontSize: 28 + appState.getTextSizeOffset(), fontWeight: FontWeight.bold, letterSpacing: -0.5, color: Theme.of(context).textTheme.bodyLarge?.color),
+                            style: TextStyle(
+                                fontSize: 28 + appState.getTextSizeOffset(),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: -0.5,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color),
                           ),
                           if (kIsWeb)
                             IconButton(
@@ -459,16 +500,18 @@ class DashboardPageState extends State<DashboardPage> {
                                 });
                               },
                             ),
-                                            ],
-                  ),
-                ),
-                const SizedBox(height: 8),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     Container(
                       margin: EdgeInsets.only(bottom: 12.0),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                            Theme.of(context)
+                                .primaryColor
+                                .withValues(alpha: 0.8),
                             Theme.of(context).primaryColor,
                           ],
                           begin: Alignment.topCenter,
@@ -478,7 +521,9 @@ class DashboardPageState extends State<DashboardPage> {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).primaryColor.withValues(alpha: 0.2),
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withValues(alpha: 0.2),
                             blurRadius: 5,
                             offset: const Offset(0, 4),
                             spreadRadius: -2,
@@ -501,90 +546,112 @@ class DashboardPageState extends State<DashboardPage> {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             S.of(context).lastRentReceived,
                                             style: TextStyle(
-                                              fontSize: 13 + appState.getTextSizeOffset(),
+                                              fontSize: 13 +
+                                                  appState.getTextSizeOffset(),
                                               color: Colors.white70,
                                               letterSpacing: -0.2,
                                             ),
                                           ),
                                           const SizedBox(height: 2),
-                                          dataManager.isLoadingMain || shouldShowShimmers
-                                            ? ShimmerUtils.originalColorShimmer(
-                                                child: Text(
+                                          dataManager.isLoadingMain ||
+                                                  shouldShowShimmers
+                                              ? ShimmerUtils
+                                                  .originalColorShimmer(
+                                                  child: Text(
+                                                    lastRentReceived,
+                                                    style: TextStyle(
+                                                      fontSize: 20 +
+                                                          appState
+                                                              .getTextSizeOffset(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  color: Colors.white,
+                                                )
+                                              : Text(
                                                   lastRentReceived,
                                                   style: TextStyle(
-                                                    fontSize: 20 + appState.getTextSizeOffset(),
+                                                    fontSize: 20 +
+                                                        appState
+                                                            .getTextSizeOffset(),
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                                color: Colors.white,
-                                              )
-                                            : Text(
-                                                lastRentReceived,
-                                                style: TextStyle(
-                                                  fontSize: 20 + appState.getTextSizeOffset(),
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
                                         ],
                                       ),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text(
                                             'Total des loyers',
                                             style: TextStyle(
-                                              fontSize: 13 + appState.getTextSizeOffset(),
+                                              fontSize: 13 +
+                                                  appState.getTextSizeOffset(),
                                               color: Colors.white70,
                                               letterSpacing: -0.2,
                                             ),
                                           ),
                                           const SizedBox(height: 2),
-                                          dataManager.isLoadingMain || shouldShowShimmers
-                                            ? ShimmerUtils.originalColorShimmer(
-                                                child: Text(
+                                          dataManager.isLoadingMain ||
+                                                  shouldShowShimmers
+                                              ? ShimmerUtils
+                                                  .originalColorShimmer(
+                                                  child: Text(
+                                                    totalRentReceived,
+                                                    style: TextStyle(
+                                                      fontSize: 20 +
+                                                          appState
+                                                              .getTextSizeOffset(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  color: Colors.white,
+                                                )
+                                              : Text(
                                                   totalRentReceived,
                                                   style: TextStyle(
-                                                    fontSize: 20 + appState.getTextSizeOffset(),
+                                                    fontSize: 20 +
+                                                        appState
+                                                            .getTextSizeOffset(),
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                                color: Colors.white,
-                                              )
-                                            : Text(
-                                                totalRentReceived,
-                                                style: TextStyle(
-                                                  fontSize: 20 + appState.getTextSizeOffset(),
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
                                         ],
                                       ),
                                     ],
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                   Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     // Icône d'alerte à gauche
                                     _buildWalletAlertIcon(),
                                     // Informations calendrier à droite
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 6),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.15),
+                                        color: Colors.white
+                                            .withValues(alpha: 0.15),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Row(
@@ -598,7 +665,8 @@ class DashboardPageState extends State<DashboardPage> {
                                           Text(
                                             'Depuis $timeElapsed',
                                             style: TextStyle(
-                                              fontSize: 12 + appState.getTextSizeOffset(),
+                                              fontSize: 12 +
+                                                  appState.getTextSizeOffset(),
                                               fontWeight: FontWeight.w500,
                                               color: Colors.white,
                                             ),
@@ -629,26 +697,36 @@ class DashboardPageState extends State<DashboardPage> {
                                       context: context,
                                     ),
                                     const SizedBox(height: 8),
-                                    TokensCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                    TokensCard(
+                                        showAmounts: appState.showAmounts,
+                                        isLoading: shouldShowShimmers),
                                     const SizedBox(height: 8),
                                     // Cartes par type de produit en ligne
                                     Row(
                                       children: [
                                         Expanded(
-                                          child: RealEstateCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                          child: RealEstateCard(
+                                              showAmounts: appState.showAmounts,
+                                              isLoading: shouldShowShimmers),
                                         ),
                                         const SizedBox(width: 4),
                                         Expanded(
-                                          child: LoanIncomeCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                          child: LoanIncomeCard(
+                                              showAmounts: appState.showAmounts,
+                                              isLoading: shouldShowShimmers),
                                         ),
                                         const SizedBox(width: 4),
                                         Expanded(
-                                          child: FactoringCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                          child: FactoringCard(
+                                              showAmounts: appState.showAmounts,
+                                              isLoading: shouldShowShimmers),
                                         ),
                                       ],
                                     ),
                                     const SizedBox(height: 8),
-                                    RentsCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                    RentsCard(
+                                        showAmounts: appState.showAmounts,
+                                        isLoading: shouldShowShimmers),
                                   ],
                                 ),
                               ),
@@ -658,9 +736,13 @@ class DashboardPageState extends State<DashboardPage> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    RmmCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                    RmmCard(
+                                        showAmounts: appState.showAmounts,
+                                        isLoading: shouldShowShimmers),
                                     const SizedBox(height: 8),
-                                    NextRondaysCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                    NextRondaysCard(
+                                        showAmounts: appState.showAmounts,
+                                        isLoading: shouldShowShimmers),
                                   ],
                                 ),
                               ),
@@ -674,30 +756,44 @@ class DashboardPageState extends State<DashboardPage> {
                                 context: context,
                               ),
                               const SizedBox(height: 8),
-                              RmmCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                              RmmCard(
+                                  showAmounts: appState.showAmounts,
+                                  isLoading: shouldShowShimmers),
                               const SizedBox(height: 8),
-                              TokensCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                              TokensCard(
+                                  showAmounts: appState.showAmounts,
+                                  isLoading: shouldShowShimmers),
                               const SizedBox(height: 8),
                               // Cartes par type de produit en ligne sur tous les écrans
                               Row(
                                 children: [
                                   Expanded(
-                                    child: RealEstateCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                    child: RealEstateCard(
+                                        showAmounts: appState.showAmounts,
+                                        isLoading: shouldShowShimmers),
                                   ),
                                   const SizedBox(width: 4),
                                   Expanded(
-                                    child: LoanIncomeCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                    child: LoanIncomeCard(
+                                        showAmounts: appState.showAmounts,
+                                        isLoading: shouldShowShimmers),
                                   ),
                                   const SizedBox(width: 4),
                                   Expanded(
-                                    child: FactoringCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                                    child: FactoringCard(
+                                        showAmounts: appState.showAmounts,
+                                        isLoading: shouldShowShimmers),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 8),
-                              RentsCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                              RentsCard(
+                                  showAmounts: appState.showAmounts,
+                                  isLoading: shouldShowShimmers),
                               const SizedBox(height: 8),
-                              NextRondaysCard(showAmounts: appState.showAmounts, isLoading: shouldShowShimmers),
+                              NextRondaysCard(
+                                  showAmounts: appState.showAmounts,
+                                  isLoading: shouldShowShimmers),
                             ],
                           ),
                     const SizedBox(height: 80),
@@ -716,7 +812,9 @@ class DashboardPageState extends State<DashboardPage> {
       margin: EdgeInsets.symmetric(vertical: 12.0),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.light ? Color(0xFFE5F2FF) : Color(0xFF0A3060),
+        color: Theme.of(context).brightness == Brightness.light
+            ? Color(0xFFE5F2FF)
+            : Color(0xFF0A3060),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
@@ -728,9 +826,12 @@ class DashboardPageState extends State<DashboardPage> {
             Text(
               S.of(context).noDataAvailable,
               style: TextStyle(
-                fontSize: 17 + Provider.of<AppState>(context).getTextSizeOffset(),
+                fontSize:
+                    17 + Provider.of<AppState>(context).getTextSizeOffset(),
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).brightness == Brightness.light ? Color(0xFF007AFF) : Colors.white,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Color(0xFF007AFF)
+                    : Colors.white,
               ),
               textAlign: TextAlign.center,
             ),
@@ -777,21 +878,25 @@ class DashboardPageState extends State<DashboardPage> {
       return S.of(context).noRentReceived;
     }
 
-    rentData.sort((a, b) => DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
+    rentData.sort((a, b) =>
+        DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
     final lastRent = rentData.first['rent'];
 
     // Utiliser _getFormattedAmount pour masquer ou afficher la valeur
-    return currencyUtils.getFormattedAmount(currencyUtils.convert(lastRent), currencyUtils.currencySymbol, appState.showAmounts);
+    return currencyUtils.getFormattedAmount(currencyUtils.convert(lastRent),
+        currencyUtils.currencySymbol, appState.showAmounts);
   }
 
   // Récupère le total des loyers reçus avec gestion du chargement
-  String _getTotalRentReceived(DataManager dataManager, CurrencyProvider currencyUtils, AppState appState) {
+  String _getTotalRentReceived(DataManager dataManager,
+      CurrencyProvider currencyUtils, AppState appState) {
     // Si les données sont en cours de chargement, retourner un placeholder
     if (dataManager.isLoadingMain || _isPageLoading) {
       return "---";
     }
 
     final totalRent = dataManager.getTotalRentReceived();
-    return currencyUtils.getFormattedAmount(currencyUtils.convert(totalRent), currencyUtils.currencySymbol, appState.showAmounts);
+    return currencyUtils.getFormattedAmount(currencyUtils.convert(totalRent),
+        currencyUtils.currencySymbol, appState.showAmounts);
   }
 }

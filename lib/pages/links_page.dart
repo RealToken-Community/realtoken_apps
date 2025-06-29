@@ -39,7 +39,8 @@ class RealtPageState extends State<LinksPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -126,17 +127,23 @@ class RealtPageState extends State<LinksPage> {
                           Text(
                             linkText,
                             style: TextStyle(
-                              fontSize: 16 + Provider.of<AppState>(context).getTextSizeOffset(),
+                              fontSize: 16 +
+                                  Provider.of<AppState>(context)
+                                      .getTextSizeOffset(),
                               fontWeight: FontWeight.w500,
-                              color: CupertinoColors.systemBlue.resolveFrom(context),
+                              color: CupertinoColors.systemBlue
+                                  .resolveFrom(context),
                             ),
                           ),
                           const SizedBox(height: 6),
                           Text(
                             description,
                             style: TextStyle(
-                              fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
-                              color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                              fontSize: 14 +
+                                  Provider.of<AppState>(context)
+                                      .getTextSizeOffset(),
+                              color: CupertinoColors.secondaryLabel
+                                  .resolveFrom(context),
                             ),
                           ),
                         ],

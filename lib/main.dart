@@ -38,7 +38,8 @@ void main() async {
 
   try {
     if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
       debugPrint("✅ Firebase initialisé !");
     }
   } catch (e, stacktrace) {
@@ -87,7 +88,9 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => dataManager),
-        ChangeNotifierProvider(create: (_) => CurrencyProvider()), // ✅ Assurez-vous que CurrencyProvider est bien ici
+        ChangeNotifierProvider(
+            create: (_) =>
+                CurrencyProvider()), // ✅ Assurez-vous que CurrencyProvider est bien ici
         ChangeNotifierProvider(create: (_) => appState),
       ],
       child: MyApp(autoSyncEnabled: autoSyncEnabled),
@@ -123,10 +126,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     _checkAuthentication();
     _checkGoogleDriveConnection();
     _autoSyncEnabled = widget.autoSyncEnabled;
-    
+
     // Charger les données initiales de l'application
     _loadInitialData();
-    
+
     if (!kIsWeb) {
       initOneSignal();
     } else {
@@ -203,31 +206,37 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     OneSignal.Debug.setAlertLevel(OSLogLevel.none);
     OneSignal.consentRequired(_requireConsent);
     OneSignal.initialize("e7059f66-9c12-4d21-a078-edaf1a203dea");
-    
+
     // Vérifier si l'utilisateur a déjà refusé les notifications
     _checkAndRequestNotificationPermission();
-    
+
     OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-      debugPrint('Notification reçue en premier plan : ${event.notification.jsonRepresentation()}');
+      debugPrint(
+          'Notification reçue en premier plan : ${event.notification.jsonRepresentation()}');
       event.preventDefault();
       event.notification.display();
     });
     OneSignal.Notifications.addClickListener((event) {
-      debugPrint('Notification cliquée : ${event.notification.jsonRepresentation()}');
+      debugPrint(
+          'Notification cliquée : ${event.notification.jsonRepresentation()}');
     });
     OneSignal.User.pushSubscription.addObserver((state) {
-      debugPrint('Utilisateur inscrit aux notifications : ${state.current.jsonRepresentation()}');
+      debugPrint(
+          'Utilisateur inscrit aux notifications : ${state.current.jsonRepresentation()}');
     });
   }
 
   Future<void> _checkAndRequestNotificationPermission() async {
     final prefs = await SharedPreferences.getInstance();
-    final hasRefusedNotifications = prefs.getBool(PreferenceKeys.hasRefusedNotifications) ?? false;
-    final hasAskedNotifications = prefs.getBool(PreferenceKeys.hasAskedNotifications) ?? false;
+    final hasRefusedNotifications =
+        prefs.getBool(PreferenceKeys.hasRefusedNotifications) ?? false;
+    final hasAskedNotifications =
+        prefs.getBool(PreferenceKeys.hasAskedNotifications) ?? false;
 
     // Si l'utilisateur a déjà refusé, ne pas redemander
     if (hasRefusedNotifications) {
-      debugPrint("🚫 L'utilisateur a déjà refusé les notifications, pas de nouvelle demande");
+      debugPrint(
+          "🚫 L'utilisateur a déjà refusé les notifications, pas de nouvelle demande");
       return;
     }
 
@@ -235,13 +244,15 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (!hasAskedNotifications) {
       debugPrint("📱 Première demande d'autorisation de notifications");
       await prefs.setBool(PreferenceKeys.hasAskedNotifications, true);
-      
-      final hasPermission = await OneSignal.Notifications.requestPermission(true);
-      
+
+      final hasPermission =
+          await OneSignal.Notifications.requestPermission(true);
+
       // Si la permission a été refusée, sauvegarder cette information
       if (!hasPermission) {
         await prefs.setBool(PreferenceKeys.hasRefusedNotifications, true);
-        debugPrint("🚫 Permissions de notifications refusées par l'utilisateur");
+        debugPrint(
+            "🚫 Permissions de notifications refusées par l'utilisateur");
       } else {
         debugPrint("✅ Permissions de notifications accordées");
         // Réinitialiser le flag de refus au cas où l'utilisateur accepterait après avoir refusé
@@ -265,9 +276,12 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       // Demander l'authentification UNIQUEMENT si l'application était en arrière-plan (inactive ou paused)
       // et qu'elle revient au premier plan après un certain temps
-      if (previousState == AppLifecycleState.paused || previousState == AppLifecycleState.inactive) {
+      if (previousState == AppLifecycleState.paused ||
+          previousState == AppLifecycleState.inactive) {
         final now = DateTime.now();
-        final needsAuth = _lastAuthTime == null || now.difference(_lastAuthTime!).inMinutes >= 5; // Redemander après 5 minutes
+        final needsAuth = _lastAuthTime == null ||
+            now.difference(_lastAuthTime!).inMinutes >=
+                5; // Redemander après 5 minutes
 
         if (needsAuth) {
           _checkAuthentication();
@@ -289,7 +303,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     } catch (e) {
       debugPrint("❌ Erreur lors de la mise à jour des données: $e");
     }
-    
+
     await _loadAutoSyncPreference();
 
     if (_autoSyncEnabled) {

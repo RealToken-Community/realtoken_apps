@@ -17,8 +17,12 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
   if (token['transactions'] != null && token['transactions'].isNotEmpty) {
     List<dynamic> sortedTransactions = List.from(token['transactions']);
     sortedTransactions.sort((a, b) {
-      final dateA = a['dateTime'] != null ? DateTime.parse(a['dateTime'].toString()) : DateTime.now();
-      final dateB = b['dateTime'] != null ? DateTime.parse(b['dateTime'].toString()) : DateTime.now();
+      final dateA = a['dateTime'] != null
+          ? DateTime.parse(a['dateTime'].toString())
+          : DateTime.now();
+      final dateB = b['dateTime'] != null
+          ? DateTime.parse(b['dateTime'].toString())
+          : DateTime.now();
       return dateB.compareTo(dateA);
     });
     token['transactions'] = sortedTransactions;
@@ -28,22 +32,23 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
   final String tokenUuid = token['uuid'] ?? token['gnosisContract'] ?? '';
   List<Map<String, dynamic>> rawTokenHistory = [];
   List<Map<String, dynamic>> tokenChanges = [];
-  
+
   if (tokenUuid.isNotEmpty && dataManager.tokenHistoryData.isNotEmpty) {
     print("🔍 Recherche historique pour token: $tokenUuid");
-    
+
     // Utiliser la méthode existante du DataManager
     rawTokenHistory = dataManager.getTokenHistory(tokenUuid);
     print("📋 Historique brut trouvé: ${rawTokenHistory.length} entrées");
-    
+
     // Détecter les changements entre les entrées consécutives
     for (int i = 1; i < rawTokenHistory.length; i++) {
       var previous = rawTokenHistory[i]; // Plus ancien
       var current = rawTokenHistory[i - 1]; // Plus récent
-      
+
       // Détecter les changements dans les champs importants
-      List<Map<String, dynamic>> changes = _detectTokenChanges(previous, current, token);
-      
+      List<Map<String, dynamic>> changes =
+          _detectTokenChanges(previous, current, token);
+
       if (changes.isNotEmpty) {
         tokenChanges.add({
           'date': current['date'],
@@ -51,8 +56,9 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
         });
       }
     }
-    
-    print("📊 Changements détectés: ${tokenChanges.length} dates avec modifications");
+
+    print(
+        "📊 Changements détectés: ${tokenChanges.length} dates avec modifications");
   }
 
   return Padding(
@@ -67,73 +73,81 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
           children: [
             // Gestion de l'état de chargement avec Shimmer
             if (isLoadingTransactions)
-              ...List.generate(5, (index) => // Placeholder pour 5 items simulés
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-                  child: Card(
-                    elevation: 0, // Style iOS plat
-                    margin: const EdgeInsets.only(bottom: 8.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Coins arrondis style iOS
-                    ),
-                    color: Theme.of(context).cardColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          ShimmerUtils.standardShimmer(
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                shape: BoxShape.circle,
-                              ),
-                            ),
+              ...List.generate(
+                  5,
+                  (index) => // Placeholder pour 5 items simulés
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0, vertical: 4.0),
+                        child: Card(
+                          elevation: 0, // Style iOS plat
+                          margin: const EdgeInsets.only(bottom: 8.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                12), // Coins arrondis style iOS
                           ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          color: Theme.of(context).cardColor,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
                               children: [
                                 ShimmerUtils.standardShimmer(
                                   child: Container(
-                                    width: double.infinity,
-                                    height: 14,
+                                    width: 40,
+                                    height: 40,
                                     decoration: BoxDecoration(
                                       color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(7),
+                                      shape: BoxShape.circle,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 8.0),
-                                ShimmerUtils.standardShimmer(
-                                  child: Container(
-                                    width: 100,
-                                    height: 12,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
+                                const SizedBox(width: 16.0),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ShimmerUtils.standardShimmer(
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 14,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[300],
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      ShimmerUtils.standardShimmer(
+                                        child: Container(
+                                          width: 100,
+                                          height: 12,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[300],
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              )
-            else if (token['transactions'] != null && token['transactions'].isNotEmpty)
+                        ),
+                      ))
+            else if (token['transactions'] != null &&
+                token['transactions'].isNotEmpty)
               ...token['transactions'].map((transaction) {
                 final price =
                     '${currencyUtils.convert(transaction['price'] ?? token['tokenPrice']).toStringAsFixed(2)} ${currencyUtils.currencySymbol}';
                 final amount = transaction['amount'] ?? 0.0;
-                final transactionType = transaction.containsKey('transactionType')
-                    ? transaction['transactionType']
-                    : S.of(context).unknownTransaction;
+                final transactionType =
+                    transaction.containsKey('transactionType')
+                        ? transaction['transactionType']
+                        : S.of(context).unknownTransaction;
 
                 final dateTime = transaction['dateTime'] != null
                     ? DateFormat('yyyy-MM-dd HH:mm')
@@ -148,7 +162,8 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                   icon = Icons.shopping_cart;
                   iconColor = Colors.white;
                   bgColor = Colors.blue;
-                } else if (transactionType == DataManager.transactionTypeTransfer) {
+                } else if (transactionType ==
+                    DataManager.transactionTypeTransfer) {
                   icon = Icons.swap_horiz;
                   iconColor = Colors.white;
                   bgColor = Colors.grey;
@@ -164,7 +179,8 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
 
                 // Afficher chaque transaction dans une belle carte style iOS
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0, vertical: 4.0),
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 8.0),
                     decoration: BoxDecoration(
@@ -202,7 +218,7 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                   ),
                                   child: Center(
                                     child: Icon(
-                                      icon, 
+                                      icon,
                                       color: iconColor,
                                       size: 20,
                                     ),
@@ -212,15 +228,21 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                 // Contenu
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // Type de transaction
                                       Text(
-                                        _getLocalizedTransactionType(transactionType, context),
+                                        _getLocalizedTransactionType(
+                                            transactionType, context),
                                         style: TextStyle(
-                                          fontSize: 16 + appState.getTextSizeOffset(),
+                                          fontSize:
+                                              16 + appState.getTextSizeOffset(),
                                           fontWeight: FontWeight.w400,
-                                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.color,
                                         ),
                                       ),
                                       const SizedBox(height: 2),
@@ -228,10 +250,12 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                       Row(
                                         children: [
                                           Text(
-                                            price, 
+                                            price,
                                             style: TextStyle(
-                                              fontSize: 14 + appState.getTextSizeOffset(),
-                                              color: Theme.of(context).primaryColor,
+                                              fontSize: 14 +
+                                                  appState.getTextSizeOffset(),
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -239,8 +263,12 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                           Text(
                                             "${S.of(context).quantity}: $amount",
                                             style: TextStyle(
-                                              fontSize: 14 + appState.getTextSizeOffset(),
-                                              color: Theme.of(context).textTheme.bodyMedium?.color,
+                                              fontSize: 14 +
+                                                  appState.getTextSizeOffset(),
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color,
                                             ),
                                           ),
                                         ],
@@ -248,10 +276,16 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                       const SizedBox(height: 2),
                                       // Date
                                       Text(
-                                        DateFormat('dd MMMM yyyy, HH:mm').format(DateTime.parse(dateTime)),
+                                        DateFormat('dd MMMM yyyy, HH:mm')
+                                            .format(DateTime.parse(dateTime)),
                                         style: TextStyle(
-                                          fontSize: 12 + appState.getTextSizeOffset(),
-                                          color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                                          fontSize:
+                                              12 + appState.getTextSizeOffset(),
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color
+                                              ?.withValues(alpha: 0.7),
                                         ),
                                       ),
                                     ],
@@ -310,13 +344,14 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
               ...tokenChanges.map((historyEntry) {
                 final date = DateTime.parse(historyEntry['date']);
                 final changes = historyEntry['changes'] as List<dynamic>? ?? [];
-                
+
                 if (changes.isEmpty) {
                   return const SizedBox.shrink();
                 }
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0, vertical: 4.0),
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 8.0),
                     decoration: BoxDecoration(
@@ -350,7 +385,7 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                             final changeType = _getChangeTypeFromChange(change);
                             final changeColor = _getChangeColor(changeType);
                             final changeIcon = _getChangeIcon(changeType);
-                            
+
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 6.0),
                               child: Row(
@@ -373,22 +408,33 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                   // Description du changement
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           _getFieldDisplayName(change['field']),
                                           style: TextStyle(
-                                            fontSize: 13 + appState.getTextSizeOffset(),
+                                            fontSize: 13 +
+                                                appState.getTextSizeOffset(),
                                             fontWeight: FontWeight.w500,
-                                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color,
                                           ),
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
-                                          _formatChangeDescription(change, currencyUtils),
+                                          _formatChangeDescription(
+                                              change, currencyUtils),
                                           style: TextStyle(
-                                            fontSize: 12 + appState.getTextSizeOffset(),
-                                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+                                            fontSize: 12 +
+                                                appState.getTextSizeOffset(),
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.color
+                                                ?.withValues(alpha: 0.8),
                                           ),
                                         ),
                                       ],
@@ -437,7 +483,8 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
 }
 
 // Widget pour construire une section, comme dans property_tab.dart
-Widget _buildSectionCard(BuildContext context, {required String title, required List<Widget> children}) {
+Widget _buildSectionCard(BuildContext context,
+    {required String title, required List<Widget> children}) {
   return Container(
     margin: const EdgeInsets.only(bottom: 6),
     decoration: BoxDecoration(
@@ -472,7 +519,8 @@ Widget _buildSectionCard(BuildContext context, {required String title, required 
 }
 
 // Méthode pour traduire les constantes en textes localisés
-String _getLocalizedTransactionType(String transactionType, BuildContext context) {
+String _getLocalizedTransactionType(
+    String transactionType, BuildContext context) {
   if (transactionType == DataManager.transactionTypePurchase) {
     return S.of(context).purchase;
   } else if (transactionType == DataManager.transactionTypeTransfer) {
@@ -502,15 +550,15 @@ String _formatHistoryDate(DateTime date) {
 String _getChangeTypeFromChange(dynamic change) {
   final oldValue = change['oldValue'];
   final newValue = change['newValue'];
-  
+
   if (oldValue == null || newValue == null) {
     return 'neutral';
   }
-  
+
   // Convertir en double pour la comparaison
   double? oldVal = double.tryParse(oldValue.toString());
   double? newVal = double.tryParse(newValue.toString());
-  
+
   if (oldVal != null && newVal != null) {
     if (newVal > oldVal) {
       return 'increase';
@@ -518,42 +566,49 @@ String _getChangeTypeFromChange(dynamic change) {
       return 'decrease';
     }
   }
-  
+
   return 'neutral';
 }
 
-String _formatChangeDescription(dynamic change, CurrencyProvider currencyUtils) {
+String _formatChangeDescription(
+    dynamic change, CurrencyProvider currencyUtils) {
   final field = change['field'];
   final oldValue = change['oldValue'];
   final newValue = change['newValue'];
-  
+
   if (oldValue == null || newValue == null) {
     return 'Valeur modifiée';
   }
-  
+
   String formattedOldValue = oldValue.toString();
   String formattedNewValue = newValue.toString();
-  
+
   // Formatage spécifique selon le champ
   if (field == 'token_price' || field == 'underlying_asset_price') {
     double? oldVal = double.tryParse(oldValue.toString());
     double? newVal = double.tryParse(newValue.toString());
     if (oldVal != null && newVal != null) {
-      formattedOldValue = '${currencyUtils.convert(oldVal).toStringAsFixed(2)} ${currencyUtils.currencySymbol}';
-      formattedNewValue = '${currencyUtils.convert(newVal).toStringAsFixed(2)} ${currencyUtils.currencySymbol}';
+      formattedOldValue =
+          '${currencyUtils.convert(oldVal).toStringAsFixed(2)} ${currencyUtils.currencySymbol}';
+      formattedNewValue =
+          '${currencyUtils.convert(newVal).toStringAsFixed(2)} ${currencyUtils.currencySymbol}';
     }
-  } else if (field == 'total_investment' || field == 'gross_rent_year' || field == 'net_rent_year') {
+  } else if (field == 'total_investment' ||
+      field == 'gross_rent_year' ||
+      field == 'net_rent_year') {
     double? oldVal = double.tryParse(oldValue.toString());
     double? newVal = double.tryParse(newValue.toString());
     if (oldVal != null && newVal != null) {
-      formattedOldValue = '${currencyUtils.convert(oldVal).toStringAsFixed(0)} ${currencyUtils.currencySymbol}';
-      formattedNewValue = '${currencyUtils.convert(newVal).toStringAsFixed(0)} ${currencyUtils.currencySymbol}';
+      formattedOldValue =
+          '${currencyUtils.convert(oldVal).toStringAsFixed(0)} ${currencyUtils.currencySymbol}';
+      formattedNewValue =
+          '${currencyUtils.convert(newVal).toStringAsFixed(0)} ${currencyUtils.currencySymbol}';
     }
   } else if (field == 'rented_units') {
     formattedOldValue = '$oldValue unité${oldValue != '1' ? 's' : ''}';
     formattedNewValue = '$newValue unité${newValue != '1' ? 's' : ''}';
   }
-  
+
   return '$formattedOldValue → $formattedNewValue';
 }
 
@@ -600,13 +655,10 @@ IconData _getChangeIcon(String changeType) {
   }
 }
 
-List<Map<String, dynamic>> _detectTokenChanges(
-  Map<String, dynamic> previous, 
-  Map<String, dynamic> current, 
-  Map<String, dynamic> tokenInfo
-) {
+List<Map<String, dynamic>> _detectTokenChanges(Map<String, dynamic> previous,
+    Map<String, dynamic> current, Map<String, dynamic> tokenInfo) {
   List<Map<String, dynamic>> changes = [];
-  
+
   // Champs à surveiller
   final fieldsToWatch = {
     'token_price': 'Prix du token',
@@ -616,11 +668,11 @@ List<Map<String, dynamic>> _detectTokenChanges(
     'net_rent_year': 'Loyer net annuel',
     'rented_units': 'Unités louées',
   };
-  
+
   fieldsToWatch.forEach((field, label) {
     var prevValue = previous[field];
     var currValue = current[field];
-    
+
     if (prevValue != null && currValue != null && prevValue != currValue) {
       changes.add({
         'field': field,
@@ -630,6 +682,6 @@ List<Map<String, dynamic>> _detectTokenChanges(
       });
     }
   });
-  
+
   return changes;
 }

@@ -24,13 +24,16 @@ class GoogleDriveService {
 
   /// Vérifier la connexion et initialiser l'API Google Drive
   Future<void> initDrive() async {
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signInSilently();
+    final GoogleSignInAccount? googleUser =
+        await _googleSignIn.signInSilently();
     if (googleUser != null) {
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final auth.AuthClient client = auth.authenticatedClient(
         http.Client(),
         auth.AccessCredentials(
-          auth.AccessToken('Bearer', googleAuth.accessToken!, DateTime.now().add(Duration(hours: 1)).toUtc()),
+          auth.AccessToken('Bearer', googleAuth.accessToken!,
+              DateTime.now().add(Duration(hours: 1)).toUtc()),
           googleAuth.idToken,
           _googleSignIn.scopes,
         ),
@@ -107,8 +110,10 @@ class GoogleDriveService {
 
     // Si les données locales sont vides, on ne fait que l'importation sans upload
     if (localData.isEmpty && driveData != null) {
-      debugPrint("📥 Importation des données de Google Drive dans l'application...");
-      await _restoreLocalBackup("${(await getApplicationDocumentsDirectory()).path}/realToken_Backup.zip");
+      debugPrint(
+          "📥 Importation des données de Google Drive dans l'application...");
+      await _restoreLocalBackup(
+          "${(await getApplicationDocumentsDirectory()).path}/realToken_Backup.zip");
       return;
     }
 
@@ -116,7 +121,8 @@ class GoogleDriveService {
     Map<String, dynamic> mergedData = _mergeData(localData, driveData);
 
     // 🔹 Assurer que les données sont bien enregistrées dans Hive
-    debugPrint("📌 Contenu fusionné après merge (avant stockage dans Hive) : ${jsonEncode(mergedData)}");
+    debugPrint(
+        "📌 Contenu fusionné après merge (avant stockage dans Hive) : ${jsonEncode(mergedData)}");
     await _storeMergedDataInHive(mergedData);
 
     DataFetchUtils.refreshData(context);
@@ -147,8 +153,10 @@ class GoogleDriveService {
       if (mergedData.containsKey(key)) {
         // debugPrint("🔍 Clés à stocker dans '$key' : ${mergedData[key].keys}");
 
-        Map<String, dynamic> existingData = Map<String, dynamic>.from(box.toMap());
-        Map<String, dynamic> newData = Map<String, dynamic>.from(mergedData[key]);
+        Map<String, dynamic> existingData =
+            Map<String, dynamic>.from(box.toMap());
+        Map<String, dynamic> newData =
+            Map<String, dynamic>.from(mergedData[key]);
 
         newData.forEach((dataKey, value) {
           // ✅ Si la clé n'existe pas, on l'ajoute directement
@@ -169,10 +177,14 @@ class GoogleDriveService {
                   String newTimestamp = newItem['timestamp'];
 
                   // Vérifier si un élément avec le même timestamp existe déjà
-                  bool exists = updatedList.any((existingItem) => existingItem is Map && existingItem.containsKey('timestamp') && existingItem['timestamp'] == newTimestamp);
+                  bool exists = updatedList.any((existingItem) =>
+                      existingItem is Map &&
+                      existingItem.containsKey('timestamp') &&
+                      existingItem['timestamp'] == newTimestamp);
 
                   if (!exists) {
-                    debugPrint("➕ Ajouté (nouveau timestamp) dans '$key' : $newItem");
+                    debugPrint(
+                        "➕ Ajouté (nouveau timestamp) dans '$key' : $newItem");
                     updatedList.add(newItem);
                   }
                 }
@@ -182,14 +194,18 @@ class GoogleDriveService {
             } else if (value is Map) {
               // Gérer les objets Map individuellement
               value.forEach((subKey, subValue) {
-                if (!existingValue.containsKey(subKey) || (existingValue[subKey]['timestamp'] ?? '') < (subValue['timestamp'] ?? '')) {
-                  debugPrint("🔄 Mise à jour (timestamp plus récent) dans '$key' : $subKey -> $subValue");
+                if (!existingValue.containsKey(subKey) ||
+                    (existingValue[subKey]['timestamp'] ?? '') <
+                        (subValue['timestamp'] ?? '')) {
+                  debugPrint(
+                      "🔄 Mise à jour (timestamp plus récent) dans '$key' : $subKey -> $subValue");
                   existingValue[subKey] = subValue;
                 }
               });
               box.put(dataKey, existingValue);
             } else {
-              debugPrint("⚠️ Valeur ignorée (format non pris en charge) : $dataKey -> $value");
+              debugPrint(
+                  "⚠️ Valeur ignorée (format non pris en charge) : $dataKey -> $value");
             }
           }
         });
@@ -258,7 +274,8 @@ class GoogleDriveService {
     }
   }
 
-  Future<Map<String, dynamic>?> _extractAndCleanBackupData(String zipFilePath) async {
+  Future<Map<String, dynamic>?> _extractAndCleanBackupData(
+      String zipFilePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final File zipFile = File(zipFilePath);
 
@@ -288,7 +305,8 @@ class GoogleDriveService {
       }
     }
 
-    debugPrint("✅ Extraction et nettoyage terminés, données récupérées "); //: $extractedData
+    debugPrint(
+        "✅ Extraction et nettoyage terminés, données récupérées "); //: $extractedData
     return extractedData;
   }
 
@@ -390,7 +408,8 @@ class GoogleDriveService {
           if (drivePreferences.isNotEmpty) {
             _storeMergedPreferences(drivePreferences);
           } else {
-            debugPrint("⚠️ Google Drive ne contient pas de préférences, on garde celles en local.");
+            debugPrint(
+                "⚠️ Google Drive ne contient pas de préférences, on garde celles en local.");
           }
         }
       }
@@ -437,37 +456,46 @@ class GoogleDriveService {
     return value;
   }
 
-  Future<void> _storeMergedPreferences(Map<String, dynamic> mergedPreferences) async {
-    debugPrint("📦 Sauvegarde des préférences fusionnées dans SharedPreferences...");
+  Future<void> _storeMergedPreferences(
+      Map<String, dynamic> mergedPreferences) async {
+    debugPrint(
+        "📦 Sauvegarde des préférences fusionnées dans SharedPreferences...");
 
     final prefs = await SharedPreferences.getInstance();
 
     // 🔹 Stocker les adresses ETH
-    await prefs.setStringList('evmAddresses', List<String>.from(mergedPreferences['ethAddresses'] ?? []));
+    await prefs.setStringList('evmAddresses',
+        List<String>.from(mergedPreferences['ethAddresses'] ?? []));
 
     // 🔹 Stocker userIdToAddresses (sans double sérialisation)
     if (mergedPreferences['userIdToAddresses'] != null) {
       if (mergedPreferences['userIdToAddresses'] is String) {
         // Vérifier si la chaîne est déjà un JSON
         try {
-          jsonDecode(mergedPreferences['userIdToAddresses']); // Test si c'est déjà un JSON
-          await prefs.setString('userIdToAddresses', mergedPreferences['userIdToAddresses']);
+          jsonDecode(mergedPreferences[
+              'userIdToAddresses']); // Test si c'est déjà un JSON
+          await prefs.setString(
+              'userIdToAddresses', mergedPreferences['userIdToAddresses']);
         } catch (e) {
           // Sinon, encoder une seule fois
-          await prefs.setString('userIdToAddresses', jsonEncode(mergedPreferences['userIdToAddresses']));
+          await prefs.setString('userIdToAddresses',
+              jsonEncode(mergedPreferences['userIdToAddresses']));
         }
       } else {
-        await prefs.setString('userIdToAddresses', jsonEncode(mergedPreferences['userIdToAddresses']));
+        await prefs.setString('userIdToAddresses',
+            jsonEncode(mergedPreferences['userIdToAddresses']));
       }
     }
 
     // 🔹 Stocker la devise sélectionnée
     if (mergedPreferences['selectedCurrency'] != null) {
-      await prefs.setString('selectedCurrency', mergedPreferences['selectedCurrency']);
+      await prefs.setString(
+          'selectedCurrency', mergedPreferences['selectedCurrency']);
     }
 
     // 🔹 Stocker la préférence de conversion en mètres carrés
-    await prefs.setBool('convertToSquareMeters', mergedPreferences['convertToSquareMeters'] ?? false);
+    await prefs.setBool('convertToSquareMeters',
+        mergedPreferences['convertToSquareMeters'] ?? false);
 
     debugPrint("✅ Sauvegarde des préférences terminée !");
   }
@@ -486,9 +514,11 @@ class GoogleDriveService {
   }
 
   /// Fusionner les données locales et celles de Google Drive
-  Map<String, dynamic> _mergeData(Map<String, dynamic> localData, Map<String, dynamic>? driveData) {
+  Map<String, dynamic> _mergeData(
+      Map<String, dynamic> localData, Map<String, dynamic>? driveData) {
     if (driveData == null) {
-      debugPrint("⚠️ Aucune donnée trouvée sur Google Drive, utilisation des données locales.");
+      debugPrint(
+          "⚠️ Aucune donnée trouvée sur Google Drive, utilisation des données locales.");
       return localData;
     }
 
@@ -498,7 +528,8 @@ class GoogleDriveService {
 
     void mergeBox(String boxKey, String backupKey) {
       if (!driveData.containsKey(backupKey) || driveData[backupKey] == null) {
-        debugPrint("⚠️ Clé '$backupKey' absente ou vide dans Google Drive, rien à fusionner.");
+        debugPrint(
+            "⚠️ Clé '$backupKey' absente ou vide dans Google Drive, rien à fusionner.");
         return;
       }
 
@@ -506,11 +537,13 @@ class GoogleDriveService {
       var driveBoxData = driveData[backupKey];
 
       if (driveBoxData is! Map) {
-        debugPrint("⚠️ Mauvais format pour '$backupKey', conversion en Map vide.");
+        debugPrint(
+            "⚠️ Mauvais format pour '$backupKey', conversion en Map vide.");
         driveBoxData = <String, dynamic>{};
       }
 
-      Map<String, dynamic> driveBoxMap = Map<String, dynamic>.from(driveBoxData);
+      Map<String, dynamic> driveBoxMap =
+          Map<String, dynamic>.from(driveBoxData);
 
       driveBoxMap.forEach((key, driveList) {
         if (key.toString().trim().isEmpty) {
@@ -520,10 +553,14 @@ class GoogleDriveService {
 
         // Correction si driveList est un Map au lieu d'une liste
         if (driveList is Map) {
-          debugPrint("⚠️ Correction : '$key' est une Map, on la transforme en Liste.");
-          driveList = driveList.entries.map((e) => {'key': e.key, 'value': e.value}).toList();
+          debugPrint(
+              "⚠️ Correction : '$key' est une Map, on la transforme en Liste.");
+          driveList = driveList.entries
+              .map((e) => {'key': e.key, 'value': e.value})
+              .toList();
         } else if (driveList is! List) {
-          debugPrint("⚠️ '$key' a un type inattendu (${driveList.runtimeType}), conversion en liste vide.");
+          debugPrint(
+              "⚠️ '$key' a un type inattendu (${driveList.runtimeType}), conversion en liste vide.");
           driveList = [];
         }
 
@@ -532,13 +569,17 @@ class GoogleDriveService {
 
         // Vérification si mergedData[boxKey][key] est bien une liste
         if (mergedData[boxKey][key] is! List) {
-          debugPrint("⚠️ Correction : '$key' contient un mauvais type dans Hive, conversion en liste vide.");
+          debugPrint(
+              "⚠️ Correction : '$key' contient un mauvais type dans Hive, conversion en liste vide.");
           mergedData[boxKey][key] = [];
         }
 
         List<dynamic> localList = List<dynamic>.from(mergedData[boxKey][key]);
 
-        Set<String> existingTimestamps = localList.where((e) => e is Map && e.containsKey('timestamp')).map((e) => e['timestamp'].toString()).toSet();
+        Set<String> existingTimestamps = localList
+            .where((e) => e is Map && e.containsKey('timestamp'))
+            .map((e) => e['timestamp'].toString())
+            .toSet();
 
         if (driveList is List) {
           for (var entry in driveList) {
@@ -566,16 +607,25 @@ class GoogleDriveService {
     // 🔹 Fusionner les préférences
     if (driveData.containsKey('preferencesBackup.json')) {
       debugPrint("🔹 Fusion des préférences...");
-      Map<String, dynamic> drivePreferences = Map<String, dynamic>.from(driveData['preferencesBackup.json'] ?? {});
-      Map<String, dynamic> localPreferences = Map<String, dynamic>.from(localData['preferences'] ?? {});
+      Map<String, dynamic> drivePreferences =
+          Map<String, dynamic>.from(driveData['preferencesBackup.json'] ?? {});
+      Map<String, dynamic> localPreferences =
+          Map<String, dynamic>.from(localData['preferences'] ?? {});
 
-      Set<String> mergedEthAddresses = {...?localPreferences['ethAddresses'], ...?drivePreferences['ethAddresses']};
+      Set<String> mergedEthAddresses = {
+        ...?localPreferences['ethAddresses'],
+        ...?drivePreferences['ethAddresses']
+      };
 
       Map<String, dynamic> mergedPreferences = {
         'ethAddresses': mergedEthAddresses.toList(),
-        'userIdToAddresses': localPreferences['userIdToAddresses'] ?? drivePreferences['userIdToAddresses'],
-        'selectedCurrency': localPreferences['selectedCurrency'] ?? drivePreferences['selectedCurrency'],
-        'convertToSquareMeters': localPreferences['convertToSquareMeters'] ?? drivePreferences['convertToSquareMeters'] ?? false,
+        'userIdToAddresses': localPreferences['userIdToAddresses'] ??
+            drivePreferences['userIdToAddresses'],
+        'selectedCurrency': localPreferences['selectedCurrency'] ??
+            drivePreferences['selectedCurrency'],
+        'convertToSquareMeters': localPreferences['convertToSquareMeters'] ??
+            drivePreferences['convertToSquareMeters'] ??
+            false,
       };
 
       mergedData['preferences'] = mergedPreferences;
@@ -618,9 +668,11 @@ class GoogleDriveService {
       final prefs = await SharedPreferences.getInstance();
       jsonData['preferencesBackup.json'] = {
         'ethAddresses': prefs.getStringList('evmAddresses') ?? [],
-        'userIdToAddresses': jsonDecode(prefs.getString('userIdToAddresses') ?? '{}'), // Décoder si nécessaire
+        'userIdToAddresses': jsonDecode(prefs.getString('userIdToAddresses') ??
+            '{}'), // Décoder si nécessaire
         'selectedCurrency': prefs.getString('selectedCurrency'),
-        'convertToSquareMeters': prefs.getBool('convertToSquareMeters') ?? false,
+        'convertToSquareMeters':
+            prefs.getBool('convertToSquareMeters') ?? false,
       };
 
       // Nettoyer les données avant de créer le fichier ZIP
@@ -632,7 +684,8 @@ class GoogleDriveService {
       final archive = Archive();
       for (var entry in jsonData.entries) {
         String jsonContent = jsonEncode(entry.value);
-        archive.addFile(ArchiveFile(entry.key, jsonContent.length, utf8.encode(jsonContent)));
+        archive.addFile(ArchiveFile(
+            entry.key, jsonContent.length, utf8.encode(jsonContent)));
       }
 
       // Sauvegarder le fichier ZIP
@@ -663,7 +716,8 @@ class GoogleDriveService {
 
     try {
       debugPrint("🔽 Recherche du fichier sur Google Drive...");
-      final drive.FileList fileList = await _driveApi!.files.list(spaces: 'appDataFolder');
+      final drive.FileList fileList =
+          await _driveApi!.files.list(spaces: 'appDataFolder');
 
       if (fileList.files == null || fileList.files!.isEmpty) {
         debugPrint("❌ Aucun fichier trouvé sur Google Drive !");
@@ -673,7 +727,8 @@ class GoogleDriveService {
       final String fileId = fileList.files!.first.id!;
       debugPrint("📂 Fichier trouvé: ID = $fileId, téléchargement en cours...");
 
-      final drive.Media fileData = await _driveApi!.files.get(fileId, downloadOptions: drive.DownloadOptions.fullMedia) as drive.Media;
+      final drive.Media fileData = await _driveApi!.files.get(fileId,
+          downloadOptions: drive.DownloadOptions.fullMedia) as drive.Media;
       final directory = await getApplicationDocumentsDirectory();
       final File localFile = File("${directory.path}/realToken_Backup.zip");
 
@@ -683,7 +738,8 @@ class GoogleDriveService {
       }
 
       await localFile.writeAsBytes(dataStore);
-      debugPrint("✅ Téléchargement terminé, fichier sauvegardé localement : ${localFile.path}");
+      debugPrint(
+          "✅ Téléchargement terminé, fichier sauvegardé localement : ${localFile.path}");
 
       debugPrint("📦 Extraction et fusion des données...");
       await _restoreLocalBackup(localFile.path);

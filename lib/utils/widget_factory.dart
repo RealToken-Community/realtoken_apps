@@ -10,7 +10,7 @@ class WidgetFactory {
   /// Widget pour créer un en-tête de section standardisé
   static Widget buildSectionHeader(BuildContext context, String title) {
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
       child: Row(
@@ -68,8 +68,8 @@ class WidgetFactory {
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           height: height,
-          color: Theme.of(context).brightness == Brightness.dark 
-              ? Colors.black.withValues(alpha: 0.3) 
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.black.withValues(alpha: 0.3)
               : Colors.white.withValues(alpha: 0.3),
           child: child,
         ),
@@ -86,7 +86,7 @@ class WidgetFactory {
     double fontSize = 10,
   }) {
     final appState = Provider.of<AppState>(context, listen: false);
-    
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: BackdropFilter(
@@ -117,7 +117,7 @@ class WidgetFactory {
     double fontSize = 12,
   }) {
     final appState = Provider.of<AppState>(context, listen: false);
-    
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: BackdropFilter(
@@ -142,28 +142,33 @@ class WidgetFactory {
   }
 
   /// Décoration de carte standardisée avec ombre et gradient
-  static BoxDecoration buildCardDecoration(BuildContext context, {
+  static BoxDecoration buildCardDecoration(
+    BuildContext context, {
     double borderRadius = 16,
     bool withGradient = true,
     bool withShadow = true,
   }) {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(borderRadius),
-      boxShadow: withShadow ? [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.05),
-          blurRadius: 10,
-          offset: const Offset(0, 2),
-        ),
-      ] : null,
-      gradient: withGradient ? LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Theme.of(context).cardColor,
-          Theme.of(context).cardColor.withValues(alpha: 0.8),
-        ],
-      ) : null,
+      boxShadow: withShadow
+          ? [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ]
+          : null,
+      gradient: withGradient
+          ? LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Theme.of(context).cardColor,
+                Theme.of(context).cardColor.withValues(alpha: 0.8),
+              ],
+            )
+          : null,
       color: withGradient ? null : Theme.of(context).cardColor,
     );
   }
@@ -172,20 +177,20 @@ class WidgetFactory {
   static BoxDecoration buildDetailContainerDecoration(BuildContext context) {
     final theme = Theme.of(context);
     return BoxDecoration(
-      color: theme.brightness == Brightness.light 
-          ? Colors.grey.shade50 
+      color: theme.brightness == Brightness.light
+          ? Colors.grey.shade50
           : theme.cardColor.withValues(alpha: 0.7),
       borderRadius: BorderRadius.circular(16),
       border: Border.all(
-        color: theme.brightness == Brightness.light 
-            ? Colors.grey.shade200 
+        color: theme.brightness == Brightness.light
+            ? Colors.grey.shade200
             : theme.dividerColor,
         width: 1.0,
       ),
       boxShadow: [
         BoxShadow(
-          color: theme.brightness == Brightness.light 
-              ? Colors.black.withValues(alpha: 0.02) 
+          color: theme.brightness == Brightness.light
+              ? Colors.black.withValues(alpha: 0.02)
               : Colors.black.withValues(alpha: 0.1),
           blurRadius: 3,
           offset: const Offset(0, 1),
@@ -195,7 +200,8 @@ class WidgetFactory {
   }
 
   /// Décoration pour les headers avec gradient primaire
-  static BoxDecoration buildPrimaryGradientDecoration(BuildContext context, {
+  static BoxDecoration buildPrimaryGradientDecoration(
+    BuildContext context, {
     double borderRadius = 24,
   }) {
     final theme = Theme.of(context);
@@ -240,7 +246,8 @@ class WidgetFactory {
   }
 
   /// InputDecoration standardisée pour les champs de texte
-  static InputDecoration buildStandardInputDecoration(BuildContext context, {
+  static InputDecoration buildStandardInputDecoration(
+    BuildContext context, {
     String? hintText,
     IconData? prefixIcon,
     Widget? suffixIcon,
@@ -307,8 +314,8 @@ class WidgetFactory {
       width: 36,
       height: 4,
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark 
-            ? Colors.white.withValues(alpha: 0.2) 
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white.withValues(alpha: 0.2)
             : Colors.black.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(4),
       ),
@@ -328,20 +335,24 @@ class WidgetFactory {
     final appState = Provider.of<AppState>(context, listen: false);
     final theme = Theme.of(context);
 
-    final defaultValueStyle = valueStyle ?? TextStyle(
-      fontSize: 15,
-      fontWeight: FontWeight.w600,
-      color: theme.textTheme.bodyLarge?.color,
-      letterSpacing: -0.3,
-      height: 1.1,
-    );
+    final defaultValueStyle = valueStyle ??
+        TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: theme.textTheme.bodyLarge?.color,
+          letterSpacing: -0.3,
+          height: 1.1,
+        );
 
-    final defaultLabelStyle = labelStyle ?? TextStyle(
-      fontSize: 14,
-      color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
-      letterSpacing: -0.2,
-      height: 1.1,
-    );
+    final defaultLabelStyle = labelStyle ??
+        TextStyle(
+          fontSize: 14,
+          color: theme.brightness == Brightness.light
+              ? Colors.black54
+              : Colors.white70,
+          letterSpacing: -0.2,
+          height: 1.1,
+        );
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -374,8 +385,10 @@ class WidgetFactory {
     final appState = Provider.of<AppState>(context, listen: false);
     final theme = Theme.of(context);
 
-    String formattedAmount = showAmounts 
-        ? (isPositive ? "+ ${value.toStringAsFixed(2)} $symbol" : "- ${value.toStringAsFixed(2)} $symbol")
+    String formattedAmount = showAmounts
+        ? (isPositive
+            ? "+ ${value.toStringAsFixed(2)} $symbol"
+            : "- ${value.toStringAsFixed(2)} $symbol")
         : (isPositive ? "+ " : "- ") + ('*' * 10);
 
     Color valueColor = isPositive
@@ -414,7 +427,9 @@ class WidgetFactory {
             style: TextStyle(
               fontSize: 13,
               letterSpacing: -0.2,
-              color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+              color: theme.brightness == Brightness.light
+                  ? Colors.black54
+                  : Colors.white70,
             ),
           ),
         ],
@@ -527,19 +542,16 @@ class WidgetFactory {
 
     return Column(
       children: [
-        onTap != null 
-            ? GestureDetector(onTap: onTap, child: content)
-            : content,
+        onTap != null ? GestureDetector(onTap: onTap, child: content) : content,
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Divider(
-              height: 1, 
-              thickness: 0.5, 
-              color: Colors.grey.withValues(alpha: 0.3)
-            ),
+                height: 1,
+                thickness: 0.5,
+                color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );
   }
-} 
+}

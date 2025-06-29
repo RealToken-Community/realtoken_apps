@@ -30,7 +30,7 @@ class SectionCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-    
+
     return Container(
       margin: margin ?? const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
@@ -42,7 +42,8 @@ class SectionCardWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: titlePadding ?? const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 6.0),
+            padding: titlePadding ??
+                const EdgeInsets.fromLTRB(12.0, 10.0, 12.0, 6.0),
             child: Text(
               title,
               style: TextStyle(
@@ -101,7 +102,8 @@ class DetailRowWidget extends StatelessWidget {
     final appState = Provider.of<AppState>(context, listen: false);
 
     return Padding(
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+      padding: padding ??
+          const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -118,7 +120,8 @@ class DetailRowWidget extends StatelessWidget {
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: (iconColor ?? Colors.blue).withValues(alpha: 0.1),
+                          color:
+                              (iconColor ?? Colors.blue).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
@@ -131,7 +134,8 @@ class DetailRowWidget extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: (labelFontSize ?? 14) + appState.getTextSizeOffset(),
+                  fontSize:
+                      (labelFontSize ?? 14) + appState.getTextSizeOffset(),
                   fontWeight: labelFontWeight ?? FontWeight.w300,
                   color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
@@ -144,8 +148,8 @@ class DetailRowWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: (valueFontSize ?? 14) + appState.getTextSizeOffset(),
               fontWeight: valueFontWeight ?? FontWeight.w400,
-              color: isExpenseItem 
-                  ? Colors.red 
+              color: isExpenseItem
+                  ? Colors.red
                   : (textColor ?? Theme.of(context).textTheme.bodyLarge?.color),
             ),
           ),
@@ -153,4 +157,4 @@ class DetailRowWidget extends StatelessWidget {
       ),
     );
   }
-} 
+}

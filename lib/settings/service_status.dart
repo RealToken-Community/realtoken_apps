@@ -58,32 +58,42 @@ class ServiceStatusPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 12),
 
-                _buildSectionHeader(context, "État des services", CupertinoIcons.gauge),
+                _buildSectionHeader(
+                    context, "État des services", CupertinoIcons.gauge),
 
                 // Afficher le texte en fonction de allAreUpToDate
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: allAreUpToDate ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
+                      color: allAreUpToDate
+                          ? Colors.green.withValues(alpha: 0.1)
+                          : Colors.red.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: allAreUpToDate ? Colors.green.withValues(alpha: 0.3) : Colors.red.withValues(alpha: 0.3),
+                        color: allAreUpToDate
+                            ? Colors.green.withValues(alpha: 0.3)
+                            : Colors.red.withValues(alpha: 0.3),
                         width: 1,
                       ),
                     ),
                     child: Row(
                       children: [
                         Icon(
-                          allAreUpToDate ? CupertinoIcons.check_mark_circled : CupertinoIcons.exclamationmark_circle,
+                          allAreUpToDate
+                              ? CupertinoIcons.check_mark_circled
+                              : CupertinoIcons.exclamationmark_circle,
                           color: allAreUpToDate ? Colors.green : Colors.red,
                           size: 20,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            allAreUpToDate ? S.of(context).allWorkCorrectly : S.of(context).somethingWrong,
+                            allAreUpToDate
+                                ? S.of(context).allWorkCorrectly
+                                : S.of(context).somethingWrong,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
@@ -105,7 +115,8 @@ class ServiceStatusPage extends StatelessWidget {
                     String time = entry.value;
 
                     // Supprimer le préfixe "lastExecutionTime_"
-                    String displayKey = key.replaceFirst('lastExecutionTime_', '');
+                    String displayKey =
+                        key.replaceFirst('lastExecutionTime_', '');
 
                     // Convertir `time` en DateTime pour calculer la différence
                     DateTime lastExecution;
@@ -123,13 +134,15 @@ class ServiceStatusPage extends StatelessWidget {
                       );
                     }
 
-                    Duration difference = DateTime.now().difference(lastExecution);
+                    Duration difference =
+                        DateTime.now().difference(lastExecution);
                     bool isLessThanAnHour = difference.inHours < 1;
 
                     return _buildServiceItem(
                       context: context,
                       title: displayKey,
-                      subtitle: '${S.of(context).lastExecution} : ${CustomDateUtils.formatReadableDateWithTime(time)}',
+                      subtitle:
+                          '${S.of(context).lastExecution} : ${CustomDateUtils.formatReadableDateWithTime(time)}',
                       isUpToDate: isLessThanAnHour,
                       isFirst: executionTimesMap.entries.first.key == key,
                       isLast: executionTimesMap.entries.last.key == key,
@@ -150,7 +163,8 @@ class ServiceStatusPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 2),
       child: Row(
@@ -219,7 +233,9 @@ class ServiceStatusPage extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                isUpToDate ? CupertinoIcons.check_mark_circled : CupertinoIcons.exclamationmark_circle,
+                isUpToDate
+                    ? CupertinoIcons.check_mark_circled
+                    : CupertinoIcons.exclamationmark_circle,
                 color: isUpToDate ? Colors.green : Colors.red,
                 size: 20,
               ),
@@ -254,7 +270,10 @@ class ServiceStatusPage extends StatelessWidget {
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 44),
-            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
+            child: Divider(
+                height: 1,
+                thickness: 0.5,
+                color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );

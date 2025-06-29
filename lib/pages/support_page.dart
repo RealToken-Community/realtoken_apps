@@ -38,14 +38,17 @@ class RealtPageState extends State<SupportPage> {
           'Support',
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: 17 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+            fontSize: 17 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset(),
           ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -56,7 +59,8 @@ class RealtPageState extends State<SupportPage> {
                   'Contribuez ou signalez un problème sur GitHub :',
                   'Github isssues link',
                   'https://github.com/RealToken-Community/realtoken_apps/issues',
-                  Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset(),
                   iconColor: CupertinoColors.systemGrey,
                 ),
                 const SizedBox(height: 14),
@@ -67,7 +71,8 @@ class RealtPageState extends State<SupportPage> {
                   'Rejoignez-nous sur Telegram :',
                   'Telegram Link here',
                   'https://t.me/+ae_vCmnjg5JjNWQ0',
-                  Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset(),
                   iconColor: const Color(0xFF0088CC),
                 ),
                 const SizedBox(height: 14),
@@ -78,7 +83,8 @@ class RealtPageState extends State<SupportPage> {
                   'Rejoignez-nous sur Discord :',
                   'Discord Link here',
                   'https://discord.com/channels/681940057183092737/681966628527013891',
-                  Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset(),
                   iconColor: CupertinoColors.systemPurple,
                 ),
                 const SizedBox(height: 14),
@@ -156,7 +162,8 @@ class RealtPageState extends State<SupportPage> {
                       description,
                       style: TextStyle(
                         fontSize: 14 + textSizeOffset,
-                        color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                        color:
+                            CupertinoColors.secondaryLabel.resolveFrom(context),
                       ),
                     ),
                   ),
@@ -170,7 +177,8 @@ class RealtPageState extends State<SupportPage> {
                             linkText,
                             style: TextStyle(
                               fontSize: 14 + textSizeOffset,
-                              color: CupertinoColors.systemBlue.resolveFrom(context),
+                              color: CupertinoColors.systemBlue
+                                  .resolveFrom(context),
                             ),
                           ),
                         ),
@@ -214,7 +222,9 @@ class RealtPageState extends State<SupportPage> {
                 Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: CupertinoColors.systemGreen.resolveFrom(context).withValues(alpha: 0.1),
+                    color: CupertinoColors.systemGreen
+                        .resolveFrom(context)
+                        .withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -246,7 +256,10 @@ class RealtPageState extends State<SupportPage> {
               ),
             ),
             const SizedBox(height: 12),
-            _buildLinkTreeButton(context, Provider.of<AppState>(context, listen: false).getTextSizeOffset()),
+            _buildLinkTreeButton(
+                context,
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset()),
             const SizedBox(height: 16),
             if (kIsWeb || (!kIsWeb && !Platform.isIOS))
               Padding(
@@ -260,7 +273,8 @@ class RealtPageState extends State<SupportPage> {
                       'PayPal',
                       CupertinoIcons.money_dollar,
                       CupertinoColors.systemBlue,
-                      () => UrlUtils.launchURL('https://paypal.me/byackee?country.x=FR&locale.x=fr_FR'),
+                      () => UrlUtils.launchURL(
+                          'https://paypal.me/byackee?country.x=FR&locale.x=fr_FR'),
                       appState.getTextSizeOffset(),
                     ),
                     _buildDonationButton(
@@ -268,7 +282,8 @@ class RealtPageState extends State<SupportPage> {
                       'Buy Coffee',
                       CupertinoIcons.gift,
                       CupertinoColors.systemBrown,
-                      () => UrlUtils.launchURL('https://buymeacoffee.com/byackee'),
+                      () => UrlUtils.launchURL(
+                          'https://buymeacoffee.com/byackee'),
                       appState.getTextSizeOffset(),
                       isImage: true,
                       imagePath: 'assets/bmc.png',
@@ -278,7 +293,10 @@ class RealtPageState extends State<SupportPage> {
                       S.of(context).crypto,
                       CupertinoIcons.bitcoin,
                       CupertinoColors.systemOrange,
-                      () => _showIOSCryptoAddressDialog(context, Provider.of<AppState>(context, listen: false).getTextSizeOffset()),
+                      () => _showIOSCryptoAddressDialog(
+                          context,
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset()),
                       appState.getTextSizeOffset(),
                     ),
                   ],
@@ -376,7 +394,8 @@ class RealtPageState extends State<SupportPage> {
     );
   }
 
-  void _showIOSCryptoAddressDialog(BuildContext context, double textSizeOffset) {
+  void _showIOSCryptoAddressDialog(
+      BuildContext context, double textSizeOffset) {
     const cryptoAddress = '0xdc30b07aebaef3f15544a3801c6cb0f35f0118fc';
 
     showCupertinoModalPopup(
@@ -459,7 +478,8 @@ class RealtPageState extends State<SupportPage> {
     );
   }
 
-  void showCupertinoSnackBar({required BuildContext context, required String message}) {
+  void showCupertinoSnackBar(
+      {required BuildContext context, required String message}) {
     final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         bottom: 50.0,

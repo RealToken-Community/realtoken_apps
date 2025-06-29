@@ -8,18 +8,19 @@ import 'package:provider/provider.dart';
 
 /// Factory pour créer tous les widgets de donation de manière uniforme
 class DonationWidgets {
-  
   /// Constantes de couleurs pour les boutons de donation
   static const Color buyMeACoffeeColor = Color(0xFFFFDD00);
   static const Color paypalColor = Color(0xFF0070ba);
   static const Color cryptoBackgroundLight = Color(0xFFF4F4F4);
-  
+
   /// Adresse de donation crypto
-  static const String donationAddress = '0xdc30b07aebaef3f15544a3801c6cb0f35f0118fc';
-  
+  static const String donationAddress =
+      '0xdc30b07aebaef3f15544a3801c6cb0f35f0118fc';
+
   /// URLs de donation
   static const String buyMeACoffeeUrl = 'https://buymeacoffee.com/byackee';
-  static const String paypalUrl = 'https://paypal.me/byackee?country.x=FR&locale.x=fr_FR';
+  static const String paypalUrl =
+      'https://paypal.me/byackee?country.x=FR&locale.x=fr_FR';
 
   /// Construit le widget d'affichage du montant de donation avec loading
   static Widget buildAmountDisplay({
@@ -30,7 +31,8 @@ class DonationWidgets {
   }) {
     if (isLoading) {
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16 + appState.getTextSizeOffset()),
+        padding:
+            EdgeInsets.symmetric(vertical: 16 + appState.getTextSizeOffset()),
         child: SizedBox(
           width: 36,
           height: 36,
@@ -49,7 +51,11 @@ class DonationWidgets {
             S.of(context).donationTotal,
             style: TextStyle(
               fontSize: 15 + appState.getTextSizeOffset(),
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color
+                  ?.withValues(alpha: 0.8),
             ),
           ),
           SizedBox(height: 4 + appState.getTextSizeOffset()),
@@ -67,7 +73,8 @@ class DonationWidgets {
               ),
               SizedBox(width: 6 + appState.getTextSizeOffset()),
               Padding(
-                padding: EdgeInsets.only(bottom: 2 + appState.getTextSizeOffset()),
+                padding:
+                    EdgeInsets.only(bottom: 2 + appState.getTextSizeOffset()),
                 child: Text(
                   'USD',
                   style: TextStyle(
@@ -144,7 +151,8 @@ class DonationWidgets {
             vertical: 10 + appState.getTextSizeOffset(),
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(StyleConstants.buttonBorderRadius),
+            borderRadius:
+                BorderRadius.circular(StyleConstants.buttonBorderRadius),
           ),
           elevation: 0,
         ),
@@ -179,7 +187,8 @@ class DonationWidgets {
             vertical: 10 + appState.getTextSizeOffset(),
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(StyleConstants.buttonBorderRadius),
+            borderRadius:
+                BorderRadius.circular(StyleConstants.buttonBorderRadius),
           ),
           elevation: 0,
         ),
@@ -198,7 +207,9 @@ class DonationWidgets {
         Text(
           S.of(context).cryptoDonation,
           style: TextStyle(
-            fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+            fontSize: 13 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset(),
             color: Theme.of(context).textTheme.bodySmall?.color,
           ),
         ),
@@ -209,7 +220,8 @@ class DonationWidgets {
             color: Theme.of(context).brightness == Brightness.dark
                 ? Colors.grey[800]
                 : cryptoBackgroundLight,
-            borderRadius: BorderRadius.circular(StyleConstants.smallBorderRadius),
+            borderRadius:
+                BorderRadius.circular(StyleConstants.smallBorderRadius),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -228,7 +240,8 @@ class DonationWidgets {
                 icon: Icon(
                   Icons.copy_rounded,
                   size: 20,
-                  color: Theme.of(context).iconTheme.color?.withValues(alpha: 0.7),
+                  color:
+                      Theme.of(context).iconTheme.color?.withValues(alpha: 0.7),
                 ),
                 tooltip: S.of(context).copy,
                 onPressed: () => _copyAddressToClipboard(context),
@@ -248,8 +261,13 @@ class DonationWidgets {
     return Text(
       S.of(context).everyContributionCounts,
       style: TextStyle(
-        fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
-        color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+        fontSize: 12 +
+            Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+        color: Theme.of(context)
+            .textTheme
+            .bodySmall
+            ?.color
+            ?.withValues(alpha: 0.7),
       ),
       textAlign: TextAlign.center,
     );
@@ -291,7 +309,6 @@ class DonationWidgets {
           buildTitle(context: context, appState: appState),
           buildSpacer(appState: appState, baseHeight: 4),
         ],
-        
         if (showAmount)
           buildAmountDisplay(
             context: context,
@@ -299,25 +316,21 @@ class DonationWidgets {
             amount: amount,
             isLoading: isLoading,
           ),
-        
         buildSpacer(appState: appState),
         buildDescription(context: context, appState: appState),
         buildSpacer(appState: appState),
         buildDivider(context: context),
         buildSpacer(appState: appState),
-
         if (showButtons) ...[
           buildBuyMeACoffeeButton(context: context, appState: appState),
           buildSpacer(appState: appState, baseHeight: 10),
           buildPaypalButton(context: context, appState: appState),
           buildSpacer(appState: appState, baseHeight: 10),
         ],
-
         if (showCrypto) ...[
           buildCryptoSection(context: context, appState: appState),
           buildSpacer(appState: appState),
         ],
-
         if (showThankYou)
           buildThankYouMessage(context: context, appState: appState),
       ],
@@ -336,4 +349,4 @@ class DonationWidgets {
       );
     }
   }
-} 
+}

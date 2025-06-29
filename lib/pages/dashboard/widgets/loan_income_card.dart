@@ -12,7 +12,8 @@ class LoanIncomeCard extends StatelessWidget {
   final bool showAmounts;
   final bool isLoading;
 
-  const LoanIncomeCard({super.key, required this.showAmounts, required this.isLoading});
+  const LoanIncomeCard(
+      {super.key, required this.showAmounts, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +22,16 @@ class LoanIncomeCard extends StatelessWidget {
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
 
     // Filtrer les tokens de type loan_income
-    final loanTokens = dataManager.portfolio.where((token) => 
-      (token['productType'] ?? '').toLowerCase() == 'loan_income'
-    ).toList();
+    final loanTokens = dataManager.portfolio
+        .where((token) =>
+            (token['productType'] ?? '').toLowerCase() == 'loan_income')
+        .toList();
 
     final totalTokens = loanTokens.length;
-    final totalValue = loanTokens.fold<double>(0.0, (sum, token) => 
-      sum + ((token['totalValue'] as num?)?.toDouble() ?? 0.0)
-    );
+    final totalValue = loanTokens.fold<double>(
+        0.0,
+        (sum, token) =>
+            sum + ((token['totalValue'] as num?)?.toDouble() ?? 0.0));
     // Filtrer selon rentStartDate pour ne prendre que les tokens qui génèrent déjà des revenus
     final today = DateTime.now();
     final monthlyIncome = loanTokens.fold<double>(0.0, (sum, token) {
@@ -46,15 +49,11 @@ class LoanIncomeCard extends StatelessWidget {
       'Loan',
       Icons.account_balance_outlined,
       _buildValueWithIconSmall(
-        context, 
-        currencyUtils.getFormattedAmount(
-          currencyUtils.convert(monthlyIncome), 
-          currencyUtils.currencySymbol, 
-          showAmounts
-        ), 
-        Icons.attach_money_rounded,
-        isLoading
-      ),
+          context,
+          currencyUtils.getFormattedAmount(currencyUtils.convert(monthlyIncome),
+              currencyUtils.currencySymbol, showAmounts),
+          Icons.attach_money_rounded,
+          isLoading),
       [
         _buildTextWithShimmerSmall(
           '$totalTokens',
@@ -63,9 +62,15 @@ class LoanIncomeCard extends StatelessWidget {
           context,
         ),
         _buildTextWithShimmerSmall(
-          showAmounts 
-            ? _formatCurrencyWithoutDecimals(currencyUtils.convert(totalValue), currencyUtils.currencySymbol)
-            : '*' * _formatCurrencyWithoutDecimals(currencyUtils.convert(totalValue), currencyUtils.currencySymbol).length,
+          showAmounts
+              ? _formatCurrencyWithoutDecimals(
+                  currencyUtils.convert(totalValue),
+                  currencyUtils.currencySymbol)
+              : '*' *
+                  _formatCurrencyWithoutDecimals(
+                          currencyUtils.convert(totalValue),
+                          currencyUtils.currencySymbol)
+                      .length,
           'Total',
           isLoading,
           context,
@@ -91,7 +96,8 @@ class LoanIncomeCard extends StatelessWidget {
     return formatter.format(value.round());
   }
 
-  Widget _buildPieChart(int totalTokens, double totalValue, BuildContext context) {
+  Widget _buildPieChart(
+      int totalTokens, double totalValue, BuildContext context) {
     // Donut désactivé (gris) pour maintenir la cohérence visuelle
     // mais indiquer qu'il ne représente pas d'information utile
     return SizedBox(
@@ -107,7 +113,9 @@ class LoanIncomeCard extends StatelessWidget {
               title: '—',
               radius: 18,
               titleStyle: TextStyle(
-                fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                fontSize: 12 +
+                    Provider.of<AppState>(context, listen: false)
+                        .getTextSizeOffset(),
                 fontWeight: FontWeight.bold,
                 color: Colors.grey.shade600,
               ),
@@ -121,7 +129,8 @@ class LoanIncomeCard extends StatelessWidget {
     );
   }
 
-  Widget _buildValueBeforeTextSmall(BuildContext context, String? value, String text, bool isLoading) {
+  Widget _buildValueBeforeTextSmall(
+      BuildContext context, String? value, String text, bool isLoading) {
     final appState = Provider.of<AppState>(context);
     final theme = Theme.of(context);
 
@@ -162,7 +171,8 @@ class LoanIncomeCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTextWithShimmerSmall(String? value, String text, bool isLoading, BuildContext context) {
+  Widget _buildTextWithShimmerSmall(
+      String? value, String text, bool isLoading, BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final theme = Theme.of(context);
 
@@ -172,10 +182,12 @@ class LoanIncomeCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            text, 
+            text,
             style: TextStyle(
               fontSize: 12 + appState.getTextSizeOffset(),
-              color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+              color: theme.brightness == Brightness.light
+                  ? Colors.black54
+                  : Colors.white70,
               letterSpacing: -0.2,
               height: 1.1,
             ),
@@ -184,7 +196,7 @@ class LoanIncomeCard extends StatelessWidget {
           isLoading
               ? ShimmerUtils.originalColorShimmer(
                   child: Text(
-                    value ?? '', 
+                    value ?? '',
                     style: TextStyle(
                       fontSize: 13 + appState.getTextSizeOffset(),
                       fontWeight: FontWeight.w600,
@@ -196,7 +208,7 @@ class LoanIncomeCard extends StatelessWidget {
                   color: theme.textTheme.bodyLarge?.color,
                 )
               : Text(
-                  value ?? '', 
+                  value ?? '',
                   style: TextStyle(
                     fontSize: 13 + appState.getTextSizeOffset(),
                     fontWeight: FontWeight.w600,
@@ -210,7 +222,8 @@ class LoanIncomeCard extends StatelessWidget {
     );
   }
 
-  Widget _buildValueWithIconSmall(BuildContext context, String? value, IconData icon, bool isLoading) {
+  Widget _buildValueWithIconSmall(
+      BuildContext context, String? value, IconData icon, bool isLoading) {
     final appState = Provider.of<AppState>(context);
     final theme = Theme.of(context);
 
@@ -250,4 +263,4 @@ class LoanIncomeCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

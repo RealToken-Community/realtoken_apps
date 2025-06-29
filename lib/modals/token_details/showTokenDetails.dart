@@ -61,7 +61,8 @@ void _openMapModal(BuildContext context, dynamic lat, dynamic lng) {
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate:
+                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: ['a', 'b', 'c'],
                   ),
                   MarkerLayer(
@@ -85,7 +86,8 @@ void _openMapModal(BuildContext context, dynamic lat, dynamic lng) {
                 right: 20,
                 child: FloatingActionButton(
                   onPressed: () {
-                    final googleStreetViewUrl = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=$latitude,$longitude';
+                    final googleStreetViewUrl =
+                        'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=$latitude,$longitude';
                     UrlUtils.launchURL(googleStreetViewUrl);
                   },
                   backgroundColor: Theme.of(context).primaryColor,
@@ -119,7 +121,8 @@ class TokenDetailsWidget extends StatefulWidget {
   _TokenDetailsWidgetState createState() => _TokenDetailsWidgetState();
 }
 
-class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTickerProviderStateMixin {
+class _TokenDetailsWidgetState extends State<TokenDetailsWidget>
+    with SingleTickerProviderStateMixin {
   int _currentCarouselIndex = 0;
   late TabController _tabController;
 
@@ -140,9 +143,11 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
     switch (index) {
       case 0:
-        return buildPropertiesTab(context, widget.token, widget.convertToSquareMeters);
+        return buildPropertiesTab(
+            context, widget.token, widget.convertToSquareMeters);
       case 1:
-        return buildFinanceTab(context, widget.token, widget.convertToSquareMeters);
+        return buildFinanceTab(
+            context, widget.token, widget.convertToSquareMeters);
       case 2:
         return MarketTab(token: widget.token);
       case 3:
@@ -150,7 +155,8 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
       case 4:
         return buildInsightsTab(context, widget.token);
       case 5:
-        return buildHistoryTab(context, widget.token, dataManager.isLoadingTransactions);
+        return buildHistoryTab(
+            context, widget.token, dataManager.isLoadingTransactions);
       default:
         return const SizedBox.shrink();
     }
@@ -187,12 +193,17 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                 // Image et infos principales
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                  child: widget.token['imageLink'] != null && widget.token['imageLink'].isNotEmpty
+                  child: widget.token['imageLink'] != null &&
+                          widget.token['imageLink'].isNotEmpty
                       ? Column(
                           children: [
                             GestureDetector(
                               onTap: () {
-                                final List<String> imageLinks = widget.token['imageLink'] is String ? [widget.token['imageLink']] : List<String>.from(widget.token['imageLink']);
+                                final List<String> imageLinks =
+                                    widget.token['imageLink'] is String
+                                        ? [widget.token['imageLink']]
+                                        : List<String>.from(
+                                            widget.token['imageLink']);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => FullScreenCarousel(
@@ -201,16 +212,25 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                   ),
                                 );
                               },
-                              child: StatefulBuilder(builder: (context, setState) {
-                                final List<String> imageLinks = widget.token['imageLink'] is String ? [widget.token['imageLink']] : List<String>.from(widget.token['imageLink']);
+                              child:
+                                  StatefulBuilder(builder: (context, setState) {
+                                final List<String> imageLinks =
+                                    widget.token['imageLink'] is String
+                                        ? [widget.token['imageLink']]
+                                        : List<String>.from(
+                                            widget.token['imageLink']);
                                 return Column(
                                   children: [
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(15.0),
                                       child: CarouselSlider(
                                         options: CarouselOptions(
-                                          height: MediaQuery.of(context).size.height * 0.22,
-                                          enableInfiniteScroll: imageLinks.length > 1,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.22,
+                                          enableInfiniteScroll:
+                                              imageLinks.length > 1,
                                           enlargeCenterPage: true,
                                           onPageChanged: (index, reason) {
                                             setState(() {
@@ -219,13 +239,16 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                           },
                                           viewportFraction: 0.9,
                                         ),
-                                        items: imageLinks.map<Widget>((imageUrl) {
+                                        items:
+                                            imageLinks.map<Widget>((imageUrl) {
                                           return Container(
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(15),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.black.withValues(alpha: 0.1),
+                                                  color: Colors.black
+                                                      .withValues(alpha: 0.1),
                                                   spreadRadius: 1,
                                                   blurRadius: 5,
                                                   offset: const Offset(0, 2),
@@ -235,25 +258,39 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                             child: Stack(
                                               children: [
                                                 ClipRRect(
-                                                  borderRadius: BorderRadius.circular(15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
                                                   child: kIsWeb
-                                                      ? ShowNetworkImage(imageSrc: imageUrl, mobileBoxFit: BoxFit.cover, mobileWidth: double.infinity)
+                                                      ? ShowNetworkImage(
+                                                          imageSrc: imageUrl,
+                                                          mobileBoxFit:
+                                                              BoxFit.cover,
+                                                          mobileWidth:
+                                                              double.infinity)
                                                       : CachedNetworkImage(
                                                           imageUrl: imageUrl,
-                                                          width: double.infinity,
+                                                          width:
+                                                              double.infinity,
                                                           fit: BoxFit.cover,
-                                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
                                                         ),
                                                 ),
                                                 if (kIsWeb)
                                                   Positioned.fill(
                                                     child: GestureDetector(
-                                                      behavior: HitTestBehavior.translucent,
+                                                      behavior: HitTestBehavior
+                                                          .translucent,
                                                       onTap: () {
-                                                        Navigator.of(context).push(
+                                                        Navigator.of(context)
+                                                            .push(
                                                           MaterialPageRoute(
-                                                            builder: (_) => FullScreenCarousel(
-                                                              imageLinks: imageLinks,
+                                                            builder: (_) =>
+                                                                FullScreenCarousel(
+                                                              imageLinks:
+                                                                  imageLinks,
                                                             ),
                                                           ),
                                                         );
@@ -270,15 +307,26 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                       Container(
                                         margin: const EdgeInsets.only(top: 10),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: imageLinks.asMap().entries.map((entry) {
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: imageLinks
+                                              .asMap()
+                                              .entries
+                                              .map((entry) {
                                             return Container(
                                               width: 8.0,
                                               height: 8.0,
-                                              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4.0),
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: _currentCarouselIndex == entry.key ? Theme.of(context).primaryColor : Colors.grey.withValues(alpha: 0.4),
+                                                color: _currentCarouselIndex ==
+                                                        entry.key
+                                                    ? Theme.of(context)
+                                                        .primaryColor
+                                                    : Colors.grey
+                                                        .withValues(alpha: 0.4),
                                               ),
                                             );
                                           }).toList(),
@@ -297,7 +345,8 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Center(
-                            child: Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
+                            child: Icon(Icons.image_not_supported,
+                                size: 50, color: Colors.grey),
                           ),
                         ),
                 ),
@@ -327,16 +376,21 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.token['shortName'] ?? S.of(context).nameUnavailable,
+                                widget.token['shortName'] ??
+                                    S.of(context).nameUnavailable,
                                 style: TextStyle(
                                   fontSize: 16 + appState.getTextSizeOffset(),
                                   fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).textTheme.titleLarge?.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              if (widget.token['city'] != null || widget.token['regionCode'] != null)
+                              if (widget.token['city'] != null ||
+                                  widget.token['regionCode'] != null)
                                 Row(
                                   children: [
                                     Icon(
@@ -345,17 +399,25 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                       color: Colors.grey[600],
                                     ),
                                     // Drapeau de l'état américain si disponible
-                                    if (widget.token['regionCode'] != null && widget.token['country']?.toLowerCase() == 'usa')
+                                    if (widget.token['regionCode'] != null &&
+                                        widget.token['country']
+                                                ?.toLowerCase() ==
+                                            'usa')
                                       Container(
-                                        margin: const EdgeInsets.only(left: 4.0, right: 2.0),
+                                        margin: const EdgeInsets.only(
+                                            left: 4.0, right: 2.0),
                                         child: Image.asset(
                                           'assets/states/${widget.token['regionCode'].toLowerCase()}.png',
-                                          width: 16 + appState.getTextSizeOffset(),
-                                          height: 16 + appState.getTextSizeOffset(),
-                                          errorBuilder: (context, error, stackTrace) {
+                                          width:
+                                              16 + appState.getTextSizeOffset(),
+                                          height:
+                                              16 + appState.getTextSizeOffset(),
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
                                             return Icon(
                                               Icons.location_city,
-                                              size: 14 + appState.getTextSizeOffset(),
+                                              size: 14 +
+                                                  appState.getTextSizeOffset(),
                                               color: Colors.grey[600],
                                             );
                                           },
@@ -365,10 +427,14 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                     Text(
                                       [
                                         widget.token['city'],
-                                        widget.token['regionCode'] != null ? Parameters.getRegionDisplayName(widget.token['regionCode']) : null
+                                        widget.token['regionCode'] != null
+                                            ? Parameters.getRegionDisplayName(
+                                                widget.token['regionCode'])
+                                            : null
                                       ].where((e) => e != null).join(', '),
                                       style: TextStyle(
-                                        fontSize: 12 + appState.getTextSizeOffset(),
+                                        fontSize:
+                                            12 + appState.getTextSizeOffset(),
                                         color: Colors.grey[600],
                                       ),
                                       maxLines: 1,
@@ -381,12 +447,16 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                         ],
                       ),
                       // Conteneur pour les informations financières
-                      if (widget.token['amount'] != null || widget.token['totalValue'] != null)
+                      if (widget.token['amount'] != null ||
+                          widget.token['totalValue'] != null)
                         Container(
                           margin: const EdgeInsets.only(top: 8.0),
-                          padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 6.0, horizontal: 10.0),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor.withValues(alpha: 0.9),
+                            color: Theme.of(context)
+                                .cardColor
+                                .withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: Colors.grey.withValues(alpha: 0.2),
@@ -407,19 +477,24 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                       ),
                                       const SizedBox(width: 4),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             S.of(context).amount,
                                             style: TextStyle(
-                                              fontSize: 11 + appState.getTextSizeOffset(),
+                                              fontSize: 11 +
+                                                  appState.getTextSizeOffset(),
                                               color: Colors.grey,
                                             ),
                                           ),
                                           Text(
-                                            widget.token['amount']?.toStringAsFixed(2) ?? "0",
+                                            widget.token['amount']
+                                                    ?.toStringAsFixed(2) ??
+                                                "0",
                                             style: TextStyle(
-                                              fontSize: 14 + appState.getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  appState.getTextSizeOffset(),
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -429,12 +504,14 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                   ),
                                 ),
                               // Séparateur vertical
-                              if (widget.token['amount'] != null && widget.token['totalValue'] != null)
+                              if (widget.token['amount'] != null &&
+                                  widget.token['totalValue'] != null)
                                 Container(
                                   height: 24,
                                   width: 1,
                                   color: Colors.grey.withValues(alpha: 0.3),
-                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
                                 ),
                               // Valeur totale
                               if (widget.token['totalValue'] != null)
@@ -444,25 +521,36 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                                       Icon(
                                         Icons.attach_money,
                                         size: 16,
-                                        color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                                        color: Theme.of(context)
+                                            .primaryColor
+                                            .withValues(alpha: 0.8),
                                       ),
                                       const SizedBox(width: 4),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Value",
                                             style: TextStyle(
-                                              fontSize: 11 + appState.getTextSizeOffset(),
-                                              color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                                              fontSize: 11 +
+                                                  appState.getTextSizeOffset(),
+                                              color: Theme.of(context)
+                                                  .primaryColor
+                                                  .withValues(alpha: 0.8),
                                             ),
                                           ),
                                           Text(
-                                            currencyUtils.formatCurrency(currencyUtils.convert(widget.token['totalValue']), currencyUtils.currencySymbol),
+                                            currencyUtils.formatCurrency(
+                                                currencyUtils.convert(
+                                                    widget.token['totalValue']),
+                                                currencyUtils.currencySymbol),
                                             style: TextStyle(
-                                              fontSize: 14 + appState.getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  appState.getTextSizeOffset(),
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           ),
                                         ],
@@ -498,7 +586,8 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                   borderRadius: BorderRadius.circular(15),
                 ),
                 splashFactory: NoSplash.splashFactory,
-                overlayColor: WidgetStateProperty.resolveWith<Color?>((states) => null),
+                overlayColor:
+                    WidgetStateProperty.resolveWith<Color?>((states) => null),
                 labelStyle: TextStyle(
                   fontSize: 12 + appState.getTextSizeOffset(),
                   fontWeight: FontWeight.w600,
@@ -508,12 +597,16 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                   fontWeight: FontWeight.normal,
                 ),
                 tabs: [
-                  _buildTabSegment(icon: Icons.home_outlined, label: "Property"),
-                  _buildTabSegment(icon: Icons.attach_money_outlined, label: "Finance"),
+                  _buildTabSegment(
+                      icon: Icons.home_outlined, label: "Property"),
+                  _buildTabSegment(
+                      icon: Icons.attach_money_outlined, label: "Finance"),
                   _buildTabSegment(icon: Icons.store_outlined, label: "Market"),
                   _buildTabSegment(icon: Icons.info_outline, label: "Info"),
-                  _buildTabSegment(icon: Icons.insights_outlined, label: "Insights"),
-                  _buildTabSegment(icon: Icons.history_outlined, label: "History"),
+                  _buildTabSegment(
+                      icon: Icons.insights_outlined, label: "Insights"),
+                  _buildTabSegment(
+                      icon: Icons.history_outlined, label: "History"),
                 ],
                 onTap: (index) {
                   setState(() {}); // Pour rafraîchir le contenu de l'onglet
@@ -553,12 +646,15 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => 35;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       height: 35,
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withValues(alpha: 0.8) : Theme.of(context).cardColor.withValues(alpha: 0.95),
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.black.withValues(alpha: 0.8)
+            : Theme.of(context).cardColor.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -573,10 +669,12 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      true;
 }
 
-Future<void> showTokenDetails(BuildContext context, Map<String, dynamic> token) async {
+Future<void> showTokenDetails(
+    BuildContext context, Map<String, dynamic> token) async {
   final dataManager = Provider.of<DataManager>(context, listen: false);
   final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
   final prefs = await SharedPreferences.getInstance();
@@ -603,13 +701,11 @@ Future<void> showTokenDetails(BuildContext context, Map<String, dynamic> token) 
             ),
             child: Stack(
               children: [
-                
-                 // hauteur de la barre d'action
-                  TokenDetailsWidget(
-                    token: token,
-                    convertToSquareMeters: convertToSquareMeters,
-                    scrollController: scrollController,
-                  
+                // hauteur de la barre d'action
+                TokenDetailsWidget(
+                  token: token,
+                  convertToSquareMeters: convertToSquareMeters,
+                  scrollController: scrollController,
                 ),
                 Positioned(
                   left: 0,
@@ -633,13 +729,18 @@ Future<void> showTokenDetails(BuildContext context, Map<String, dynamic> token) 
                         SizedBox(
                           height: 32,
                           child: ElevatedButton(
-                            onPressed: () => UrlUtils.launchURL(token['marketplaceLink']),
+                            onPressed: () =>
+                                UrlUtils.launchURL(token['marketplaceLink']),
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: Theme.of(context).primaryColor,
-                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 8),
                               textStyle: TextStyle(
-                                fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                fontSize: 13 +
+                                    Provider.of<AppState>(context,
+                                            listen: false)
+                                        .getTextSizeOffset(),
                               ),
                             ),
                             child: Text(S.of(context).viewOnRealT),
@@ -649,12 +750,18 @@ Future<void> showTokenDetails(BuildContext context, Map<String, dynamic> token) 
                         SizedBox(
                           height: 32,
                           child: ElevatedButton(
-                            onPressed: () => _openMapModal(context, token['lat'], token['lng']),
+                            onPressed: () => _openMapModal(
+                                context, token['lat'], token['lng']),
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.green,
-                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                              textStyle: TextStyle(fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset()),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 8),
+                              textStyle: TextStyle(
+                                  fontSize: 13 +
+                                      Provider.of<AppState>(context,
+                                              listen: false)
+                                          .getTextSizeOffset()),
                             ),
                             child: Text(S.of(context).viewOnMap),
                           ),

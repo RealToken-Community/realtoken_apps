@@ -49,7 +49,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         padding: EdgeInsets.zero,
         children: [
           const SizedBox(height: 12),
-          _buildSectionHeader(context, "Historique YAM", CupertinoIcons.chart_bar_alt_fill),
+          _buildSectionHeader(
+              context, "Historique YAM", CupertinoIcons.chart_bar_alt_fill),
           _buildSettingsSection(
             context,
             children: [
@@ -57,7 +58,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 context,
                 title: S.of(context).yamHistory,
                 subtitle: "${S.of(context).daysLimit}: $_daysLimit days",
-                trailing: const Icon(CupertinoIcons.pencil, size: 14, color: Colors.grey),
+                trailing: const Icon(CupertinoIcons.pencil,
+                    size: 14, color: Colors.grey),
                 onTap: () => _showNumberPicker(context),
                 isFirst: true,
                 isLast: true,
@@ -65,16 +67,23 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             ],
           ),
           const SizedBox(height: 12),
-          _buildSectionHeader(context, "Réactivité APY", CupertinoIcons.waveform_path),
+          _buildSectionHeader(
+              context, "Réactivité APY", CupertinoIcons.waveform_path),
           _buildSettingsSection(
             context,
-            footnote: 'Ajustez la sensibilité du calcul d\'APY aux variations récentes',
+            footnote:
+                'Ajustez la sensibilité du calcul d\'APY aux variations récentes',
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
                 child: Row(
                   children: [
-                    Text('Lisse', style: TextStyle(fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset())),
+                    Text('Lisse',
+                        style: TextStyle(
+                            fontSize: 13 +
+                                Provider.of<AppState>(context, listen: false)
+                                    .getTextSizeOffset())),
                     Expanded(
                       child: Slider.adaptive(
                         value: _apyReactivity,
@@ -109,14 +118,16 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             ],
           ),
           const SizedBox(height: 12),
-          _buildSectionHeader(context, "Gestion des données", CupertinoIcons.delete),
+          _buildSectionHeader(
+              context, "Gestion des données", CupertinoIcons.delete),
           _buildSettingsSection(
             context,
             children: [
               _buildSettingsItem(
                 context,
                 title: 'Effacer le cache et les données',
-                trailing: const Icon(CupertinoIcons.delete, color: Colors.red, size: 14),
+                trailing: const Icon(CupertinoIcons.delete,
+                    color: Colors.red, size: 14),
                 onTap: () => _showDeleteConfirmation(context),
                 isFirst: true,
                 isLast: true,
@@ -129,7 +140,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 2),
       child: Row(
@@ -253,7 +265,10 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 12),
-            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withValues(alpha: 0.3)),
+            child: Divider(
+                height: 1,
+                thickness: 0.5,
+                color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );
@@ -264,7 +279,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
       context: context,
       builder: (context) => CupertinoAlertDialog(
         title: const Text('Confirmer la suppression'),
-        content: const Text('Êtes-vous sûr de vouloir effacer toutes les données et le cache? Cette action est irréversible.'),
+        content: const Text(
+            'Êtes-vous sûr de vouloir effacer toutes les données et le cache? Cette action est irréversible.'),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,
@@ -313,10 +329,12 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: Colors.grey.withValues(alpha: 0.3), width: 0.5),
+                    bottom: BorderSide(
+                        color: Colors.grey.withValues(alpha: 0.3), width: 0.5),
                   ),
                 ),
                 child: Row(
@@ -325,7 +343,9 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () => Navigator.pop(context),
-                      child: Text("Annuler", style: TextStyle(color: CupertinoColors.destructiveRed)),
+                      child: Text("Annuler",
+                          style:
+                              TextStyle(color: CupertinoColors.destructiveRed)),
                     ),
                     Text(
                       "Jours d'historique",
@@ -354,7 +374,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   onSelectedItemChanged: (index) {
                     tempDaysLimit = index + 1;
                   },
-                  scrollController: FixedExtentScrollController(initialItem: _daysLimit - 1),
+                  scrollController:
+                      FixedExtentScrollController(initialItem: _daysLimit - 1),
                   children: List.generate(365, (index) {
                     return Center(
                       child: Text(

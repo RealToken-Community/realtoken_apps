@@ -83,7 +83,8 @@ class _LockScreenState extends State<LockScreen> with WidgetsBindingObserver {
     });
 
     try {
-      final authenticated = await _biometricService.authenticate(reason: 'Veuillez vous authentifier pour accéder à l\'application');
+      final authenticated = await _biometricService.authenticate(
+          reason: 'Veuillez vous authentifier pour accéder à l\'application');
 
       if (authenticated) {
         widget.onAuthenticated();
@@ -156,7 +157,9 @@ class _LockScreenState extends State<LockScreen> with WidgetsBindingObserver {
               Text(
                 'RealToken App',
                 style: TextStyle(
-                  fontSize: 24 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 24 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -165,7 +168,9 @@ class _LockScreenState extends State<LockScreen> with WidgetsBindingObserver {
                 S.of(context).pleaseAuthenticateToAccess,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 16 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   color: Colors.grey[600],
                 ),
               ),
@@ -179,9 +184,12 @@ class _LockScreenState extends State<LockScreen> with WidgetsBindingObserver {
                         ElevatedButton.icon(
                           onPressed: _authenticate,
                           icon: Icon(icon, size: 24),
-                          label: Text(S.of(context).authenticateWithBiometric(_biometricType)),
+                          label: Text(S
+                              .of(context)
+                              .authenticateWithBiometric(_biometricType)),
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -193,13 +201,16 @@ class _LockScreenState extends State<LockScreen> with WidgetsBindingObserver {
                             S.of(context).biometricAuthenticationFailed,
                             style: TextStyle(
                               color: Colors.red,
-                              fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                              fontSize: 14 +
+                                  Provider.of<AppState>(context, listen: false)
+                                      .getTextSizeOffset(),
                             ),
                           ),
                           const SizedBox(height: 8),
                           TextButton(
                             onPressed: () => widget.onAuthenticated(),
-                            child: Text(S.of(context).continueWithoutAuthentication),
+                            child: Text(
+                                S.of(context).continueWithoutAuthentication),
                           ),
                         ],
                       ],

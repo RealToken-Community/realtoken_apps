@@ -48,7 +48,8 @@ Widget buildOthersTab(BuildContext context, Map<String, dynamic> token) {
               onTap: () {
                 final ethereumAddress = token['ethereumContract'] ?? '';
                 if (ethereumAddress.isNotEmpty) {
-                  UrlUtils.launchURL('https://etherscan.io/address/$ethereumAddress');
+                  UrlUtils.launchURL(
+                      'https://etherscan.io/address/$ethereumAddress');
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -74,7 +75,8 @@ Widget buildOthersTab(BuildContext context, Map<String, dynamic> token) {
               onTap: () {
                 final gnosisAddress = token['gnosisContract'] ?? '';
                 if (gnosisAddress.isNotEmpty) {
-                  UrlUtils.launchURL('https://gnosisscan.io/address/$gnosisAddress');
+                  UrlUtils.launchURL(
+                      'https://gnosisscan.io/address/$gnosisAddress');
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -102,15 +104,21 @@ Widget buildOthersTab(BuildContext context, Map<String, dynamic> token) {
               context,
               icon: isWhitelisted ? Icons.check_circle : Icons.cancel,
               iconColor: isWhitelisted ? Colors.green : Colors.red,
-              label: isWhitelisted ? S.of(context).tokenWhitelisted : S.of(context).tokenNotWhitelisted,
+              label: isWhitelisted
+                  ? S.of(context).tokenWhitelisted
+                  : S.of(context).tokenNotWhitelisted,
               textColor: isWhitelisted ? Colors.green : Colors.red,
             ),
             const Divider(height: 1, thickness: 0.5),
             _buildStatusRow(
               context,
-              icon: isInWallet ? Icons.account_balance_wallet : Icons.account_balance_wallet_outlined,
+              icon: isInWallet
+                  ? Icons.account_balance_wallet
+                  : Icons.account_balance_wallet_outlined,
               iconColor: isInWallet ? Colors.green : Colors.red,
-              label: isInWallet ? S.of(context).presentInWallet : S.of(context).filterNotInWallet,
+              label: isInWallet
+                  ? S.of(context).presentInWallet
+                  : S.of(context).filterNotInWallet,
               textColor: isInWallet ? Colors.green : Colors.red,
             ),
           ],
@@ -131,7 +139,8 @@ Widget buildOthersTab(BuildContext context, Map<String, dynamic> token) {
                         walletAddress: walletAddress,
                         showFull: appState.showAmounts,
                       ),
-                      if (tokenWallets.last != walletAddress) const Divider(height: 1, thickness: 0.5),
+                      if (tokenWallets.last != walletAddress)
+                        const Divider(height: 1, thickness: 0.5),
                     ],
                   );
                 }).toList()
@@ -156,7 +165,8 @@ Widget buildOthersTab(BuildContext context, Map<String, dynamic> token) {
 }
 
 // Widget pour construire une section avec titre, comme dans property_tab.dart
-Widget _buildSectionCard(BuildContext context, {required String title, required List<Widget> children}) {
+Widget _buildSectionCard(BuildContext context,
+    {required String title, required List<Widget> children}) {
   return Container(
     margin: const EdgeInsets.only(bottom: 6),
     decoration: BoxDecoration(
@@ -374,7 +384,9 @@ Widget _buildWalletRow(
                 ),
               ),
               child: Text(
-                showFull ? walletAddress : TextUtils.truncateWallet(walletAddress),
+                showFull
+                    ? walletAddress
+                    : TextUtils.truncateWallet(walletAddress),
                 style: TextStyle(
                   fontSize: 12 + appState.getTextSizeOffset(),
                   fontFamily: 'Menlo', // Police monospace style iOS

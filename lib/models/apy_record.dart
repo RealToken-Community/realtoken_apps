@@ -42,18 +42,19 @@ class APYRecord {
     if (json.containsKey('netApy') && json.containsKey('grossApy')) {
       // Ancien format
       return APYRecord(
-        timestamp: json['timestamp'] is int 
-            ? DateTime.fromMillisecondsSinceEpoch(json['timestamp']) 
+        timestamp: json['timestamp'] is int
+            ? DateTime.fromMillisecondsSinceEpoch(json['timestamp'])
             : DateTime.parse(json['timestamp'].toString()),
-        apy: safeToDouble(json['netApy']), // Utiliser netApy comme apy principal
+        apy:
+            safeToDouble(json['netApy']), // Utiliser netApy comme apy principal
         netApy: safeToDouble(json['netApy']),
         grossApy: safeToDouble(json['grossApy']),
       );
     } else {
       // Nouveau format
       return APYRecord(
-        timestamp: json['timestamp'] is int 
-            ? DateTime.fromMillisecondsSinceEpoch(json['timestamp']) 
+        timestamp: json['timestamp'] is int
+            ? DateTime.fromMillisecondsSinceEpoch(json['timestamp'])
             : DateTime.parse(json['timestamp'].toString()),
         apy: safeToDouble(json['apy']),
         netApy: safeToDouble(json['netApy']),

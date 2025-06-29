@@ -14,12 +14,8 @@ class EditableAPYRecord {
   final TextEditingController grossController;
   final TextEditingController dateController;
 
-  EditableAPYRecord(
-    this.original, 
-    this.netController,
-    this.grossController,
-    this.dateController
-  );
+  EditableAPYRecord(this.original, this.netController, this.grossController,
+      this.dateController);
 }
 
 class ApyHistoryGraph extends StatefulWidget {
@@ -67,26 +63,33 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
     return records.map((record) {
       return EditableAPYRecord(
         record,
-        TextEditingController(text: (record.netApy ?? record.apy).toStringAsFixed(2)),
-        TextEditingController(text: (record.grossApy ?? record.apy).toStringAsFixed(2)),
-        TextEditingController(text: DateFormat('yyyy-MM-dd HH:mm:ss').format(record.timestamp)),
+        TextEditingController(
+            text: (record.netApy ?? record.apy).toStringAsFixed(2)),
+        TextEditingController(
+            text: (record.grossApy ?? record.apy).toStringAsFixed(2)),
+        TextEditingController(
+            text: DateFormat('yyyy-MM-dd HH:mm:ss').format(record.timestamp)),
       );
     }).toList();
   }
 
-  void _updateAPYValue(DataManager dataManager, EditableAPYRecord editableRecord, 
+  void _updateAPYValue(
+      DataManager dataManager, EditableAPYRecord editableRecord,
       {double? netValue, double? grossValue}) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.apyHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.apy == editableRecord.original.apy
-    );
-    
+    final index = dataManager.apyHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.apy == editableRecord.original.apy);
+
     if (index != -1) {
       // Déterminer les valeurs à utiliser
-      final newNetValue = netValue ?? editableRecord.original.netApy ?? editableRecord.original.apy;
-      final newGrossValue = grossValue ?? editableRecord.original.grossApy ?? editableRecord.original.apy;
-      
+      final newNetValue = netValue ??
+          editableRecord.original.netApy ??
+          editableRecord.original.apy;
+      final newGrossValue = grossValue ??
+          editableRecord.original.grossApy ??
+          editableRecord.original.apy;
+
       // Créer un nouvel enregistrement avec les valeurs mises à jour
       final updatedRecord = APYRecord(
         timestamp: editableRecord.original.timestamp,
@@ -94,18 +97,18 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
         netApy: newNetValue,
         grossApy: newGrossValue,
       );
-      
+
       // Mettre à jour la liste
       dataManager.apyHistory[index] = updatedRecord;
       // Mettre à jour l'original dans l'enregistrement éditable
       editableRecord.original = updatedRecord;
-      
+
       // Sauvegarder dans Hive
       dataManager.saveApyHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Mettre à jour les contrôleurs si nécessaire
       if (netValue != null) {
         editableRecord.netController.text = newNetValue.toStringAsFixed(2);
@@ -113,21 +116,22 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
       if (grossValue != null) {
         editableRecord.grossController.text = newGrossValue.toStringAsFixed(2);
       }
-      
+
       // Pour le débogage
-      print('APY mis à jour à l\'index $index: Net=$newNetValue, Gross=$newGrossValue');
+      print(
+          'APY mis à jour à l\'index $index: Net=$newNetValue, Gross=$newGrossValue');
     } else {
       print('Enregistrement non trouvé pour la mise à jour');
     }
   }
 
-  void _updateAPYDate(DataManager dataManager, EditableAPYRecord editableRecord, DateTime newDate) {
+  void _updateAPYDate(DataManager dataManager, EditableAPYRecord editableRecord,
+      DateTime newDate) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.apyHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.apy == editableRecord.original.apy
-    );
-    
+    final index = dataManager.apyHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.apy == editableRecord.original.apy);
+
     if (index != -1) {
       // Créer un nouvel enregistrement avec la date mise à jour
       final updatedRecord = APYRecord(
@@ -136,53 +140,55 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
         netApy: editableRecord.original.netApy,
         grossApy: editableRecord.original.grossApy,
       );
-      
+
       // Mettre à jour la liste
       dataManager.apyHistory[index] = updatedRecord;
       // Mettre à jour l'original dans l'enregistrement éditable
       editableRecord.original = updatedRecord;
-      
+
       // Sauvegarder dans Hive
       dataManager.saveApyHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Mettre à jour l'enregistrement éditable
-      editableRecord.dateController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(newDate);
-      
+      editableRecord.dateController.text =
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(newDate);
+
       // Pour le débogage
-      print('Date APY mise à jour à l\'index $index: ${newDate.toIso8601String()}');
+      print(
+          'Date APY mise à jour à l\'index $index: ${newDate.toIso8601String()}');
     } else {
       print('Enregistrement non trouvé pour la mise à jour de la date');
     }
   }
 
-  void _deleteAPYRecord(DataManager dataManager, EditableAPYRecord editableRecord, StateSetter setState) {
+  void _deleteAPYRecord(DataManager dataManager,
+      EditableAPYRecord editableRecord, StateSetter setState) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.apyHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.apy == editableRecord.original.apy
-    );
-    
+    final index = dataManager.apyHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.apy == editableRecord.original.apy);
+
     if (index != -1) {
       // Supprimer de la liste
       dataManager.apyHistory.removeAt(index);
-      
+
       // Sauvegarder dans Hive
       dataManager.saveApyHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Pour le débogage
       print('APY supprimé à l\'index $index');
-      
+
       // Recréer les enregistrements éditables
       setState(() {
         _editableRecords = _createEditableRecords(
-          List<APYRecord>.from(dataManager.apyHistory)..sort((a, b) => b.timestamp.compareTo(a.timestamp))
-        );
+            List<APYRecord>.from(dataManager.apyHistory)
+              ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
       });
     } else {
       print('Enregistrement non trouvé pour la suppression');
@@ -192,8 +198,8 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
   void _showEditModal(BuildContext context) {
     // Créer des enregistrements éditables à partir des enregistrements triés
     _editableRecords = _createEditableRecords(
-      List<APYRecord>.from(widget.dataManager.apyHistory)..sort((a, b) => b.timestamp.compareTo(a.timestamp))
-    );
+        List<APYRecord>.from(widget.dataManager.apyHistory)
+          ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
 
     showModalBottomSheet(
       context: context,
@@ -231,7 +237,9 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                       Text(
                         'Éditer l\'historique APY',
                         style: TextStyle(
-                          fontSize: 20 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                          fontSize: 20 +
+                              Provider.of<AppState>(context, listen: false)
+                                  .getTextSizeOffset(),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -250,7 +258,10 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                             child: Text(
                               "Aucun historique disponible",
                               style: TextStyle(
-                                fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                fontSize: 16 +
+                                    Provider.of<AppState>(context,
+                                            listen: false)
+                                        .getTextSizeOffset(),
                                 color: Colors.grey.shade600,
                               ),
                             ),
@@ -269,7 +280,10 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                         "Date",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context,
+                                                      listen: false)
+                                                  .getTextSizeOffset(),
                                         ),
                                       ),
                                     ),
@@ -281,7 +295,10 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                         S.of(context).net,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context,
+                                                      listen: false)
+                                                  .getTextSizeOffset(),
                                         ),
                                       ),
                                     ),
@@ -293,7 +310,10 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                         S.of(context).brute,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context,
+                                                      listen: false)
+                                                  .getTextSizeOffset(),
                                         ),
                                       ),
                                     ),
@@ -305,7 +325,10 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                         "Actions",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context,
+                                                      listen: false)
+                                                  .getTextSizeOffset(),
                                         ),
                                         textAlign: TextAlign.right,
                                       ),
@@ -319,59 +342,91 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                         SizedBox(
                                           width: 150,
                                           child: TextField(
-                                            controller: editableRecord.dateController,
-                                            keyboardType: TextInputType.datetime,
-                                            textInputAction: TextInputAction.done,
+                                            controller:
+                                                editableRecord.dateController,
+                                            keyboardType:
+                                                TextInputType.datetime,
+                                            textInputAction:
+                                                TextInputAction.done,
                                             style: TextStyle(
-                                              fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  Provider.of<AppState>(context,
+                                                          listen: false)
+                                                      .getTextSizeOffset(),
                                             ),
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor: Colors.white,
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
-                                                  color: Theme.of(context).primaryColor,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                               ),
-                                              contentPadding: const EdgeInsets.symmetric(
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 12,
                                                 vertical: 8,
                                               ),
                                             ),
                                             onSubmitted: (value) {
                                               try {
-                                                DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(value);
-                                                _updateAPYDate(widget.dataManager, editableRecord, newDate);
-                                                FocusScope.of(context).unfocus();
+                                                DateTime newDate = DateFormat(
+                                                        'yyyy-MM-dd HH:mm:ss')
+                                                    .parse(value);
+                                                _updateAPYDate(
+                                                    widget.dataManager,
+                                                    editableRecord,
+                                                    newDate);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } catch (e) {
-                                                print('Erreur de format de date: $e');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Format de date invalide')),
+                                                print(
+                                                    'Erreur de format de date: $e');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Format de date invalide')),
                                                 );
                                               }
                                             },
                                             onEditingComplete: () {
                                               try {
-                                                DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(editableRecord.dateController.text);
-                                                _updateAPYDate(widget.dataManager, editableRecord, newDate);
-                                                FocusScope.of(context).unfocus();
+                                                DateTime newDate = DateFormat(
+                                                        'yyyy-MM-dd HH:mm:ss')
+                                                    .parse(editableRecord
+                                                        .dateController.text);
+                                                _updateAPYDate(
+                                                    widget.dataManager,
+                                                    editableRecord,
+                                                    newDate);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } catch (e) {
-                                                print('Erreur de format de date: $e');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Format de date invalide')),
+                                                print(
+                                                    'Erreur de format de date: $e');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Format de date invalide')),
                                                 );
                                               }
                                             },
@@ -382,70 +437,94 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                         SizedBox(
                                           width: 100,
                                           child: TextField(
-                                            controller: editableRecord.netController,
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                            textInputAction: TextInputAction.done,
+                                            controller:
+                                                editableRecord.netController,
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(
+                                                decimal: true),
+                                            textInputAction:
+                                                TextInputAction.done,
                                             inputFormatters: [
-                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'^\d*\.?\d*')),
                                             ],
                                             style: TextStyle(
-                                              fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  Provider.of<AppState>(context,
+                                                          listen: false)
+                                                      .getTextSizeOffset(),
                                             ),
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor: Colors.white,
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
-                                                  color: Theme.of(context).primaryColor,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                               ),
-                                              contentPadding: const EdgeInsets.symmetric(
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 12,
                                                 vertical: 8,
                                               ),
                                             ),
                                             onSubmitted: (value) {
-                                              double? newValue = double.tryParse(value);
+                                              double? newValue =
+                                                  double.tryParse(value);
                                               if (newValue != null) {
                                                 _updateAPYValue(
-                                                  widget.dataManager, 
-                                                  editableRecord, 
-                                                  netValue: newValue
-                                                );
-                                                FocusScope.of(context).unfocus();
+                                                    widget.dataManager,
+                                                    editableRecord,
+                                                    netValue: newValue);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } else {
-                                                print('Valeur non valide: $value');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Valeur non valide')),
+                                                print(
+                                                    'Valeur non valide: $value');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Valeur non valide')),
                                                 );
                                               }
                                             },
                                             onEditingComplete: () {
-                                              double? newValue = double.tryParse(editableRecord.netController.text);
+                                              double? newValue =
+                                                  double.tryParse(editableRecord
+                                                      .netController.text);
                                               if (newValue != null) {
                                                 _updateAPYValue(
-                                                  widget.dataManager, 
-                                                  editableRecord, 
-                                                  netValue: newValue
-                                                );
-                                                FocusScope.of(context).unfocus();
+                                                    widget.dataManager,
+                                                    editableRecord,
+                                                    netValue: newValue);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } else {
-                                                print('Valeur non valide: ${editableRecord.netController.text}');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Valeur non valide')),
+                                                print(
+                                                    'Valeur non valide: ${editableRecord.netController.text}');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Valeur non valide')),
                                                 );
                                               }
                                             },
@@ -456,70 +535,94 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                         SizedBox(
                                           width: 100,
                                           child: TextField(
-                                            controller: editableRecord.grossController,
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                            textInputAction: TextInputAction.done,
+                                            controller:
+                                                editableRecord.grossController,
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(
+                                                decimal: true),
+                                            textInputAction:
+                                                TextInputAction.done,
                                             inputFormatters: [
-                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'^\d*\.?\d*')),
                                             ],
                                             style: TextStyle(
-                                              fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  Provider.of<AppState>(context,
+                                                          listen: false)
+                                                      .getTextSizeOffset(),
                                             ),
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor: Colors.white,
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
-                                                  color: Theme.of(context).primaryColor,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                               ),
-                                              contentPadding: const EdgeInsets.symmetric(
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 12,
                                                 vertical: 8,
                                               ),
                                             ),
                                             onSubmitted: (value) {
-                                              double? newValue = double.tryParse(value);
+                                              double? newValue =
+                                                  double.tryParse(value);
                                               if (newValue != null) {
                                                 _updateAPYValue(
-                                                  widget.dataManager, 
-                                                  editableRecord, 
-                                                  grossValue: newValue
-                                                );
-                                                FocusScope.of(context).unfocus();
+                                                    widget.dataManager,
+                                                    editableRecord,
+                                                    grossValue: newValue);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } else {
-                                                print('Valeur non valide: $value');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Valeur non valide')),
+                                                print(
+                                                    'Valeur non valide: $value');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Valeur non valide')),
                                                 );
                                               }
                                             },
                                             onEditingComplete: () {
-                                              double? newValue = double.tryParse(editableRecord.grossController.text);
+                                              double? newValue =
+                                                  double.tryParse(editableRecord
+                                                      .grossController.text);
                                               if (newValue != null) {
                                                 _updateAPYValue(
-                                                  widget.dataManager, 
-                                                  editableRecord, 
-                                                  grossValue: newValue
-                                                );
-                                                FocusScope.of(context).unfocus();
+                                                    widget.dataManager,
+                                                    editableRecord,
+                                                    grossValue: newValue);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } else {
-                                                print('Valeur non valide: ${editableRecord.grossController.text}');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Valeur non valide')),
+                                                print(
+                                                    'Valeur non valide: ${editableRecord.grossController.text}');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Valeur non valide')),
                                                 );
                                               }
                                             },
@@ -530,7 +633,8 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                         SizedBox(
                                           width: 60,
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: [
                                               IconButton(
                                                 icon: Icon(
@@ -539,7 +643,10 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                                                   size: 20,
                                                 ),
                                                 onPressed: () {
-                                                  _deleteAPYRecord(widget.dataManager, editableRecord, setState);
+                                                  _deleteAPYRecord(
+                                                      widget.dataManager,
+                                                      editableRecord,
+                                                      setState);
                                                 },
                                               ),
                                             ],
@@ -563,52 +670,64 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                           for (var editableRecord in _editableRecords) {
                             try {
                               // Mettre à jour la date
-                              final dateText = editableRecord.dateController.text;
-                              final DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateText);
-                              
+                              final dateText =
+                                  editableRecord.dateController.text;
+                              final DateTime newDate =
+                                  DateFormat('yyyy-MM-dd HH:mm:ss')
+                                      .parse(dateText);
+
                               // Mettre à jour la valeur nette
                               final netText = editableRecord.netController.text;
-                              final double? newNetValue = double.tryParse(netText);
-                              
+                              final double? newNetValue =
+                                  double.tryParse(netText);
+
                               // Mettre à jour la valeur brute
-                              final grossText = editableRecord.grossController.text;
-                              final double? newGrossValue = double.tryParse(grossText);
-                              
-                              if (newNetValue != null && newGrossValue != null) {
+                              final grossText =
+                                  editableRecord.grossController.text;
+                              final double? newGrossValue =
+                                  double.tryParse(grossText);
+
+                              if (newNetValue != null &&
+                                  newGrossValue != null) {
                                 // Trouver l'index dans la liste originale
-                                final index = widget.dataManager.apyHistory.indexWhere((r) => 
-                                  r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-                                  r.apy == editableRecord.original.apy
-                                );
-                                
+                                final index = widget.dataManager.apyHistory
+                                    .indexWhere((r) =>
+                                        r.timestamp.isAtSameMomentAs(
+                                            editableRecord
+                                                .original.timestamp) &&
+                                        r.apy == editableRecord.original.apy);
+
                                 if (index != -1) {
                                   // Créer un nouvel enregistrement avec les nouvelles valeurs
                                   final updatedRecord = APYRecord(
                                     timestamp: newDate,
-                                    apy: newNetValue, // Utiliser la valeur nette comme valeur principale
+                                    apy:
+                                        newNetValue, // Utiliser la valeur nette comme valeur principale
                                     netApy: newNetValue,
                                     grossApy: newGrossValue,
                                   );
-                                  
+
                                   // Mettre à jour la liste
-                                  widget.dataManager.apyHistory[index] = updatedRecord;
-                                  print('Mise à jour index $index: ${newDate.toIso8601String()} -> $newNetValue');
+                                  widget.dataManager.apyHistory[index] =
+                                      updatedRecord;
+                                  print(
+                                      'Mise à jour index $index: ${newDate.toIso8601String()} -> $newNetValue');
                                 }
                               }
                             } catch (e) {
                               print('Erreur lors de la mise à jour: $e');
                             }
                           }
-                          
+
                           // Sauvegarder dans Hive
                           widget.dataManager.saveApyHistory();
-                          
+
                           // Notifier les écouteurs
                           widget.dataManager.notifyListeners();
-                          
+
                           // Fermer le modal
                           Navigator.pop(context);
-                          
+
                           // Forcer la mise à jour du widget parent
                           setState(() {});
                         },
@@ -624,7 +743,9 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
                         child: Text(
                           'Sauvegarder',
                           style: TextStyle(
-                            fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                            fontSize: 16 +
+                                Provider.of<AppState>(context, listen: false)
+                                    .getTextSizeOffset(),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -645,7 +766,7 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
     // Définir les couleurs pour les séries empilées
     final Color netColor = const Color(0xFF5AC8FA); // Bleu pour net
     final Color grossColor = const Color(0xFFFF9500); // Orange pour brut
-    
+
     return GenericChartWidget<APYRecord>(
       title: S.of(context).apyHistory,
       chartColor: netColor, // Utiliser la couleur de la série principale
@@ -664,10 +785,10 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
       getStackValues: (record) {
         final netValue = record.netApy ?? record.apy ?? 0.0;
         final grossValue = record.grossApy ?? record.apy ?? 0.0;
-        
+
         // Si gross est inférieur à net (rare), on affiche juste la valeur nette
         final grossDiff = grossValue > netValue ? grossValue - netValue : 0.0;
-        
+
         return [netValue, grossDiff];
       },
       getTimestamp: (record) => record.timestamp ?? DateTime.now(),
@@ -675,7 +796,10 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
       valueSuffix: '%',
       maxY: 20, // Limiter la hauteur à 20%
       isStacked: true, // Activer l'affichage empilé pour APY
-      stackLabels: [S.of(context).net, S.of(context).brute], // Ajouter les étiquettes pour la légende
+      stackLabels: [
+        S.of(context).net,
+        S.of(context).brute
+      ], // Ajouter les étiquettes pour la légende
       onEditPressed: (context) => _showEditModal(context),
     );
   }

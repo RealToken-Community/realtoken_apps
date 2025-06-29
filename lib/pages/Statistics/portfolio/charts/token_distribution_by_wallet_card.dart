@@ -12,12 +12,15 @@ class TokenDistributionByWalletCard extends StatefulWidget {
   const TokenDistributionByWalletCard({super.key, required this.dataManager});
 
   @override
-  _TokenDistributionByWalletCardState createState() => _TokenDistributionByWalletCardState();
+  _TokenDistributionByWalletCardState createState() =>
+      _TokenDistributionByWalletCardState();
 }
 
-class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalletCard> {
+class _TokenDistributionByWalletCardState
+    extends State<TokenDistributionByWalletCard> {
   int? _selectedIndexWallet;
-  final ValueNotifier<int?> _selectedIndexNotifierWallet = ValueNotifier<int?>(null);
+  final ValueNotifier<int?> _selectedIndexNotifierWallet =
+      ValueNotifier<int?>(null);
 
   @override
   Widget build(BuildContext context) {
@@ -71,25 +74,32 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
                     children: [
                       PieChart(
                         PieChartData(
-                          sections: _buildDonutChartDataByWallet(widget.dataManager, selectedIndex),
+                          sections: _buildDonutChartDataByWallet(
+                              widget.dataManager, selectedIndex),
                           centerSpaceRadius: 65,
                           sectionsSpace: 3,
                           borderData: FlBorderData(show: false),
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
-                              if (response != null && response.touchedSection != null) {
-                                final touchedIndex = response.touchedSection!.touchedSectionIndex;
-                                _selectedIndexNotifierWallet.value = touchedIndex >= 0 ? touchedIndex : null;
+                            touchCallback: (FlTouchEvent event,
+                                PieTouchResponse? response) {
+                              if (response != null &&
+                                  response.touchedSection != null) {
+                                final touchedIndex = response
+                                    .touchedSection!.touchedSectionIndex;
+                                _selectedIndexNotifierWallet.value =
+                                    touchedIndex >= 0 ? touchedIndex : null;
                               } else {
                                 _selectedIndexNotifierWallet.value = null;
                               }
                             },
                           ),
                         ),
-                        swapAnimationDuration: const Duration(milliseconds: 300),
+                        swapAnimationDuration:
+                            const Duration(milliseconds: 300),
                         swapAnimationCurve: Curves.easeInOutCubic,
                       ),
-                      _buildCenterTextByWallet(widget.dataManager, selectedIndex),
+                      _buildCenterTextByWallet(
+                          widget.dataManager, selectedIndex),
                     ],
                   );
                 },
@@ -107,7 +117,8 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
     );
   }
 
-  List<PieChartSectionData> _buildDonutChartDataByWallet(DataManager dataManager, int? selectedIndex) {
+  List<PieChartSectionData> _buildDonutChartDataByWallet(
+      DataManager dataManager, int? selectedIndex) {
     final appState = Provider.of<AppState>(context);
 
     // Créer une Map qui compte les tokens par wallet
@@ -119,14 +130,17 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
       // Utiliser une version abrégée de l'adresse pour l'affichage
       String walletDisplayName = _formatWalletAddress(walletAddress);
 
-      walletTokenCounts[walletDisplayName] = (walletTokenCounts[walletDisplayName] ?? 0) + 1;
+      walletTokenCounts[walletDisplayName] =
+          (walletTokenCounts[walletDisplayName] ?? 0) + 1;
     }
 
     // Calculer la somme totale des tokens dans tous les wallets
-    int totalWalletTokens = walletTokenCounts.values.fold(0, (sum, count) => sum + count);
+    int totalWalletTokens =
+        walletTokenCounts.values.fold(0, (sum, count) => sum + count);
 
     // Trier les wallets par nombre de tokens (décroissant)
-    final sortedWallets = walletTokenCounts.keys.toList()..sort((a, b) => walletTokenCounts[b]!.compareTo(walletTokenCounts[a]!));
+    final sortedWallets = walletTokenCounts.keys.toList()
+      ..sort((a, b) => walletTokenCounts[b]!.compareTo(walletTokenCounts[a]!));
 
     // Créer les sections du graphique à secteurs
     return sortedWallets.asMap().entries.map((entry) {
@@ -147,7 +161,9 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
         color: baseColor.withValues(alpha: opacity),
         radius: isSelected ? 52 : 45,
         titleStyle: TextStyle(
-          fontSize: isSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
+          fontSize: isSelected
+              ? 14 + appState.getTextSizeOffset()
+              : 10 + appState.getTextSizeOffset(),
           color: Colors.white,
           fontWeight: FontWeight.w600,
           shadows: [
@@ -194,11 +210,13 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
       String walletAddress = token['wallet'] ?? S.of(context).unknown;
       String walletDisplayName = _formatWalletAddress(walletAddress);
 
-      walletTokenCounts[walletDisplayName] = (walletTokenCounts[walletDisplayName] ?? 0) + 1;
+      walletTokenCounts[walletDisplayName] =
+          (walletTokenCounts[walletDisplayName] ?? 0) + 1;
     }
 
     // Calculer la somme totale des tokens dans tous les wallets
-    int totalWalletTokens = walletTokenCounts.values.fold(0, (sum, count) => sum + count);
+    int totalWalletTokens =
+        walletTokenCounts.values.fold(0, (sum, count) => sum + count);
 
     if (selectedIndex == null) {
       // Afficher la valeur totale si aucun segment n'est sélectionné
@@ -227,7 +245,8 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
     }
 
     // Afficher les détails du segment sélectionné
-    final sortedWallets = walletTokenCounts.keys.toList()..sort((a, b) => walletTokenCounts[b]!.compareTo(walletTokenCounts[a]!));
+    final sortedWallets = walletTokenCounts.keys.toList()
+      ..sort((a, b) => walletTokenCounts[b]!.compareTo(walletTokenCounts[a]!));
 
     if (selectedIndex >= sortedWallets.length) return Container();
 
@@ -269,14 +288,17 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
       String walletAddress = token['wallet'] ?? S.of(context).unknown;
       String walletDisplayName = _formatWalletAddress(walletAddress);
 
-      walletTokenCounts[walletDisplayName] = (walletTokenCounts[walletDisplayName] ?? 0) + 1;
+      walletTokenCounts[walletDisplayName] =
+          (walletTokenCounts[walletDisplayName] ?? 0) + 1;
     }
 
     // Calculer la somme totale des tokens dans tous les wallets
-    int totalWalletTokens = walletTokenCounts.values.fold(0, (sum, count) => sum + count);
+    int totalWalletTokens =
+        walletTokenCounts.values.fold(0, (sum, count) => sum + count);
 
     // Trier les wallets par nombre de tokens (décroissant)
-    final sortedWallets = walletTokenCounts.keys.toList()..sort((a, b) => walletTokenCounts[b]!.compareTo(walletTokenCounts[a]!));
+    final sortedWallets = walletTokenCounts.keys.toList()
+      ..sort((a, b) => walletTokenCounts[b]!.compareTo(walletTokenCounts[a]!));
 
     return Wrap(
       spacing: 12.0,
@@ -291,16 +313,21 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
 
         return InkWell(
           onTap: () {
-            _selectedIndexNotifierWallet.value = (_selectedIndexNotifierWallet.value == index) ? null : index;
+            _selectedIndexNotifierWallet.value =
+                (_selectedIndexNotifierWallet.value == index) ? null : index;
           },
           borderRadius: BorderRadius.circular(8),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifierWallet.value == index ? color.withValues(alpha: 0.1) : Colors.transparent,
+              color: _selectedIndexNotifierWallet.value == index
+                  ? color.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: _selectedIndexNotifierWallet.value == index ? color : Colors.transparent,
+                color: _selectedIndexNotifierWallet.value == index
+                    ? color
+                    : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -328,8 +355,12 @@ class _TokenDistributionByWalletCardState extends State<TokenDistributionByWalle
                     '$wallet (${percentage.toStringAsFixed(1)}%)',
                     style: TextStyle(
                       fontSize: 12 + appState.getTextSizeOffset(),
-                      color: _selectedIndexNotifierWallet.value == index ? color : Theme.of(context).textTheme.bodyMedium?.color,
-                      fontWeight: _selectedIndexNotifierWallet.value == index ? FontWeight.w600 : FontWeight.normal,
+                      color: _selectedIndexNotifierWallet.value == index
+                          ? color
+                          : Theme.of(context).textTheme.bodyMedium?.color,
+                      fontWeight: _selectedIndexNotifierWallet.value == index
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),

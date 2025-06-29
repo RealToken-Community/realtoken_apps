@@ -12,7 +12,8 @@ class PerformanceByRegionChart extends StatefulWidget {
   const PerformanceByRegionChart({super.key, required this.dataManager});
 
   @override
-  _PerformanceByRegionChartState createState() => _PerformanceByRegionChartState();
+  _PerformanceByRegionChartState createState() =>
+      _PerformanceByRegionChartState();
 }
 
 class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
@@ -66,8 +67,10 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
                 DropdownButton<String>(
                   value: _sortBy,
                   items: [
-                    DropdownMenuItem(value: 'roi', child: Text(S.of(context).sortByROI)),
-                    DropdownMenuItem(value: 'count', child: Text(S.of(context).sortByCount)),
+                    DropdownMenuItem(
+                        value: 'roi', child: Text(S.of(context).sortByROI)),
+                    DropdownMenuItem(
+                        value: 'count', child: Text(S.of(context).sortByCount)),
                   ],
                   onChanged: (String? value) {
                     setState(() {
@@ -106,9 +109,11 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
     for (var token in widget.dataManager.portfolio) {
       final String regionCode = token['regionCode'] ?? 'Unknown';
       final String regionName = Parameters.getRegionDisplayName(regionCode);
-      final double totalRentReceived = (token['totalRentReceived'] ?? 0.0).toDouble();
+      final double totalRentReceived =
+          (token['totalRentReceived'] ?? 0.0).toDouble();
       final double initialValue = (token['initialValue'] ?? 0.0).toDouble();
-      final double roi = initialValue > 0 ? (totalRentReceived / initialValue) * 100 : 0.0;
+      final double roi =
+          initialValue > 0 ? (totalRentReceived / initialValue) * 100 : 0.0;
 
       if (!regionData.containsKey(regionName)) {
         regionData[regionName] = {
@@ -119,10 +124,14 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
         };
       }
 
-      regionData[regionName]!['totalRoi'] = regionData[regionName]!['totalRoi'] + roi;
-      regionData[regionName]!['totalInitialValue'] = regionData[regionName]!['totalInitialValue'] + initialValue;
-      regionData[regionName]!['totalRentReceived'] = regionData[regionName]!['totalRentReceived'] + totalRentReceived;
-      regionData[regionName]!['tokenCount'] = regionData[regionName]!['tokenCount'] + 1;
+      regionData[regionName]!['totalRoi'] =
+          regionData[regionName]!['totalRoi'] + roi;
+      regionData[regionName]!['totalInitialValue'] =
+          regionData[regionName]!['totalInitialValue'] + initialValue;
+      regionData[regionName]!['totalRentReceived'] =
+          regionData[regionName]!['totalRentReceived'] + totalRentReceived;
+      regionData[regionName]!['tokenCount'] =
+          regionData[regionName]!['tokenCount'] + 1;
     }
 
     // Calculer le ROI moyen par région
@@ -130,16 +139,19 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
       final int tokenCount = data['tokenCount'];
       final double totalInitialValue = data['totalInitialValue'];
       final double totalRentReceived = data['totalRentReceived'];
-      
-      data['averageRoi'] = totalInitialValue > 0 ? (totalRentReceived / totalInitialValue) * 100 : 0.0;
+
+      data['averageRoi'] = totalInitialValue > 0
+          ? (totalRentReceived / totalInitialValue) * 100
+          : 0.0;
     });
 
     return regionData;
   }
 
   Widget _buildRegionPerformanceChart(int? selectedIndex) {
-    final Map<String, Map<String, dynamic>> regionData = _calculateRegionPerformance();
-    
+    final Map<String, Map<String, dynamic>> regionData =
+        _calculateRegionPerformance();
+
     if (regionData.isEmpty) {
       return Center(
         child: Text(
@@ -153,21 +165,29 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
     }
 
     // Trier les données selon le critère sélectionné
-    final List<MapEntry<String, Map<String, dynamic>>> sortedEntries = regionData.entries.toList();
+    final List<MapEntry<String, Map<String, dynamic>>> sortedEntries =
+        regionData.entries.toList();
     if (_sortBy == 'roi') {
-      sortedEntries.sort((a, b) => b.value['averageRoi'].compareTo(a.value['averageRoi']));
+      sortedEntries.sort(
+          (a, b) => b.value['averageRoi'].compareTo(a.value['averageRoi']));
     } else {
-      sortedEntries.sort((a, b) => b.value['tokenCount'].compareTo(a.value['tokenCount']));
+      sortedEntries.sort(
+          (a, b) => b.value['tokenCount'].compareTo(a.value['tokenCount']));
     }
 
     // Limiter à 8 régions pour la lisibilité
-    final List<MapEntry<String, Map<String, dynamic>>> displayEntries = 
+    final List<MapEntry<String, Map<String, dynamic>>> displayEntries =
         sortedEntries.take(8).toList();
 
     return BarChart(
       BarChartData(
         alignment: BarChartAlignment.spaceAround,
-        maxY: displayEntries.isEmpty ? 10 : displayEntries.map((e) => e.value['averageRoi'] as double).reduce((a, b) => a > b ? a : b) * 1.2,
+        maxY: displayEntries.isEmpty
+            ? 10
+            : displayEntries
+                    .map((e) => e.value['averageRoi'] as double)
+                    .reduce((a, b) => a > b ? a : b) *
+                1.2,
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
@@ -175,11 +195,12 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
               final regionName = entry.key;
               final data = entry.value;
               return BarTooltipItem(
-                                 '$regionName\n${S.of(context).averageROI}: ${data['averageRoi'].toStringAsFixed(1)}%\nTokens: ${data['tokenCount']}',
+                '$regionName\n${S.of(context).averageROI}: ${data['averageRoi'].toStringAsFixed(1)}%\nTokens: ${data['tokenCount']}',
                 TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12 + Provider.of<AppState>(context).getTextSizeOffset(),
+                  fontSize:
+                      12 + Provider.of<AppState>(context).getTextSizeOffset(),
                 ),
               );
             },
@@ -187,7 +208,8 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
           touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
             if (response != null && response.spot != null) {
               final touchedIndex = response.spot!.touchedBarGroupIndex;
-              _selectedIndexNotifier.value = touchedIndex >= 0 ? touchedIndex : null;
+              _selectedIndexNotifier.value =
+                  touchedIndex >= 0 ? touchedIndex : null;
             } else {
               _selectedIndexNotifier.value = null;
             }
@@ -206,9 +228,12 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      regionName.length > 6 ? '${regionName.substring(0, 6)}...' : regionName,
+                      regionName.length > 6
+                          ? '${regionName.substring(0, 6)}...'
+                          : regionName,
                       style: TextStyle(
-                        fontSize: 10 + Provider.of<AppState>(context).getTextSizeOffset(),
+                        fontSize: 10 +
+                            Provider.of<AppState>(context).getTextSizeOffset(),
                         color: Colors.grey.shade600,
                       ),
                     ),
@@ -226,15 +251,18 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
                 return Text(
                   '${value.toInt()}%',
                   style: TextStyle(
-                    fontSize: 10 + Provider.of<AppState>(context).getTextSizeOffset(),
+                    fontSize:
+                        10 + Provider.of<AppState>(context).getTextSizeOffset(),
                     color: Colors.grey.shade600,
                   ),
                 );
               },
             ),
           ),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
         borderData: FlBorderData(show: false),
         barGroups: displayEntries.asMap().entries.map((entry) {
@@ -268,7 +296,10 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
                 ),
                 backDrawRodData: BackgroundBarChartRodData(
                   show: true,
-                  toY: displayEntries.map((e) => e.value['averageRoi'] as double).reduce((a, b) => a > b ? a : b) * 1.2,
+                  toY: displayEntries
+                          .map((e) => e.value['averageRoi'] as double)
+                          .reduce((a, b) => a > b ? a : b) *
+                      1.2,
                   color: Colors.grey.withValues(alpha: 0.1),
                 ),
               ),
@@ -281,14 +312,18 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
   }
 
   Widget _buildRegionLegend() {
-    final Map<String, Map<String, dynamic>> regionData = _calculateRegionPerformance();
+    final Map<String, Map<String, dynamic>> regionData =
+        _calculateRegionPerformance();
     final appState = Provider.of<AppState>(context);
 
-    final List<MapEntry<String, Map<String, dynamic>>> sortedEntries = regionData.entries.toList();
+    final List<MapEntry<String, Map<String, dynamic>>> sortedEntries =
+        regionData.entries.toList();
     if (_sortBy == 'roi') {
-      sortedEntries.sort((a, b) => b.value['averageRoi'].compareTo(a.value['averageRoi']));
+      sortedEntries.sort(
+          (a, b) => b.value['averageRoi'].compareTo(a.value['averageRoi']));
     } else {
-      sortedEntries.sort((a, b) => b.value['tokenCount'].compareTo(a.value['tokenCount']));
+      sortedEntries.sort(
+          (a, b) => b.value['tokenCount'].compareTo(a.value['tokenCount']));
     }
 
     return Wrap(
@@ -316,16 +351,21 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
 
         return InkWell(
           onTap: () {
-            _selectedIndexNotifier.value = (_selectedIndexNotifier.value == index) ? null : index;
+            _selectedIndexNotifier.value =
+                (_selectedIndexNotifier.value == index) ? null : index;
           },
           borderRadius: BorderRadius.circular(8),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifier.value == index ? color.withValues(alpha: 0.1) : Colors.transparent,
+              color: _selectedIndexNotifier.value == index
+                  ? color.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: _selectedIndexNotifier.value == index ? color : Colors.transparent,
+                color: _selectedIndexNotifier.value == index
+                    ? color
+                    : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -352,8 +392,12 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
                   '$regionName: ${roi.toStringAsFixed(1)}% ($tokenCount)',
                   style: TextStyle(
                     fontSize: 12 + appState.getTextSizeOffset(),
-                    color: _selectedIndexNotifier.value == index ? color : Theme.of(context).textTheme.bodyMedium?.color,
-                    fontWeight: _selectedIndexNotifier.value == index ? FontWeight.w600 : FontWeight.normal,
+                    color: _selectedIndexNotifier.value == index
+                        ? color
+                        : Theme.of(context).textTheme.bodyMedium?.color,
+                    fontWeight: _selectedIndexNotifier.value == index
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
               ],
@@ -363,4 +407,4 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
       }).toList(),
     );
   }
-} 
+}

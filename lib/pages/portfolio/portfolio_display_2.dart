@@ -21,7 +21,7 @@ class PortfolioDisplay2 extends StatefulWidget {
   final bool isLoading;
 
   const PortfolioDisplay2({
-    super.key, 
+    super.key,
     required this.portfolio,
     this.isLoading = false,
   });
@@ -32,14 +32,15 @@ class PortfolioDisplay2 extends StatefulWidget {
 
 class PortfolioDisplay2State extends State<PortfolioDisplay2> {
   /// Widget pour afficher une image avec gestion automatique de l'orientation
-  Widget _buildImageWithOrientation(String imageUrl, {BoxFit fit = BoxFit.cover}) {
+  Widget _buildImageWithOrientation(String imageUrl,
+      {BoxFit fit = BoxFit.cover}) {
     if (kIsWeb) {
       return ShowNetworkImage(
         imageSrc: imageUrl,
         mobileBoxFit: fit,
       );
     }
-    
+
     // Pour Android, utiliser Image.network avec filterQuality pour une meilleure gestion
     if (Platform.isAndroid) {
       return Image.network(
@@ -63,14 +64,15 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
           return Center(
             child: CircularProgressIndicator(
               value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
                   : null,
             ),
           );
         },
       );
     }
-    
+
     // Pour iOS et autres plateformes, utiliser CachedNetworkImage
     return CachedNetworkImage(
       imageUrl: imageUrl,
@@ -89,7 +91,8 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           double maxWidth = constraints.maxWidth;
-          final bool showTextInside = rentValue >= 15; // Afficher le texte à l'intérieur seulement si >= 15%
+          final bool showTextInside = rentValue >=
+              15; // Afficher le texte à l'intérieur seulement si >= 15%
 
           return Stack(
             children: [
@@ -105,7 +108,8 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
               // Partie remplie de la jauge
               Container(
                 height: 16,
-                width: Math.max(rentValue.clamp(0, 100) / 100 * maxWidth, 8), // Largeur minimum pour garantir les bords arrondis
+                width: Math.max(rentValue.clamp(0, 100) / 100 * maxWidth,
+                    8), // Largeur minimum pour garantir les bords arrondis
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -120,70 +124,88 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                 // Texte du pourcentage à l'intérieur de la barre seulement si assez d'espace
                 child: showTextInside
                     ? Center(
-                        child: widget.isLoading 
-                          ? ShimmerUtils.originalColorShimmer(
-                              child: Text(
+                        child: widget.isLoading
+                            ? ShimmerUtils.originalColorShimmer(
+                                child: Text(
+                                  "${rentValue.toStringAsFixed(1)}%",
+                                  style: TextStyle(
+                                    fontSize: 10 +
+                                        Provider.of<AppState>(context,
+                                                listen: false)
+                                            .getTextSizeOffset(),
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    shadows: [
+                                      Shadow(
+                                        offset: const Offset(0, 1),
+                                        blurRadius: 1,
+                                        color:
+                                            Colors.black.withValues(alpha: 0.5),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                color: Colors.white,
+                              )
+                            : Text(
                                 "${rentValue.toStringAsFixed(1)}%",
                                 style: TextStyle(
-                                  fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                  fontSize: 10 +
+                                      Provider.of<AppState>(context,
+                                              listen: false)
+                                          .getTextSizeOffset(),
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                   shadows: [
                                     Shadow(
                                       offset: const Offset(0, 1),
                                       blurRadius: 1,
-                                      color: Colors.black.withValues(alpha: 0.5),
+                                      color:
+                                          Colors.black.withValues(alpha: 0.5),
                                     ),
                                   ],
                                 ),
                               ),
-                              color: Colors.white,
-                            )
-                          : Text(
-                              "${rentValue.toStringAsFixed(1)}%",
-                              style: TextStyle(
-                                fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(
-                                    offset: const Offset(0, 1),
-                                    blurRadius: 1,
-                                    color: Colors.black.withValues(alpha: 0.5),
-                                  ),
-                                ],
-                              ),
-                            ),
                       )
                     : null,
               ),
               // Texte du pourcentage visible en dehors de la barre seulement si < 15%
               if (!showTextInside)
                 Positioned(
-                  left: Math.max(rentValue.clamp(0, 100) / 100 * maxWidth, 8) + 4,
+                  left:
+                      Math.max(rentValue.clamp(0, 100) / 100 * maxWidth, 8) + 4,
                   top: 0,
                   bottom: 0,
                   child: Center(
                     child: widget.isLoading
-                      ? ShimmerUtils.originalColorShimmer(
-                          child: Text(
+                        ? ShimmerUtils.originalColorShimmer(
+                            child: Text(
+                              "${rentValue.toStringAsFixed(1)}%",
+                              style: TextStyle(
+                                fontSize: 10 +
+                                    Provider.of<AppState>(context,
+                                            listen: false)
+                                        .getTextSizeOffset(),
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color,
+                              ),
+                            ),
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                          )
+                        : Text(
                             "${rentValue.toStringAsFixed(1)}%",
                             style: TextStyle(
-                              fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                              fontSize: 10 +
+                                  Provider.of<AppState>(context, listen: false)
+                                      .getTextSizeOffset(),
                               fontWeight: FontWeight.w600,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color,
                             ),
                           ),
-                          color: Theme.of(context).textTheme.bodyLarge?.color,
-                        )
-                      : Text(
-                          "${rentValue.toStringAsFixed(1)}%",
-                          style: TextStyle(
-                            fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                          ),
-                        ),
                   ),
                 ),
             ],
@@ -226,15 +248,18 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const ManageEvmAddressesPage(),
+                                  builder: (context) =>
+                                      const ManageEvmAddressesPage(),
                                 ),
                               );
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: Theme.of(context).primaryColor,
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)),
                             ),
                             child: Text(
                               S.of(context).manageAddresses,
@@ -251,7 +276,8 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                 )
               : Expanded(
                   child: AlignedGridView.count(
-                    padding: const EdgeInsets.only(top: 8, bottom: 80, right: 16, left: 16),
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 80, right: 16, left: 16),
                     crossAxisCount: widthScreen > 700 ? 2 : 1,
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
@@ -260,14 +286,22 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                       final token = filteredPortfolio[index];
                       final isWallet = token['inWallet'] ?? false;
                       final isRMM = token['inRMM'] ?? false;
-                      final city = LocationUtils.extractCity(token['fullName'] ?? '');
+                      final city =
+                          LocationUtils.extractCity(token['fullName'] ?? '');
 
-                      final rentStartDate = DateTime.tryParse(token['rentStartDate'] ?? '');
-                      final bool isFutureRentStart = rentStartDate != null && rentStartDate.isAfter(DateTime.now());
+                      final rentStartDate =
+                          DateTime.tryParse(token['rentStartDate'] ?? '');
+                      final bool isFutureRentStart = rentStartDate != null &&
+                          rentStartDate.isAfter(DateTime.now());
 
-                      final rentPercentage = (token['totalRentReceived'] != null && token['initialTotalValue'] != null && token['initialTotalValue'] != 0)
-                          ? (token['totalRentReceived'] / token['initialTotalValue']) * 100
-                          : 0.5;
+                      final rentPercentage =
+                          (token['totalRentReceived'] != null &&
+                                  token['initialTotalValue'] != null &&
+                                  token['initialTotalValue'] != 0)
+                              ? (token['totalRentReceived'] /
+                                      token['initialTotalValue']) *
+                                  100
+                              : 0.5;
 
                       return Container(
                         decoration: BoxDecoration(
@@ -305,7 +339,13 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                             topRight: Radius.circular(20),
                                           ),
                                           child: ColorFiltered(
-                                            colorFilter: isFutureRentStart ? const ColorFilter.mode(Colors.black45, BlendMode.darken) : const ColorFilter.mode(Colors.transparent, BlendMode.multiply),
+                                            colorFilter: isFutureRentStart
+                                                ? const ColorFilter.mode(
+                                                    Colors.black45,
+                                                    BlendMode.darken)
+                                                : const ColorFilter.mode(
+                                                    Colors.transparent,
+                                                    BlendMode.multiply),
                                             child: _buildImageWithOrientation(
                                               token['imageLink'][0],
                                               fit: BoxFit.cover,
@@ -317,7 +357,8 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                       if (kIsWeb)
                                         Positioned.fill(
                                           child: GestureDetector(
-                                            behavior: HitTestBehavior.translucent,
+                                            behavior:
+                                                HitTestBehavior.translucent,
                                             onTap: () {
                                               showTokenDetails(context, token);
                                             },
@@ -328,11 +369,19 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                         Positioned.fill(
                                           child: Center(
                                             child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(10),
-                                              child: WidgetFactory.buildImageOverlay(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: WidgetFactory
+                                                  .buildImageOverlay(
                                                 context: context,
-                                                text: S.of(context).rentStartFuture,
-                                                fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                                text: S
+                                                    .of(context)
+                                                    .rentStartFuture,
+                                                fontSize: 12 +
+                                                    Provider.of<AppState>(
+                                                            context,
+                                                            listen: false)
+                                                        .getTextSizeOffset(),
                                               ),
                                             ),
                                           ),
@@ -346,18 +395,30 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                           child: Row(
                                             children: [
                                               if (isWallet)
-                                                WidgetFactory.buildImageIndicator(
+                                                WidgetFactory
+                                                    .buildImageIndicator(
                                                   context: context,
                                                   text: S.of(context).wallet,
-                                                  fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                                  fontSize: 10 +
+                                                      Provider.of<AppState>(
+                                                              context,
+                                                              listen: false)
+                                                          .getTextSizeOffset(),
                                                 ),
                                               const SizedBox(width: 6),
                                               if (isRMM)
-                                                WidgetFactory.buildImageIndicator(
+                                                WidgetFactory
+                                                    .buildImageIndicator(
                                                   context: context,
                                                   text: 'RMM',
-                                                  backgroundColor: const Color.fromARGB(150, 165, 100, 21),
-                                                  fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                                  backgroundColor:
+                                                      const Color.fromARGB(
+                                                          150, 165, 100, 21),
+                                                  fontSize: 10 +
+                                                      Provider.of<AppState>(
+                                                              context,
+                                                              listen: false)
+                                                          .getTextSizeOffset(),
                                                 ),
                                             ],
                                           ),
@@ -369,16 +430,21 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                         right: 0,
                                         child: ClipRRect(
                                           child: BackdropFilter(
-                                            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                                            filter: ImageFilter.blur(
+                                                sigmaX: 3, sigmaY: 3),
                                             child: Container(
-                                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 10),
                                               decoration: BoxDecoration(
                                                 gradient: LinearGradient(
                                                   begin: Alignment.topCenter,
                                                   end: Alignment.bottomCenter,
                                                   colors: [
                                                     Colors.transparent,
-                                                    Colors.black.withValues(alpha: 0.6),
+                                                    Colors.black
+                                                        .withValues(alpha: 0.6),
                                                   ],
                                                 ),
                                               ),
@@ -386,13 +452,18 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                                 city,
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 14 + appState.getTextSizeOffset(),
+                                                  fontSize: 14 +
+                                                      appState
+                                                          .getTextSizeOffset(),
                                                   fontWeight: FontWeight.w600,
                                                   shadows: [
                                                     Shadow(
-                                                      offset: const Offset(0, 1),
+                                                      offset:
+                                                          const Offset(0, 1),
                                                       blurRadius: 2,
-                                                      color: Colors.black.withValues(alpha: 0.5),
+                                                      color: Colors.black
+                                                          .withValues(
+                                                              alpha: 0.5),
                                                     ),
                                                   ],
                                                 ),
@@ -407,32 +478,50 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                   Padding(
                                     padding: const EdgeInsets.all(12.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
                                             if (token['country'] != null)
                                               Padding(
-                                                padding: const EdgeInsets.only(right: 6),
+                                                padding: const EdgeInsets.only(
+                                                    right: 6),
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(4),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
                                                   child: Image.asset(
                                                     'assets/country/${token['country'].toLowerCase()}.png',
-                                                    width: 22 + appState.getTextSizeOffset(),
-                                                    height: 22 + appState.getTextSizeOffset(),
-                                                    errorBuilder: (context, error, stackTrace) {
-                                                      return const Icon(Icons.flag, size: 22);
+                                                    width: 22 +
+                                                        appState
+                                                            .getTextSizeOffset(),
+                                                    height: 22 +
+                                                        appState
+                                                            .getTextSizeOffset(),
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return const Icon(
+                                                          Icons.flag,
+                                                          size: 22);
                                                     },
                                                   ),
                                                 ),
                                               ),
                                             Expanded(
                                               child: Text(
-                                                token['shortName'] ?? S.of(context).nameUnavailable,
+                                                token['shortName'] ??
+                                                    S
+                                                        .of(context)
+                                                        .nameUnavailable,
                                                 style: TextStyle(
-                                                  fontSize: 16 + appState.getTextSizeOffset(),
+                                                  fontSize: 16 +
+                                                      appState
+                                                          .getTextSizeOffset(),
                                                   fontWeight: FontWeight.w600,
-                                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.color,
                                                   letterSpacing: -0.2,
                                                 ),
                                                 maxLines: 1,
@@ -443,64 +532,99 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                         ),
                                         const SizedBox(height: 8),
                                         // Barre de progression
-                                        _buildGaugeForRent(rentPercentage, context),
+                                        _buildGaugeForRent(
+                                            rentPercentage, context),
                                         const SizedBox(height: 2),
 
                                         // Montant et APY
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Expanded(
                                               child: widget.isLoading
-                                                ? ShimmerUtils.originalColorShimmer(
-                                                    child: Text(
+                                                  ? ShimmerUtils
+                                                      .originalColorShimmer(
+                                                      child: Text(
+                                                        '${token['amount']?.toStringAsFixed(2) ?? '0.00'} / ${token['totalTokens'] ?? 'N/A'}',
+                                                        style: TextStyle(
+                                                          fontSize: 12 +
+                                                              appState
+                                                                  .getTextSizeOffset(),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall
+                                                                  ?.color,
+                                                        ),
+                                                      ),
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall
+                                                          ?.color,
+                                                    )
+                                                  : Text(
                                                       '${token['amount']?.toStringAsFixed(2) ?? '0.00'} / ${token['totalTokens'] ?? 'N/A'}',
                                                       style: TextStyle(
-                                                        fontSize: 12 + appState.getTextSizeOffset(),
-                                                        fontWeight: FontWeight.w500,
-                                                        color: Theme.of(context).textTheme.bodySmall?.color,
+                                                        fontSize: 12 +
+                                                            appState
+                                                                .getTextSizeOffset(),
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall
+                                                            ?.color,
                                                       ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                    color: Theme.of(context).textTheme.bodySmall?.color,
-                                                  )
-                                                : Text(
-                                                    '${token['amount']?.toStringAsFixed(2) ?? '0.00'} / ${token['totalTokens'] ?? 'N/A'}',
-                                                    style: TextStyle(
-                                                      fontSize: 12 + appState.getTextSizeOffset(),
-                                                      fontWeight: FontWeight.w500,
-                                                      color: Theme.of(context).textTheme.bodySmall?.color,
-                                                    ),
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
                                             ),
                                             Row(
                                               children: [
                                                 Icon(
                                                   Icons.trending_up,
-                                                  size: 14 + appState.getTextSizeOffset(),
-                                                  color: Theme.of(context).primaryColor,
+                                                  size: 14 +
+                                                      appState
+                                                          .getTextSizeOffset(),
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                                 const SizedBox(width: 2),
                                                 widget.isLoading
-                                                  ? ShimmerUtils.originalColorShimmer(
-                                                      child: Text(
+                                                    ? ShimmerUtils
+                                                        .originalColorShimmer(
+                                                        child: Text(
+                                                          '${token['annualPercentageYield']?.toStringAsFixed(2) ?? 'N/A'}%',
+                                                          style: TextStyle(
+                                                            fontSize: 13 +
+                                                                appState
+                                                                    .getTextSizeOffset(),
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                          ),
+                                                        ),
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                      )
+                                                    : Text(
                                                         '${token['annualPercentageYield']?.toStringAsFixed(2) ?? 'N/A'}%',
                                                         style: TextStyle(
-                                                          fontSize: 13 + appState.getTextSizeOffset(),
-                                                          fontWeight: FontWeight.w600,
-                                                          color: Theme.of(context).primaryColor,
+                                                          fontSize: 13 +
+                                                              appState
+                                                                  .getTextSizeOffset(),
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
                                                         ),
                                                       ),
-                                                      color: Theme.of(context).primaryColor,
-                                                    )
-                                                  : Text(
-                                                      '${token['annualPercentageYield']?.toStringAsFixed(2) ?? 'N/A'}%',
-                                                      style: TextStyle(
-                                                        fontSize: 13 + appState.getTextSizeOffset(),
-                                                        fontWeight: FontWeight.w600,
-                                                        color: Theme.of(context).primaryColor,
-                                                      ),
-                                                    ),
                                               ],
                                             ),
                                           ],
@@ -509,105 +633,232 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
 
                                         // Valeurs totales
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 6),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     S.of(context).totalValue,
                                                     style: TextStyle(
-                                                      fontSize: 11 + appState.getTextSizeOffset(),
-                                                      color: Theme.of(context).textTheme.bodySmall?.color,
-                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 11 +
+                                                          appState
+                                                              .getTextSizeOffset(),
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall
+                                                          ?.color,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
                                                   widget.isLoading
-                                                    ? ShimmerUtils.originalColorShimmer(
-                                                        child: Text(
-                                                          currencyUtils.getFormattedAmount(
-                                                            currencyUtils.convert(token['totalValue']),
-                                                            currencyUtils.currencySymbol,
-                                                            appState.showAmounts,
+                                                      ? ShimmerUtils
+                                                          .originalColorShimmer(
+                                                          child: Text(
+                                                            currencyUtils
+                                                                .getFormattedAmount(
+                                                              currencyUtils
+                                                                  .convert(token[
+                                                                      'totalValue']),
+                                                              currencyUtils
+                                                                  .currencySymbol,
+                                                              appState
+                                                                  .showAmounts,
+                                                            ),
+                                                            style: TextStyle(
+                                                              fontSize: 13 +
+                                                                  appState
+                                                                      .getTextSizeOffset(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyLarge
+                                                                  ?.color,
+                                                        )
+                                                      : Text(
+                                                          currencyUtils
+                                                              .getFormattedAmount(
+                                                            currencyUtils
+                                                                .convert(token[
+                                                                    'totalValue']),
+                                                            currencyUtils
+                                                                .currencySymbol,
+                                                            appState
+                                                                .showAmounts,
                                                           ),
                                                           style: TextStyle(
-                                                            fontSize: 13 + appState.getTextSizeOffset(),
-                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 13 +
+                                                                appState
+                                                                    .getTextSizeOffset(),
+                                                            fontWeight:
+                                                                FontWeight.w600,
                                                           ),
                                                         ),
-                                                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                                                      )
-                                                    : Text(
-                                                        currencyUtils.getFormattedAmount(
-                                                          currencyUtils.convert(token['totalValue']),
-                                                          currencyUtils.currencySymbol,
-                                                          appState.showAmounts,
-                                                        ),
-                                                        style: TextStyle(
-                                                          fontSize: 13 + appState.getTextSizeOffset(),
-                                                          fontWeight: FontWeight.w600,
-                                                        ),
-                                                      ),
                                                 ],
                                               ),
                                               Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
                                                 children: [
                                                   Text(
                                                     'YAM',
                                                     style: TextStyle(
-                                                      fontSize: 11 + appState.getTextSizeOffset(),
-                                                      color: Theme.of(context).textTheme.bodySmall?.color,
-                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 11 +
+                                                          appState
+                                                              .getTextSizeOffset(),
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall
+                                                          ?.color,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
                                                   Row(
                                                     children: [
                                                       widget.isLoading
-                                                        ? ShimmerUtils.originalColorShimmer(
-                                                            child: Text(
+                                                          ? ShimmerUtils
+                                                              .originalColorShimmer(
+                                                              child: Text(
+                                                                currencyUtils.getFormattedAmount(
+                                                                    currencyUtils.convert((token[
+                                                                            'yamAverageValue'] *
+                                                                        token[
+                                                                            'amount'])),
+                                                                    currencyUtils
+                                                                        .currencySymbol,
+                                                                    appState
+                                                                        .showAmounts),
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 13 +
+                                                                      appState
+                                                                          .getTextSizeOffset(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: (token['yamAverageValue'] *
+                                                                              token[
+                                                                                  'amount']) >=
+                                                                          token[
+                                                                              'totalValue']
+                                                                      ? Colors
+                                                                          .green
+                                                                          .shade600
+                                                                      : Colors
+                                                                          .red
+                                                                          .shade600,
+                                                                ),
+                                                              ),
+                                                              color: (token['yamAverageValue'] *
+                                                                          token[
+                                                                              'amount']) >=
+                                                                      token[
+                                                                          'totalValue']
+                                                                  ? Colors.green
+                                                                      .shade600
+                                                                  : Colors.red
+                                                                      .shade600,
+                                                            )
+                                                          : Text(
                                                               currencyUtils.getFormattedAmount(
-                                                                  currencyUtils.convert((token['yamAverageValue'] * token['amount'])), currencyUtils.currencySymbol, appState.showAmounts),
+                                                                  currencyUtils
+                                                                      .convert((token[
+                                                                              'yamAverageValue'] *
+                                                                          token[
+                                                                              'amount'])),
+                                                                  currencyUtils
+                                                                      .currencySymbol,
+                                                                  appState
+                                                                      .showAmounts),
                                                               style: TextStyle(
-                                                                fontSize: 13 + appState.getTextSizeOffset(),
-                                                                fontWeight: FontWeight.w600,
-                                                                color: (token['yamAverageValue'] * token['amount']) >= token['totalValue'] ? Colors.green.shade600 : Colors.red.shade600,
+                                                                fontSize: 13 +
+                                                                    appState
+                                                                        .getTextSizeOffset(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: (token['yamAverageValue'] *
+                                                                            token[
+                                                                                'amount']) >=
+                                                                        token[
+                                                                            'totalValue']
+                                                                    ? Colors
+                                                                        .green
+                                                                        .shade600
+                                                                    : Colors.red
+                                                                        .shade600,
                                                               ),
                                                             ),
-                                                            color: (token['yamAverageValue'] * token['amount']) >= token['totalValue'] ? Colors.green.shade600 : Colors.red.shade600,
-                                                          )
-                                                        : Text(
-                                                            currencyUtils.getFormattedAmount(
-                                                                currencyUtils.convert((token['yamAverageValue'] * token['amount'])), currencyUtils.currencySymbol, appState.showAmounts),
-                                                            style: TextStyle(
-                                                              fontSize: 13 + appState.getTextSizeOffset(),
-                                                              fontWeight: FontWeight.w600,
-                                                              color: (token['yamAverageValue'] * token['amount']) >= token['totalValue'] ? Colors.green.shade600 : Colors.red.shade600,
-                                                            ),
-                                                          ),
                                                       const SizedBox(width: 4),
                                                       widget.isLoading
-                                                        ? ShimmerUtils.originalColorShimmer(
-                                                            child: Text(
+                                                          ? ShimmerUtils
+                                                              .originalColorShimmer(
+                                                              child: Text(
+                                                                '(${((token['yamAverageValue'] / token['tokenPrice'] - 1) * 100).toStringAsFixed(0)}%)',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 11 +
+                                                                      appState
+                                                                          .getTextSizeOffset(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: (token['yamAverageValue'] *
+                                                                              token[
+                                                                                  'amount']) >=
+                                                                          token[
+                                                                              'totalValue']
+                                                                      ? Colors
+                                                                          .green
+                                                                          .shade600
+                                                                      : Colors
+                                                                          .red
+                                                                          .shade600,
+                                                                ),
+                                                              ),
+                                                              color: (token['yamAverageValue'] *
+                                                                          token[
+                                                                              'amount']) >=
+                                                                      token[
+                                                                          'totalValue']
+                                                                  ? Colors.green
+                                                                      .shade600
+                                                                  : Colors.red
+                                                                      .shade600,
+                                                            )
+                                                          : Text(
                                                               '(${((token['yamAverageValue'] / token['tokenPrice'] - 1) * 100).toStringAsFixed(0)}%)',
                                                               style: TextStyle(
-                                                                fontSize: 11 + appState.getTextSizeOffset(),
-                                                                fontWeight: FontWeight.w500,
-                                                                color: (token['yamAverageValue'] * token['amount']) >= token['totalValue'] ? Colors.green.shade600 : Colors.red.shade600,
+                                                                fontSize: 11 +
+                                                                    appState
+                                                                        .getTextSizeOffset(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: (token['yamAverageValue'] *
+                                                                            token[
+                                                                                'amount']) >=
+                                                                        token[
+                                                                            'totalValue']
+                                                                    ? Colors
+                                                                        .green
+                                                                        .shade600
+                                                                    : Colors.red
+                                                                        .shade600,
                                                               ),
                                                             ),
-                                                            color: (token['yamAverageValue'] * token['amount']) >= token['totalValue'] ? Colors.green.shade600 : Colors.red.shade600,
-                                                          )
-                                                        : Text(
-                                                            '(${((token['yamAverageValue'] / token['tokenPrice'] - 1) * 100).toStringAsFixed(0)}%)',
-                                                            style: TextStyle(
-                                                              fontSize: 11 + appState.getTextSizeOffset(),
-                                                              fontWeight: FontWeight.w500,
-                                                              color: (token['yamAverageValue'] * token['amount']) >= token['totalValue'] ? Colors.green.shade600 : Colors.red.shade600,
-                                                            ),
-                                                          ),
                                                     ],
                                                   ),
                                                 ],
@@ -620,113 +871,235 @@ class PortfolioDisplay2State extends State<PortfolioDisplay2> {
                                         // Section Revenus
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).primaryColor.withValues(alpha: 0.08),
-                                            borderRadius: BorderRadius.circular(12),
+                                            color: Theme.of(context)
+                                                .primaryColor
+                                                .withValues(alpha: 0.08),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 8),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 S.of(context).revenue,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: 13 + appState.getTextSizeOffset(),
-                                                  color: Theme.of(context).primaryColor,
+                                                  fontSize: 13 +
+                                                      appState
+                                                          .getTextSizeOffset(),
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                               ),
                                               const SizedBox(height: 4),
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         S.of(context).week,
                                                         style: TextStyle(
-                                                          fontSize: 12 + appState.getTextSizeOffset(),
-                                                          color: Theme.of(context).textTheme.bodySmall?.color,
+                                                          fontSize: 12 +
+                                                              appState
+                                                                  .getTextSizeOffset(),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall
+                                                                  ?.color,
                                                         ),
                                                       ),
                                                       widget.isLoading
-                                                        ? ShimmerUtils.originalColorShimmer(
-                                                            child: Text(
-                                                              currencyUtils.getFormattedAmount(currencyUtils.convert(token['dailyIncome'] * 7), currencyUtils.currencySymbol, appState.showAmounts),
+                                                          ? ShimmerUtils
+                                                              .originalColorShimmer(
+                                                              child: Text(
+                                                                currencyUtils.getFormattedAmount(
+                                                                    currencyUtils
+                                                                        .convert(
+                                                                            token['dailyIncome'] *
+                                                                                7),
+                                                                    currencyUtils
+                                                                        .currencySymbol,
+                                                                    appState
+                                                                        .showAmounts),
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 13 +
+                                                                      appState
+                                                                          .getTextSizeOffset(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyLarge
+                                                                  ?.color,
+                                                            )
+                                                          : Text(
+                                                              currencyUtils.getFormattedAmount(
+                                                                  currencyUtils
+                                                                      .convert(
+                                                                          token['dailyIncome'] *
+                                                                              7),
+                                                                  currencyUtils
+                                                                      .currencySymbol,
+                                                                  appState
+                                                                      .showAmounts),
                                                               style: TextStyle(
-                                                                fontSize: 13 + appState.getTextSizeOffset(),
-                                                                fontWeight: FontWeight.w600,
+                                                                fontSize: 13 +
+                                                                    appState
+                                                                        .getTextSizeOffset(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
                                                               ),
                                                             ),
-                                                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                                                          )
-                                                        : Text(
-                                                            currencyUtils.getFormattedAmount(currencyUtils.convert(token['dailyIncome'] * 7), currencyUtils.currencySymbol, appState.showAmounts),
-                                                            style: TextStyle(
-                                                              fontSize: 13 + appState.getTextSizeOffset(),
-                                                              fontWeight: FontWeight.w600,
-                                                            ),
-                                                          ),
                                                     ],
                                                   ),
                                                   Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         S.of(context).month,
                                                         style: TextStyle(
-                                                          fontSize: 12 + appState.getTextSizeOffset(),
-                                                          color: Theme.of(context).textTheme.bodySmall?.color,
+                                                          fontSize: 12 +
+                                                              appState
+                                                                  .getTextSizeOffset(),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall
+                                                                  ?.color,
                                                         ),
                                                       ),
                                                       widget.isLoading
-                                                        ? ShimmerUtils.originalColorShimmer(
-                                                            child: Text(
-                                                              currencyUtils.getFormattedAmount(currencyUtils.convert(token['monthlyIncome']), currencyUtils.currencySymbol, appState.showAmounts),
+                                                          ? ShimmerUtils
+                                                              .originalColorShimmer(
+                                                              child: Text(
+                                                                currencyUtils.getFormattedAmount(
+                                                                    currencyUtils
+                                                                        .convert(token[
+                                                                            'monthlyIncome']),
+                                                                    currencyUtils
+                                                                        .currencySymbol,
+                                                                    appState
+                                                                        .showAmounts),
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 13 +
+                                                                      appState
+                                                                          .getTextSizeOffset(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyLarge
+                                                                  ?.color,
+                                                            )
+                                                          : Text(
+                                                              currencyUtils.getFormattedAmount(
+                                                                  currencyUtils
+                                                                      .convert(
+                                                                          token[
+                                                                              'monthlyIncome']),
+                                                                  currencyUtils
+                                                                      .currencySymbol,
+                                                                  appState
+                                                                      .showAmounts),
                                                               style: TextStyle(
-                                                                fontSize: 13 + appState.getTextSizeOffset(),
-                                                                fontWeight: FontWeight.w600,
+                                                                fontSize: 13 +
+                                                                    appState
+                                                                        .getTextSizeOffset(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
                                                               ),
                                                             ),
-                                                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                                                          )
-                                                        : Text(
-                                                            currencyUtils.getFormattedAmount(currencyUtils.convert(token['monthlyIncome']), currencyUtils.currencySymbol, appState.showAmounts),
-                                                            style: TextStyle(
-                                                              fontSize: 13 + appState.getTextSizeOffset(),
-                                                              fontWeight: FontWeight.w600,
-                                                            ),
-                                                          ),
                                                     ],
                                                   ),
                                                   Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         S.of(context).year,
                                                         style: TextStyle(
-                                                          fontSize: 12 + appState.getTextSizeOffset(),
-                                                          color: Theme.of(context).textTheme.bodySmall?.color,
+                                                          fontSize: 12 +
+                                                              appState
+                                                                  .getTextSizeOffset(),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall
+                                                                  ?.color,
                                                         ),
                                                       ),
                                                       widget.isLoading
-                                                        ? ShimmerUtils.originalColorShimmer(
-                                                            child: Text(
-                                                              currencyUtils.getFormattedAmount(currencyUtils.convert(token['yearlyIncome']), currencyUtils.currencySymbol, appState.showAmounts),
+                                                          ? ShimmerUtils
+                                                              .originalColorShimmer(
+                                                              child: Text(
+                                                                currencyUtils.getFormattedAmount(
+                                                                    currencyUtils
+                                                                        .convert(token[
+                                                                            'yearlyIncome']),
+                                                                    currencyUtils
+                                                                        .currencySymbol,
+                                                                    appState
+                                                                        .showAmounts),
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 13 +
+                                                                      appState
+                                                                          .getTextSizeOffset(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyLarge
+                                                                  ?.color,
+                                                            )
+                                                          : Text(
+                                                              currencyUtils.getFormattedAmount(
+                                                                  currencyUtils
+                                                                      .convert(
+                                                                          token[
+                                                                              'yearlyIncome']),
+                                                                  currencyUtils
+                                                                      .currencySymbol,
+                                                                  appState
+                                                                      .showAmounts),
                                                               style: TextStyle(
-                                                                fontSize: 13 + appState.getTextSizeOffset(),
-                                                                fontWeight: FontWeight.w600,
+                                                                fontSize: 13 +
+                                                                    appState
+                                                                        .getTextSizeOffset(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
                                                               ),
                                                             ),
-                                                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                                                          )
-                                                        : Text(
-                                                            currencyUtils.getFormattedAmount(currencyUtils.convert(token['yearlyIncome']), currencyUtils.currencySymbol, appState.showAmounts),
-                                                            style: TextStyle(
-                                                              fontSize: 13 + appState.getTextSizeOffset(),
-                                                              fontWeight: FontWeight.w600,
-                                                            ),
-                                                          ),
                                                     ],
                                                   ),
                                                 ],

@@ -15,10 +15,12 @@ class TokenDistributionByProductTypeChart extends StatefulWidget {
   });
 
   @override
-  State<TokenDistributionByProductTypeChart> createState() => _TokenDistributionByProductTypeChartState();
+  State<TokenDistributionByProductTypeChart> createState() =>
+      _TokenDistributionByProductTypeChartState();
 }
 
-class _TokenDistributionByProductTypeChartState extends State<TokenDistributionByProductTypeChart> {
+class _TokenDistributionByProductTypeChartState
+    extends State<TokenDistributionByProductTypeChart> {
   final ValueNotifier<int?> _selectedIndexNotifier = ValueNotifier<int?>(null);
 
   @override
@@ -78,17 +80,22 @@ class _TokenDistributionByProductTypeChartState extends State<TokenDistributionB
                           sectionsSpace: 3,
                           borderData: FlBorderData(show: false),
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
-                              if (response != null && response.touchedSection != null) {
-                                final touchedIndex = response.touchedSection!.touchedSectionIndex;
-                                _selectedIndexNotifier.value = touchedIndex >= 0 ? touchedIndex : null;
+                            touchCallback: (FlTouchEvent event,
+                                PieTouchResponse? response) {
+                              if (response != null &&
+                                  response.touchedSection != null) {
+                                final touchedIndex = response
+                                    .touchedSection!.touchedSectionIndex;
+                                _selectedIndexNotifier.value =
+                                    touchedIndex >= 0 ? touchedIndex : null;
                               } else {
                                 _selectedIndexNotifier.value = null;
                               }
                             },
                           ),
                         ),
-                        swapAnimationDuration: const Duration(milliseconds: 300),
+                        swapAnimationDuration:
+                            const Duration(milliseconds: 300),
                         swapAnimationCurve: Curves.easeInOutCubic,
                       ),
                       _buildCenterText(selectedIndex),
@@ -112,7 +119,7 @@ class _TokenDistributionByProductTypeChartState extends State<TokenDistributionB
   List<PieChartSectionData> _buildDonutChartData(int? selectedIndex) {
     final appState = Provider.of<AppState>(context);
     final tokensByType = _calculateTokensByProductType();
-    
+
     if (tokensByType.isEmpty) return [];
 
     final int total = tokensByType.values.fold(0, (sum, value) => sum + value);
@@ -136,7 +143,9 @@ class _TokenDistributionByProductTypeChartState extends State<TokenDistributionB
         color: baseColor.withValues(alpha: opacity),
         radius: isSelected ? 52 : 45,
         titleStyle: TextStyle(
-          fontSize: isSelected ? 14 + appState.getTextSizeOffset() : 10 + appState.getTextSizeOffset(),
+          fontSize: isSelected
+              ? 14 + appState.getTextSizeOffset()
+              : 10 + appState.getTextSizeOffset(),
           color: Colors.white,
           fontWeight: FontWeight.w600,
           shadows: [
@@ -239,7 +248,7 @@ class _TokenDistributionByProductTypeChartState extends State<TokenDistributionB
   Widget _buildLegend() {
     final appState = Provider.of<AppState>(context);
     final tokensByType = _calculateTokensByProductType();
-    
+
     if (tokensByType.isEmpty) return Container();
 
     final int total = tokensByType.values.fold(0, (sum, value) => sum + value);
@@ -259,16 +268,21 @@ class _TokenDistributionByProductTypeChartState extends State<TokenDistributionB
 
         return InkWell(
           onTap: () {
-            _selectedIndexNotifier.value = (_selectedIndexNotifier.value == index) ? null : index;
+            _selectedIndexNotifier.value =
+                (_selectedIndexNotifier.value == index) ? null : index;
           },
           borderRadius: BorderRadius.circular(8),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifier.value == index ? color.withValues(alpha: 0.1) : Colors.transparent,
+              color: _selectedIndexNotifier.value == index
+                  ? color.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: _selectedIndexNotifier.value == index ? color : Colors.transparent,
+                color: _selectedIndexNotifier.value == index
+                    ? color
+                    : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -296,8 +310,12 @@ class _TokenDistributionByProductTypeChartState extends State<TokenDistributionB
                     '${_getLocalizedProductTypeName(context, productType)} (${percentage.toStringAsFixed(1)}%)',
                     style: TextStyle(
                       fontSize: 12 + appState.getTextSizeOffset(),
-                      color: _selectedIndexNotifier.value == index ? color : Theme.of(context).textTheme.bodyMedium?.color,
-                      fontWeight: _selectedIndexNotifier.value == index ? FontWeight.w600 : FontWeight.normal,
+                      color: _selectedIndexNotifier.value == index
+                          ? color
+                          : Theme.of(context).textTheme.bodyMedium?.color,
+                      fontWeight: _selectedIndexNotifier.value == index
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -312,16 +330,18 @@ class _TokenDistributionByProductTypeChartState extends State<TokenDistributionB
 
   Map<String, int> _calculateTokensByProductType() {
     Map<String, int> tokensByProductType = {};
-    
+
     for (var token in widget.dataManager.portfolio) {
       final String productType = token['productType'] ?? 'other';
-      tokensByProductType[productType] = (tokensByProductType[productType] ?? 0) + 1;
+      tokensByProductType[productType] =
+          (tokensByProductType[productType] ?? 0) + 1;
     }
-    
+
     return tokensByProductType;
   }
 
-  String _getLocalizedProductTypeName(BuildContext context, String productType) {
+  String _getLocalizedProductTypeName(
+      BuildContext context, String productType) {
     switch (productType.toLowerCase()) {
       case 'real_estate_rental':
         return S.of(context).productTypeRealEstateRental;
@@ -333,4 +353,4 @@ class _TokenDistributionByProductTypeChartState extends State<TokenDistributionB
         return S.of(context).productTypeOther;
     }
   }
-} 
+}
