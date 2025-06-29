@@ -134,8 +134,8 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                                 });
                               },
                               activeColor: const Color(0xFF007AFF), // Bleu iOS
-                              trackColor: MaterialStateProperty.resolveWith(
-                                (states) => states.contains(MaterialState.selected) ? Theme.of(context).primaryColor : Colors.grey.withOpacity(0.3),
+                              trackColor: WidgetStateProperty.resolveWith(
+                                (states) => states.contains(WidgetState.selected) ? Theme.of(context).primaryColor : Colors.grey.withOpacity(0.3),
                               ),
                             ),
                           ),

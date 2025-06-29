@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/models/healthandltv_record.dart';
 import 'package:realtoken_asset_tracker/models/rented_record.dart';
 import 'package:realtoken_asset_tracker/utils/parameters.dart';

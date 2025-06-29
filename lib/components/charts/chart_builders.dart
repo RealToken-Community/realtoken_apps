@@ -5,7 +5,6 @@ import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/date_utils.dart';
-import 'package:realtoken_asset_tracker/models/apy_record.dart';
 import 'package:provider/provider.dart';
 
 /// Factory pour construire les éléments de graphiques de manière standardisée

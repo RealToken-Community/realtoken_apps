@@ -175,13 +175,13 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                   ),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
+                    onPressed: _toggleCalendarSize,
                     child: Icon(
                       _isCalendarCollapsed 
                           ? CupertinoIcons.calendar_badge_plus 
                           : CupertinoIcons.calendar_badge_minus,
                       color: CupertinoColors.systemBlue.resolveFrom(context),
                     ),
-                    onPressed: _toggleCalendarSize,
                   ),
                 ],
               ),

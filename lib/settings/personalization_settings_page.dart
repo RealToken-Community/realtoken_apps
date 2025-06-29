@@ -514,7 +514,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
         child: CupertinoSwitch(
           value: value,
           onChanged: onChanged,
-          activeColor: Theme.of(context).primaryColor,
+          activeTrackColor: Theme.of(context).primaryColor,
         ),
       ),
       isFirst: isFirst,

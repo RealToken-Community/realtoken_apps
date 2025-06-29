@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:realtoken_asset_tracker/models/balance_record.dart';
 import 'package:realtoken_asset_tracker/models/apy_record.dart';

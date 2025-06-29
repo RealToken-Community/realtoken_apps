@@ -7,14 +7,13 @@ import 'package:realtoken_asset_tracker/utils/widget_factory.dart';
 import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/rmm_details_page.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:realtoken_asset_tracker/utils/shimmer_utils.dart';
 
 class RmmCard extends StatelessWidget {
   final bool showAmounts;
   final bool isLoading;
 
-  const RmmCard({Key? key, required this.showAmounts, required this.isLoading}) : super(key: key);
+  const RmmCard({super.key, required this.showAmounts, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +157,7 @@ class RmmCard extends StatelessWidget {
       context,
       hasGraph: true,
       // Flèche de navigation dans l'en-tête
-      headerRightWidget: Container(
+      headerRightWidget: SizedBox(
         height: 36,
         width: 36,
         child: Material(
@@ -583,7 +582,7 @@ class RmmCard extends StatelessWidget {
     if (isLoading) {
       return ShimmerUtils.originalColorShimmer(
         child: Text(
-          "${S.of(context).timeBeforeLiquidation}",
+          S.of(context).timeBeforeLiquidation,
           style: TextStyle(
             fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
             fontWeight: FontWeight.w500,

@@ -9,8 +9,6 @@ import 'package:realtoken_asset_tracker/utils/data_fetch_utils.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:realtoken_asset_tracker/utils/shimmer_utils.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:flutter/rendering.dart';
 import 'dart:ui'; // Pour ImageFilter
 import 'package:file_picker/file_picker.dart';
 import 'package:archive/archive_io.dart';
@@ -18,11 +16,9 @@ import 'package:hive/hive.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:realtoken_asset_tracker/models/balance_record.dart';
 
 import 'widgets/portfolio_card.dart';
 import 'widgets/rmm_card.dart';
-import 'widgets/properties_card.dart';
 import 'widgets/real_estate_card.dart';
 import 'widgets/loan_income_card.dart';
 import 'widgets/factoring_card.dart';

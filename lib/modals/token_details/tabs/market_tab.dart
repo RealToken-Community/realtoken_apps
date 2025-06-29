@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -154,7 +153,7 @@ class _MarketTabState extends State<MarketTab> {
                         } else {
                           return const SizedBox.shrink(); // Ne devrait jamais arriver
                         }
-                      }).toList(),
+                      }),
 
                       // Espace en bas
                       const SizedBox(height: 16),

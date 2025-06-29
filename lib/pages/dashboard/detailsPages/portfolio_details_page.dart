@@ -4,11 +4,6 @@ import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
-import 'package:realtoken_asset_tracker/utils/text_utils.dart';
-import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
-import 'package:realtoken_asset_tracker/managers/apy_manager.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/services.dart'; // Pour Clipboard
 import 'dart:ui'; // Pour les effets de flou
 

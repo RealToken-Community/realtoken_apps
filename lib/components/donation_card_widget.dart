@@ -8,10 +8,10 @@ class DonationCardWidget extends StatelessWidget {
   final bool isLoading;
   
   const DonationCardWidget({
-    Key? key, 
+    super.key, 
     this.montantWallet, 
     this.isLoading = false
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

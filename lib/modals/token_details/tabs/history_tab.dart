@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
@@ -398,13 +397,13 @@ Widget buildHistoryTab(BuildContext context, Map<String, dynamic> token,
                                 ],
                               ),
                             );
-                          }).toList(),
+                          }),
                         ],
                       ),
                     ),
                   ),
                 );
-              }).toList()
+              })
             else
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -551,8 +550,8 @@ String _formatChangeDescription(dynamic change, CurrencyProvider currencyUtils) 
       formattedNewValue = '${currencyUtils.convert(newVal).toStringAsFixed(0)} ${currencyUtils.currencySymbol}';
     }
   } else if (field == 'rented_units') {
-    formattedOldValue = '${oldValue} unité${oldValue != '1' ? 's' : ''}';
-    formattedNewValue = '${newValue} unité${newValue != '1' ? 's' : ''}';
+    formattedOldValue = '$oldValue unité${oldValue != '1' ? 's' : ''}';
+    formattedNewValue = '$newValue unité${newValue != '1' ? 's' : ''}';
   }
   
   return '$formattedOldValue → $formattedNewValue';

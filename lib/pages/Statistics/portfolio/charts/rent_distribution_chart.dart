@@ -341,7 +341,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '${data.key}',
+                  data.key,
                   style: TextStyle(
                     fontSize: 12 + appState.getTextSizeOffset(),
                     color: _selectedIndexNotifier.value == index ? color : Theme.of(context).textTheme.bodyMedium?.color,

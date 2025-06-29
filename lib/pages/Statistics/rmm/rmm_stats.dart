@@ -7,9 +7,7 @@ import 'package:realtoken_asset_tracker/models/balance_record.dart';
 import 'package:realtoken_asset_tracker/pages/Statistics/rmm/borrow_chart.dart';
 import 'package:realtoken_asset_tracker/pages/Statistics/rmm/deposit_chart.dart';
 import 'package:realtoken_asset_tracker/pages/Statistics/rmm/healthFactorLtv_graph.dart';
-import 'package:realtoken_asset_tracker/utils/chart_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:realtoken_asset_tracker/app_state.dart';
 
 class RmmStats extends StatefulWidget {
   const RmmStats({super.key});
@@ -198,7 +196,7 @@ class RmmStatsState extends State<RmmStats> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '${S.of(context).averageApy}',
+                      S.of(context).averageApy,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,

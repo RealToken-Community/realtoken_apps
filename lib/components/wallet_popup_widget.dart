@@ -239,7 +239,7 @@ class WalletPopupWidget extends StatelessWidget {
 
   String _truncateAddress(String address) {
     if (address.length <= 12) return address;
-    return address.substring(0, 6) + "..." + address.substring(address.length - 4);
+    return "${address.substring(0, 6)}...${address.substring(address.length - 4)}";
   }
 }
 
@@ -428,6 +428,6 @@ class WalletItemWidget extends StatelessWidget {
 
   String _truncateAddress(String address) {
     if (address.length <= 12) return address;
-    return address.substring(0, 6) + "..." + address.substring(address.length - 4);
+    return "${address.substring(0, 6)}...${address.substring(address.length - 4)}";
   }
 } 

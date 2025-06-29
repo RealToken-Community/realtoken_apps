@@ -115,7 +115,7 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
                   child: CupertinoSwitch(
                     value: _isGoogleDriveConnected,
                     onChanged: _toggleGoogleDriveConnection,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeTrackColor: Theme.of(context).primaryColor,
                   ),
                 ),
                 isFirst: true,
@@ -128,7 +128,7 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
                   child: CupertinoSwitch(
                     value: _autoSyncEnabled,
                     onChanged: _saveAutoSyncPreference,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeTrackColor: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -552,8 +552,8 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
               debugPrint("📥 Début de l'importation de walletValueArchiveBackup.json");
 
               // Ouvrir les deux boîtes Hive
-              var walletValueArchiveBox = await Hive.box('walletValueArchive');
-              var balanceHistoryBox = await Hive.box('balanceHistory');
+              var walletValueArchiveBox = Hive.box('walletValueArchive');
+              var balanceHistoryBox = Hive.box('balanceHistory');
 
               // Décoder le contenu JSON
               dynamic decodedData = jsonDecode(jsonContent);

@@ -28,7 +28,7 @@ class DrawerMenuFactory {
               isFirst: index == 0,
               isLast: index == items.length - 1,
             );
-          }).toList(),
+          }),
         ],
       ),
     );

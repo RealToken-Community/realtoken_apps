@@ -265,7 +265,7 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
                 );
               },
             );
-          }).toList(),
+          }),
         ],
       );
   }

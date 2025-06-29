@@ -91,7 +91,7 @@ class PropertiesCard extends StatelessWidget {
           return _buildPieChart(rentedPercentage, context);
         },
       ),
-      headerRightWidget: Container(
+      headerRightWidget: SizedBox(
         height: 36,
         width: 36,
         child: Material(

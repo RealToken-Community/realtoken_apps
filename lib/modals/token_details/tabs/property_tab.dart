@@ -277,7 +277,7 @@ Widget _buildRentalStatusRow(BuildContext context, {required Map<String, dynamic
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              '${occupancyRate.toString()}% ' + "Occupation",
+              '${occupancyRate.toString()}% ' "Occupation",
               style: TextStyle(
                 fontSize: 12 + appState.getTextSizeOffset(),
                 fontWeight: FontWeight.w500,

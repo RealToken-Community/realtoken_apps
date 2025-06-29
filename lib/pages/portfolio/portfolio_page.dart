@@ -1,8 +1,6 @@
-import 'package:googleapis/meet/v2.dart';
 import 'package:realtoken_asset_tracker/utils/data_fetch_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:realtoken_asset_tracker/utils/text_utils.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
@@ -10,7 +8,6 @@ import 'portfolio_display_1.dart';
 import 'portfolio_display_2.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart'; // Import pour les traductions
 import 'package:realtoken_asset_tracker/utils/parameters.dart';
-import 'package:realtoken_asset_tracker/utils/location_utils.dart';
 import 'package:realtoken_asset_tracker/components/filter_widgets.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 
@@ -732,7 +729,7 @@ class PortfolioPageState extends State<PortfolioPage> {
       }
     }
     if (activeFilters.isNotEmpty) {
-      return "${activeFilters.join('+')}";
+      return activeFilters.join('+');
     }
     return baseLabel;
   }

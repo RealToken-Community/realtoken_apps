@@ -198,8 +198,8 @@ class _UpdatesPageState extends State<UpdatesPage> {
                                     showUserTokensOnly = value;
                                   });
                                 },
-                                activeColor: Theme.of(context).primaryColor,
-                                trackColor: isDarkMode 
+                                activeTrackColor: Theme.of(context).primaryColor,
+                                inactiveTrackColor: isDarkMode 
                                     ? CupertinoColors.systemGrey4.darkColor 
                                     : CupertinoColors.systemGrey5.color,
                               ),
@@ -231,8 +231,8 @@ class _UpdatesPageState extends State<UpdatesPage> {
                                     includeAllFieldChanges = value;
                                   });
                                 },
-                                activeColor: Theme.of(context).primaryColor,
-                                trackColor: isDarkMode 
+                                activeTrackColor: Theme.of(context).primaryColor,
+                                inactiveTrackColor: isDarkMode 
                                     ? CupertinoColors.systemGrey4.darkColor 
                                     : CupertinoColors.systemGrey5.color,
                               ),
@@ -264,8 +264,8 @@ class _UpdatesPageState extends State<UpdatesPage> {
                                     showAllChanges = value;
                                   });
                                 },
-                                activeColor: Theme.of(context).primaryColor,
-                                trackColor: isDarkMode 
+                                activeTrackColor: Theme.of(context).primaryColor,
+                                inactiveTrackColor: isDarkMode 
                                     ? CupertinoColors.systemGrey4.darkColor 
                                     : CupertinoColors.systemGrey5.color,
                               ),
@@ -297,7 +297,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
                         child: Row(
                           children: [
                             // Espace pour aligner avec la timeline (32px de largeur)
-                            Container(
+                            SizedBox(
                               width: 32,
                               child: Center(
                                                                   child: Container(
@@ -537,7 +537,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
                               SizedBox(height: 12),
 
                               // Liste des changements pour ce token
-                              ...tokenChanges.map((change) => _buildChangeItem(context, change, appState)).toList(),
+                              ...tokenChanges.map((change) => _buildChangeItem(context, change, appState)),
                             ],
                           ),
                         ),
@@ -564,7 +564,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
     bool isVeryFirstItem = isFirstDate && isFirstToken;
     bool isVeryLastItem = isLastDate && isLastToken;
 
-    return Container(
+    return SizedBox(
       width: 32,
       // Pas de hauteur fixe - s'adapte à la hauteur de la carte
       child: Stack(

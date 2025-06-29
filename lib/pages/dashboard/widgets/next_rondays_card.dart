@@ -7,7 +7,6 @@ import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:shimmer/shimmer.dart';
 
 class NextRondaysCard extends StatelessWidget {
   final bool showAmounts;
@@ -147,7 +146,7 @@ class NextRondaysCard extends StatelessWidget {
 
     // Si aucune donnée, afficher un placeholder
     if (graphData.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 100,
         width: 120,
         child: Center(

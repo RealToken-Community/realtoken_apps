@@ -15,6 +15,6 @@ class TextUtils {
     if (wallet.length <= prefixLength + suffixLength) {
       return wallet;
     }
-    return wallet.substring(0, prefixLength) + '...' + wallet.substring(wallet.length - suffixLength);
+    return '${wallet.substring(0, prefixLength)}...${wallet.substring(wallet.length - suffixLength)}';
   }
 }

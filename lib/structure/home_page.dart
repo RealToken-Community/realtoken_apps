@@ -5,7 +5,6 @@ import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:realtoken_asset_tracker/utils/performance_utils.dart';
 import 'package:realtoken_asset_tracker/utils/cache_constants.dart';
-import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'dart:math';
 
 import 'bottom_bar.dart';

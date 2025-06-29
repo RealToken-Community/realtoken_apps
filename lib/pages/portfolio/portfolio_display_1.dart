@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:realtoken_asset_tracker/modals/token_details/showTokenDetails.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/location_utils.dart';
@@ -271,7 +270,7 @@ class PortfolioDisplay1 extends StatelessWidget {
                 double totalRentReceived = tokenId.isNotEmpty ? dataManager.cumulativeRentsByToken[tokenId] ?? token['totalRentReceived'] ?? 0 : token['totalRentReceived'] ?? 0;
 
                 final rentPercentage =
-                    (totalRentReceived != null && token['initialTotalValue'] != null && token['initialTotalValue'] != 0) ? (totalRentReceived / token['initialTotalValue']) * 100 : 0.5;
+                    (token['initialTotalValue'] != null && token['initialTotalValue'] != 0) ? (totalRentReceived / token['initialTotalValue']) * 100 : 0.5;
 
                 // Récupérer le nombre de wallets possédant ce token
                 int walletCount = tokenId.isNotEmpty ? dataManager.getWalletCountForToken(tokenId) : 0;

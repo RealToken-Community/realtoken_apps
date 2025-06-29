@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
@@ -94,7 +93,7 @@ class DonationWidgets {
     required AppState appState,
   }) {
     return Text(
-      S.of(context).supportProject + " ❤️",
+      "${S.of(context).supportProject} ❤️",
       style: TextStyle(
         fontSize: 24 + appState.getTextSizeOffset(),
         fontWeight: FontWeight.bold,

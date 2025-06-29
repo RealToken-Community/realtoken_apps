@@ -4,10 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/pages/Statistics/portfolio/charts/token_distribution_chart.dart';
-import 'package:realtoken_asset_tracker/pages/Statistics/portfolio/charts/token_distribution_by_wallet_card.dart';
 import 'package:flutter/services.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
-import 'package:fl_chart/fl_chart.dart'; // Nouvelle bibliothèque pour graphiques
+// Nouvelle bibliothèque pour graphiques
 
 class PropertiesDetailsPage extends StatelessWidget {
   const PropertiesDetailsPage({super.key});

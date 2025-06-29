@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:realtoken_asset_tracker/utils/parameters.dart';
 import 'package:realtoken_asset_tracker/utils/contracts_constants.dart';
 import 'package:realtoken_asset_tracker/utils/performance_utils.dart';
-import 'package:realtoken_asset_tracker/utils/cache_constants.dart';
-import 'package:realtoken_asset_tracker/services/api_service_helpers.dart';
 import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,7 +118,7 @@ class ApiService {
       results.addAll(chunkResults.where((result) => result != null).cast<T>());
       
       processedCount += chunk.length;
-      debugPrint("📊 Progression $debugName: ${processedCount}/${wallets.length} wallets traités");
+      debugPrint("📊 Progression $debugName: $processedCount/${wallets.length} wallets traités");
 
       // Petite pause entre les chunks pour être gentil avec le serveur
       if (i + maxConcurrentRequests < wallets.length) {
@@ -647,7 +645,7 @@ class ApiService {
           
           // Retirer TOUTES les anciennes données de ce wallet du merge global
           // (on ne peut pas se baser sur les montants car ils peuvent avoir changé)
-          Set<String> walletDates = Set<String>();
+          Set<String> walletDates = <String>{};
           if (existingDataByWallet[wallet] != null) {
             for (var existing in existingDataByWallet[wallet]!) {
               walletDates.add(existing['date']);
@@ -840,7 +838,7 @@ class ApiService {
             }
           } catch (e) {
             debugPrint('❌ Exception pour wallet $wallet: $e');
-            throw e;
+            rethrow;
           }
         }
 
@@ -976,7 +974,7 @@ class ApiService {
             }
           } catch (e) {
             debugPrint("❌ Exception balances pour wallet $address: $e");
-            throw e;
+            rethrow;
           }
         }
 

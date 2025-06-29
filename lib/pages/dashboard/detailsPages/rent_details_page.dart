@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/pages/Statistics/wallet/charts/rent_graph.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/date_utils.dart';
 import 'package:share_plus/share_plus.dart';
-import 'dart:ui';
 import 'package:realtoken_asset_tracker/app_state.dart';
 
 class DashboardRentsDetailsPage extends StatefulWidget {

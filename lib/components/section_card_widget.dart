@@ -16,7 +16,7 @@ class SectionCardWidget extends StatelessWidget {
   final FontWeight? titleFontWeight;
 
   const SectionCardWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.children,
     this.margin,
@@ -25,7 +25,7 @@ class SectionCardWidget extends StatelessWidget {
     this.titleColor,
     this.titleFontSize,
     this.titleFontWeight,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class DetailRowWidget extends StatelessWidget {
   final FontWeight? valueFontWeight;
 
   const DetailRowWidget({
-    Key? key,
+    super.key,
     required this.label,
     required this.value,
     this.icon,
@@ -94,7 +94,7 @@ class DetailRowWidget extends StatelessWidget {
     this.valueFontSize,
     this.labelFontWeight,
     this.valueFontWeight,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

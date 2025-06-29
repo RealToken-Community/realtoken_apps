@@ -40,10 +40,10 @@ class MapsPageState extends State<MapsPage> {
   bool _forceLightMode = false;
   
   // Nouveaux filtres avancés
-  bool _showHeatmapRent = false;
-  bool _showHeatmapPerformance = false;
-  bool _showYamOffers = false;
-  bool _showRecentTransactions = false;
+  final bool _showHeatmapRent = false;
+  final bool _showHeatmapPerformance = false;
+  final bool _showYamOffers = false;
+  final bool _showRecentTransactions = false;
   bool _showMiniDashboard = false;
   
   // Filtres de rentabilité
@@ -54,7 +54,7 @@ class MapsPageState extends State<MapsPage> {
   
   // Filtres par région
   String? _selectedCountry;
-  List<String> _availableCountries = [];
+  final List<String> _availableCountries = [];
   
   // Filtres par performance
   double _minRoi = -100.0;  // Permettre les ROI négatifs
@@ -544,8 +544,8 @@ class MapsPageState extends State<MapsPage> {
                       });
                       _saveThemePreference(); // Sauvegarder la préférence
                     },
-                    activeColor: Theme.of(context).primaryColor,
-                    trackColor: Colors.grey.shade300,
+                    activeTrackColor: Theme.of(context).primaryColor,
+                    inactiveTrackColor: Colors.grey.shade300,
                   ),
                 ),
               ],
@@ -598,8 +598,8 @@ class MapsPageState extends State<MapsPage> {
                                             _showAllTokens = value;
                                           });
                                         },
-                                        activeColor: Theme.of(context).primaryColor,
-                                        trackColor: Colors.grey.shade300,
+                                        activeTrackColor: Theme.of(context).primaryColor,
+                                        inactiveTrackColor: Colors.grey.shade300,
                                       ),
                                     ),
                                     const SizedBox(width: 4),
@@ -645,8 +645,8 @@ class MapsPageState extends State<MapsPage> {
                                         _showWhitelistedTokens = value;
                                       });
                                     },
-                                    activeColor: Theme.of(context).primaryColor,
-                                    trackColor: Colors.grey.shade300,
+                                    activeTrackColor: Theme.of(context).primaryColor,
+                                    inactiveTrackColor: Colors.grey.shade300,
                                   ),
                                 ),
                                 const SizedBox(width: 4),
@@ -1207,12 +1207,12 @@ class MapsPageState extends State<MapsPage> {
                   _maxRoi = 100.0;
                 });
               },
-              child: Text('Reset', style: TextStyle(fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset())),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
                 foregroundColor: Colors.white,
                 minimumSize: Size(80, 30),
               ),
+              child: Text('Reset', style: TextStyle(fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset())),
             ),
           ),
         ],

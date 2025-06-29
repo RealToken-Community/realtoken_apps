@@ -5,7 +5,6 @@ import '../models/roi_record.dart';
 import '../models/apy_record.dart';
 import '../models/healthandltv_record.dart';
 import '../models/rented_record.dart';
-import '../models/rented_record.dart';
 import 'data_manager.dart';
 import 'dart:convert';
 
@@ -154,7 +153,7 @@ class ArchiveManager {
       debugPrint('🗃️ ROI: Nouvel enregistrement ajouté avec succès, total: ${roiHistory.length} enregistrements');
       
       // Afficher quelques enregistrements pour le débogage
-      if (roiHistory.length > 0) {
+      if (roiHistory.isNotEmpty) {
         debugPrint('🗃️ ROI: Dernier enregistrement: ${roiHistory.last.roi}% (${roiHistory.last.timestamp.toIso8601String()})');
       }
       if (roiHistory.length > 1) {
@@ -235,7 +234,7 @@ class ArchiveManager {
       
     } catch (e) {
       debugPrint("❌ Erreur lors de l'archivage des valeurs APY : $e");
-      throw e; // Relancer l'erreur pour que le code appelant puisse la gérer
+      rethrow; // Relancer l'erreur pour que le code appelant puisse la gérer
     }
   }
 

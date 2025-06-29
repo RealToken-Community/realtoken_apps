@@ -6,11 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
-import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/properties_details_page.dart';
-import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/rent_details_page.dart';
-import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/rmm_details_page.dart';
-import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/portfolio_details_page.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:realtoken_asset_tracker/utils/shimmer_utils.dart';
 import 'package:realtoken_asset_tracker/utils/widget_factory.dart';
 

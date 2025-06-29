@@ -230,7 +230,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
                 child: CupertinoSwitch(
                   value: value,
                   onChanged: onChanged,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeTrackColor: Theme.of(context).primaryColor,
                 ),
               ),
             ],

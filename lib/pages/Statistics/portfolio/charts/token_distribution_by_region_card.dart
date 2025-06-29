@@ -7,7 +7,6 @@ import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/utils/parameters.dart';
 import 'package:realtoken_asset_tracker/utils/location_utils.dart';
 import 'package:realtoken_asset_tracker/modals/modal_others_pie.dart'; // Assurez-vous que ce fichier existe
-import 'package:realtoken_asset_tracker/pages/Statistics/portfolio/common_functions.dart';
 
 class TokenDistributionByRegionCard extends StatefulWidget {
   final DataManager dataManager;

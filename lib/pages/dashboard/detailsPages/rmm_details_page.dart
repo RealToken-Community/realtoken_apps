@@ -4,9 +4,7 @@ import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/text_utils.dart';
-import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
-import 'dart:ui';
 
 class RmmWalletDetailsPage extends StatelessWidget {
   const RmmWalletDetailsPage({super.key});
@@ -101,7 +99,7 @@ class _WalletDetailCard extends StatelessWidget {
   final Map<String, dynamic> wallet;
   final CurrencyProvider currencyUtils;
 
-  const _WalletDetailCard({Key? key, required this.wallet, required this.currencyUtils}) : super(key: key);
+  const _WalletDetailCard({required this.wallet, required this.currencyUtils});
 
   @override
   Widget build(BuildContext context) {
@@ -536,7 +534,7 @@ class _WalletDetailCard extends StatelessWidget {
 
 class _NoUsageWalletsCard extends StatelessWidget {
   final List<Map<String, dynamic>> noUsageWallets;
-  const _NoUsageWalletsCard({Key? key, required this.noUsageWallets}) : super(key: key);
+  const _NoUsageWalletsCard({required this.noUsageWallets});
 
   @override
   Widget build(BuildContext context) {

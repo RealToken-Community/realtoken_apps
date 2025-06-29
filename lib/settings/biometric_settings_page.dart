@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
-import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/services/biometric_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_settings/app_settings.dart';
@@ -229,7 +228,7 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
                   ),
                   CupertinoSwitch(
                     value: _isBiometricEnabled,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeTrackColor: Theme.of(context).primaryColor,
                     onChanged: (bool value) async {
                       if (value) {
                         await _authenticateWithBiometrics();

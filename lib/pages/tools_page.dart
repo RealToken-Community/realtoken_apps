@@ -12,7 +12,7 @@ import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 
 class ToolsPage extends StatelessWidget {
-  const ToolsPage({Key? key}) : super(key: key);
+  const ToolsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

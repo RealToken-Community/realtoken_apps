@@ -24,8 +24,6 @@ import 'managers/apy_manager.dart';
 import 'screens/lock_screen.dart';
 import 'utils/data_fetch_utils.dart';
 import 'utils/preference_keys.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

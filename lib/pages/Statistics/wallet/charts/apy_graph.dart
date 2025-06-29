@@ -659,18 +659,18 @@ class _ApyHistoryGraphState extends State<ApyHistoryGraph> {
       onTimeRangeChanged: widget.onTimeRangeChanged,
       timeOffset: widget.timeOffset,
       onTimeOffsetChanged: widget.onTimeOffsetChanged,
-      getYValue: (record) => record?.apy ?? 0.0,
+      getYValue: (record) => record.apy ?? 0.0,
       // Fournir les valeurs pour l'empilement
       getStackValues: (record) {
-        final netValue = record?.netApy ?? record?.apy ?? 0.0;
-        final grossValue = record?.grossApy ?? record?.apy ?? 0.0;
+        final netValue = record.netApy ?? record.apy ?? 0.0;
+        final grossValue = record.grossApy ?? record.apy ?? 0.0;
         
         // Si gross est inférieur à net (rare), on affiche juste la valeur nette
         final grossDiff = grossValue > netValue ? grossValue - netValue : 0.0;
         
         return [netValue, grossDiff];
       },
-      getTimestamp: (record) => record?.timestamp ?? DateTime.now(),
+      getTimestamp: (record) => record.timestamp ?? DateTime.now(),
       valuePrefix: '',
       valueSuffix: '%',
       maxY: 20, // Limiter la hauteur à 20%

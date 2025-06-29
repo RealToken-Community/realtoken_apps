@@ -10,9 +10,7 @@ import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:show_network_image/show_network_image.dart';
 import 'package:realtoken_asset_tracker/utils/parameters.dart';
-import 'package:realtoken_asset_tracker/utils/location_utils.dart';
 import 'package:realtoken_asset_tracker/components/filter_widgets.dart';
-import 'package:realtoken_asset_tracker/app_state.dart';
 
 class RealTokensPage extends StatefulWidget {
   const RealTokensPage({super.key});

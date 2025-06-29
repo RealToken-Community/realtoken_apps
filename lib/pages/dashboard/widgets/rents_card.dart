@@ -97,7 +97,7 @@ class RentsCard extends StatelessWidget {
       context,
       hasGraph: true,
       rightWidget: _buildMiniGraphForRendement(_getLast12WeeksRent(dataManager), context, dataManager),
-      headerRightWidget: Container(
+      headerRightWidget: SizedBox(
         height: 36,
         width: 36,
         child: Material(

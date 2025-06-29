@@ -62,12 +62,6 @@ class _PortfolioStats extends State<PortfolioStats> {
   Widget build(BuildContext context) {
     return Consumer<DataManager>(
       builder: (context, dataManager, child) {
-        if (dataManager == null) {
-          return const Scaffold(
-            body: Center(child: Text("Error loading data")),
-          );
-        }
-
         final screenWidth = MediaQuery.of(context).size.width;
         final isWideScreen = screenWidth > 700;
         final double fixedCardHeight = 380;
@@ -196,7 +190,7 @@ class _PortfolioStats extends State<PortfolioStats> {
       }
     } catch (e) {
       debugPrint("Error building chart widget at index $index: $e");
-      return Container(
+      return SizedBox(
         height: 380,
         child: const Center(
           child: Text("Erreur de chargement du graphique"),

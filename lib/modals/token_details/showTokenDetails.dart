@@ -15,7 +15,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:show_network_image/show_network_image.dart';
 import '../../pages/portfolio/FullScreenCarousel.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
-import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 
 import 'tabs/property_tab.dart';
 import 'tabs/finance_tab.dart';
@@ -110,11 +109,11 @@ class TokenDetailsWidget extends StatefulWidget {
   final ScrollController scrollController;
 
   const TokenDetailsWidget({
-    Key? key,
+    super.key,
     required this.token,
     required this.convertToSquareMeters,
     required this.scrollController,
-  }) : super(key: key);
+  });
 
   @override
   _TokenDetailsWidgetState createState() => _TokenDetailsWidgetState();
@@ -499,7 +498,7 @@ class _TokenDetailsWidgetState extends State<TokenDetailsWidget> with SingleTick
                   borderRadius: BorderRadius.circular(15),
                 ),
                 splashFactory: NoSplash.splashFactory,
-                overlayColor: MaterialStateProperty.resolveWith<Color?>((states) => null),
+                overlayColor: WidgetStateProperty.resolveWith<Color?>((states) => null),
                 labelStyle: TextStyle(
                   fontSize: 12 + appState.getTextSizeOffset(),
                   fontWeight: FontWeight.w600,

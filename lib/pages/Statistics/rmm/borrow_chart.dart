@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/models/balance_record.dart';
-import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
-import 'package:realtoken_asset_tracker/utils/date_utils.dart';
 import 'package:realtoken_asset_tracker/components/charts/generic_chart_widget.dart';
 
 /// Classe représentant un groupe d'emprunts agrégé selon la période.

@@ -1,4 +1,5 @@
 /// Modèle pour représenter les données de Retour sur Investissement (ROI)
+library;
 import 'package:flutter/foundation.dart'; // Pour debugPrint
 
 class ROIRecord {

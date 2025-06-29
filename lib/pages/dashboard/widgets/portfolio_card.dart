@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
@@ -8,7 +7,6 @@ import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:realtoken_asset_tracker/utils/parameters.dart';
 import 'package:realtoken_asset_tracker/utils/widget_factory.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:realtoken_asset_tracker/settings/personalization_settings_page.dart';
 import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/portfolio_details_page.dart';
 import 'package:realtoken_asset_tracker/utils/shimmer_utils.dart';
@@ -66,9 +64,9 @@ class PortfolioCard extends StatelessWidget {
 
     // Hauteur minimale basée sur le nombre de sections visibles
     double minHeight = 220.0; // Hauteur de base
-    if (visibleSections <= 2)
+    if (visibleSections <= 2) {
       minHeight = 220.0; // Hauteur minimale pour peu de contenu
-    else if (visibleSections == 3)
+    } else if (visibleSections == 3)
       minHeight = 240.0;
     else
       minHeight = 260.0;
@@ -164,7 +162,7 @@ class PortfolioCard extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: 36,
               width: 36,
               child: Material(
@@ -456,16 +454,16 @@ class PortfolioCard extends StatelessWidget {
 
     // Ajuster la hauteur de la jauge en fonction du nombre de sections visibles
     double gaugeHeight = 90.0; // Hauteur par défaut
-    if (visibleSections <= 2)
+    if (visibleSections <= 2) {
       gaugeHeight = 75.0;
-    else if (visibleSections == 3)
+    } else if (visibleSections == 3)
       gaugeHeight = 120.0;
     else
       gaugeHeight = 160.0;
 
     double containerHeight = gaugeHeight + 50; // Ajouter de l'espace pour le texte et les marges
 
-    return Container(
+    return SizedBox(
       width: 90,
       height: containerHeight,
       child: Column(
