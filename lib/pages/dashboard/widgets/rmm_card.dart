@@ -83,10 +83,10 @@ class RmmCard extends StatelessWidget {
         dataManager.perWalletRmmValues[selectedAddress] ?? 0;
 
 // Récupération des taux APY
-    final double usdcDepositApy = dataManager.usdcDepositApy ?? 0.0;
-    final double xdaiDepositApy = dataManager.xdaiDepositApy ?? 0.0;
-    final double usdcBorrowApy = dataManager.usdcBorrowApy ?? 0.0;
-    final double xdaiBorrowApy = dataManager.xdaiBorrowApy ?? 0.0;
+    final double usdcDepositApy = dataManager.usdcDepositApy;
+    final double xdaiDepositApy = dataManager.xdaiDepositApy;
+    final double usdcBorrowApy = dataManager.usdcBorrowApy;
+    final double xdaiBorrowApy = dataManager.xdaiBorrowApy;
 
 // Calcul final du Health Factor et du LTV pour le wallet le plus défavorable
     double healthFactor = worstWalletBorrow > 0
@@ -113,8 +113,8 @@ class RmmCard extends StatelessWidget {
         worstWalletRmmValue,
         worstWalletUsdcBorrow,
         worstWalletXdaiBorrow,
-        dataManager.usdcBorrowApy ?? 0.0,
-        dataManager.xdaiBorrowApy ?? 0.0,
+        dataManager.usdcBorrowApy,
+        dataManager.xdaiBorrowApy,
         isLoading,
       ),
       [
@@ -887,8 +887,8 @@ class RmmCard extends StatelessWidget {
     }
 
     // Taux d'emprunt
-    final double usdcBorrowApy = dataManager.usdcBorrowApy ?? 0.0;
-    final double xdaiBorrowApy = dataManager.xdaiBorrowApy ?? 0.0;
+    final double usdcBorrowApy = dataManager.usdcBorrowApy;
+    final double xdaiBorrowApy = dataManager.xdaiBorrowApy;
 
     // Calcul des taux d'intérêt journaliers
     final double usdcDailyRate = usdcBorrowApy / 365 / 100;

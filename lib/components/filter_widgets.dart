@@ -102,9 +102,7 @@ class FilterWidgets {
           }
           return country;
         })
-        .where((country) => country != null)
         .toSet()
-        .cast<String>()
         .toList();
     countries.sort();
     return countries;

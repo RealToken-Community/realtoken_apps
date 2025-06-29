@@ -252,7 +252,7 @@ class PieChartBuilders {
   /// Extrait le titre d'une section pour l'affichage central
   static String _extractTitleFromSection(PieChartSectionData section) {
     // Extraire le nom avant le pourcentage
-    final title = section.title ?? '';
+    final title = section.title;
     final percentageIndex = title.lastIndexOf(' ');
     if (percentageIndex > 0 &&
         title.substring(percentageIndex + 1).contains('%')) {

@@ -16,7 +16,7 @@ class WalletPopupWidget extends StatelessWidget {
     final dataManager = Provider.of<DataManager>(context, listen: false);
 
     final List<Map<String, dynamic>> walletDetails =
-        dataManager.perWalletBalances ?? [];
+        dataManager.perWalletBalances;
     final bool hasStaking =
         walletDetails.any((wallet) => (wallet['gnosisVaultReg'] ?? 0) > 0);
 
