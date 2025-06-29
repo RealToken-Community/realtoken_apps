@@ -32,18 +32,18 @@ class AgendaCalendarState extends State<AgendaCalendar> {
     final dataManager = Provider.of<DataManager>(context, listen: false);
     _events = _extractTransactions(widget.portfolio);
     _addRentEvents(_events, dataManager.rentData);
-    
+
     // Ajout d'un listener pour le défilement
     _scrollController.addListener(_onScroll);
   }
-  
+
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
-  
+
   void _onScroll() {
     // On réduit le calendrier si on scrolle vers le bas
     if (_scrollController.offset > 20 && !_isCalendarCollapsed) {
@@ -136,29 +136,27 @@ class AgendaCalendarState extends State<AgendaCalendar> {
               curve: Curves.easeInOut,
               height: _isCalendarCollapsed ? 80 : null,
               decoration: BoxDecoration(
-                color: isDarkMode 
-                    ? CupertinoColors.systemGrey6.darkColor 
+                color: isDarkMode
+                    ? CupertinoColors.systemGrey6.darkColor
                     : CupertinoColors.systemGrey6.color,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
               padding: EdgeInsets.symmetric(
-                vertical: _isCalendarCollapsed ? 8 : 12, 
-                horizontal: 8
-              ),
-              child: _isCalendarCollapsed 
-                  ? _buildCollapsedCalendar() 
+                  vertical: _isCalendarCollapsed ? 8 : 12, horizontal: 8),
+              child: _isCalendarCollapsed
+                  ? _buildCollapsedCalendar()
                   : _buildFullCalendar(isDarkMode, context),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Titre de section avec bouton pour contrôler le calendrier
             Padding(
               padding: const EdgeInsets.only(left: 8, bottom: 8),
@@ -175,18 +173,18 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                   ),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
+                    onPressed: _toggleCalendarSize,
                     child: Icon(
-                      _isCalendarCollapsed 
-                          ? CupertinoIcons.calendar_badge_plus 
+                      _isCalendarCollapsed
+                          ? CupertinoIcons.calendar_badge_plus
                           : CupertinoIcons.calendar_badge_minus,
                       color: CupertinoColors.systemBlue.resolveFrom(context),
                     ),
-                    onPressed: _toggleCalendarSize,
                   ),
                 ],
               ),
             ),
-            
+
             Expanded(
               child: (_events.containsKey(_selectedDay) &&
                       _events[_selectedDay]!.isNotEmpty)
@@ -199,7 +197,8 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                         separatorBuilder: (context, index) => Divider(
                           height: 1,
                           indent: 70,
-                          color: CupertinoColors.systemGrey5.resolveFrom(context),
+                          color:
+                              CupertinoColors.systemGrey5.resolveFrom(context),
                         ),
                         itemBuilder: (context, index) {
                           final event = _events[_selectedDay]![index];
@@ -214,15 +213,18 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                               event.containsKey('transactionType')
                                   ? event['transactionType']
                                   : S.of(context).unknownTransaction;
-                          
+
                           // Obtenir la version localisée du type de transaction pour l'affichage
-                          final localizedTransactionType = _getLocalizedTransactionType(transactionType, context);
+                          final localizedTransactionType =
+                              _getLocalizedTransactionType(
+                                  transactionType, context);
 
                           return Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
                             decoration: BoxDecoration(
-                              color: isDarkMode 
-                                  ? CupertinoColors.systemGrey6.darkColor 
+                              color: isDarkMode
+                                  ? CupertinoColors.systemGrey6.darkColor
                                   : CupertinoColors.systemGrey6.color,
                               borderRadius: BorderRadius.circular(0),
                             ),
@@ -233,12 +235,15 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                                         width: 48,
                                         height: 48,
                                         decoration: BoxDecoration(
-                                          color: _getIconBackground(transactionType, context),
-                                          borderRadius: BorderRadius.circular(12),
+                                          color: _getIconBackground(
+                                              transactionType, context),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: Center(
                                           child: Icon(
-                                            _getTransactionIcon(transactionType),
+                                            _getTransactionIcon(
+                                                transactionType),
                                             color: Colors.white,
                                             size: 24,
                                           ),
@@ -247,30 +252,42 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                                       const SizedBox(width: 12),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               fullName,
                                               style: TextStyle(
-                                                fontSize: 16 + appState.getTextSizeOffset(),
+                                                fontSize: 16 +
+                                                    appState
+                                                        .getTextSizeOffset(),
                                                 fontWeight: FontWeight.w600,
-                                                color: CupertinoColors.label.resolveFrom(context),
+                                                color: CupertinoColors.label
+                                                    .resolveFrom(context),
                                               ),
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
                                               "$localizedTransactionType • ${S.of(context).quantity}: $amount",
                                               style: TextStyle(
-                                                fontSize: 14 + appState.getTextSizeOffset(),
-                                                color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                                                fontSize: 14 +
+                                                    appState
+                                                        .getTextSizeOffset(),
+                                                color: CupertinoColors
+                                                    .secondaryLabel
+                                                    .resolveFrom(context),
                                               ),
                                             ),
                                             Text(
                                               price,
                                               style: TextStyle(
-                                                fontSize: 14 + appState.getTextSizeOffset(),
+                                                fontSize: 14 +
+                                                    appState
+                                                        .getTextSizeOffset(),
                                                 fontWeight: FontWeight.w500,
-                                                color: CupertinoColors.systemBlue.resolveFrom(context),
+                                                color: CupertinoColors
+                                                    .systemBlue
+                                                    .resolveFrom(context),
                                               ),
                                             ),
                                           ],
@@ -284,8 +301,10 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                                         width: 48,
                                         height: 48,
                                         decoration: BoxDecoration(
-                                          color: CupertinoColors.systemGreen.resolveFrom(context),
-                                          borderRadius: BorderRadius.circular(12),
+                                          color: CupertinoColors.systemGreen
+                                              .resolveFrom(context),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: const Center(
                                           child: Icon(
@@ -298,22 +317,31 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                                       const SizedBox(width: 12),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               S.of(context).wallet,
                                               style: TextStyle(
-                                                fontSize: 16 + appState.getTextSizeOffset(),
-                                                color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                                                fontSize: 16 +
+                                                    appState
+                                                        .getTextSizeOffset(),
+                                                color: CupertinoColors
+                                                    .secondaryLabel
+                                                    .resolveFrom(context),
                                               ),
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
                                               "${currencyUtils.convert(amount).toStringAsFixed(2)} ${currencyUtils.currencySymbol}",
                                               style: TextStyle(
-                                                fontSize: 15 + appState.getTextSizeOffset(),
+                                                fontSize: 15 +
+                                                    appState
+                                                        .getTextSizeOffset(),
                                                 fontWeight: FontWeight.w500,
-                                                color: CupertinoColors.systemGreen.resolveFrom(context),
+                                                color: CupertinoColors
+                                                    .systemGreen
+                                                    .resolveFrom(context),
                                               ),
                                             ),
                                           ],
@@ -329,8 +357,8 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: isDarkMode 
-                              ? CupertinoColors.systemGrey6.darkColor 
+                          color: isDarkMode
+                              ? CupertinoColors.systemGrey6.darkColor
                               : CupertinoColors.systemGrey6.color,
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -340,14 +368,16 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                             Icon(
                               CupertinoIcons.calendar_badge_minus,
                               size: 50,
-                              color: CupertinoColors.systemGrey.resolveFrom(context),
+                              color: CupertinoColors.systemGrey
+                                  .resolveFrom(context),
                             ),
                             const SizedBox(height: 12),
                             Text(
                               S.of(context).wallet,
                               style: TextStyle(
                                 fontSize: 16 + appState.getTextSizeOffset(),
-                                color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                                color: CupertinoColors.secondaryLabel
+                                    .resolveFrom(context),
                               ),
                             ),
                           ],
@@ -360,7 +390,7 @@ class AgendaCalendarState extends State<AgendaCalendar> {
       ),
     );
   }
-  
+
   // Version compacte du calendrier
   Widget _buildCollapsedCalendar() {
     return GestureDetector(
@@ -381,7 +411,9 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                 Text(
                   "${_selectedDay.day}/${_selectedDay.month}/${_selectedDay.year}",
                   style: TextStyle(
-                    fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 16 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.w600,
                     color: CupertinoColors.label.resolveFrom(context),
                   ),
@@ -390,7 +422,9 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                 Text(
                   _getFormattedDay(_selectedDay),
                   style: TextStyle(
-                    fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 14 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     color: CupertinoColors.secondaryLabel.resolveFrom(context),
                   ),
                 ),
@@ -410,7 +444,8 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _selectedDay = _selectedDay.subtract(const Duration(days: 1));
+                    _selectedDay =
+                        _selectedDay.subtract(const Duration(days: 1));
                     _focusedDay = _selectedDay;
                   });
                 },
@@ -437,7 +472,7 @@ class AgendaCalendarState extends State<AgendaCalendar> {
       ),
     );
   }
-  
+
   // Version complète du calendrier
   Widget _buildFullCalendar(bool isDarkMode, BuildContext context) {
     return TableCalendar(
@@ -451,8 +486,8 @@ class AgendaCalendarState extends State<AgendaCalendar> {
       },
       onDaySelected: (selectedDay, focusedDay) {
         setState(() {
-          _selectedDay = DateTime(
-              selectedDay.year, selectedDay.month, selectedDay.day);
+          _selectedDay =
+              DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
           _focusedDay = focusedDay;
         });
       },
@@ -461,18 +496,13 @@ class AgendaCalendarState extends State<AgendaCalendar> {
       headerStyle: HeaderStyle(
         titleCentered: true,
         formatButtonVisible: false,
-        leftChevronIcon: Icon(
-          CupertinoIcons.chevron_left, 
-          size: 16, 
-          color: CupertinoColors.systemBlue.resolveFrom(context)
-        ),
-        rightChevronIcon: Icon(
-          CupertinoIcons.chevron_right, 
-          size: 16, 
-          color: CupertinoColors.systemBlue.resolveFrom(context)
-        ),
+        leftChevronIcon: Icon(CupertinoIcons.chevron_left,
+            size: 16, color: CupertinoColors.systemBlue.resolveFrom(context)),
+        rightChevronIcon: Icon(CupertinoIcons.chevron_right,
+            size: 16, color: CupertinoColors.systemBlue.resolveFrom(context)),
         titleTextStyle: TextStyle(
-          fontSize: 18 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+          fontSize: 18 +
+              Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
           fontWeight: FontWeight.w600,
           color: CupertinoColors.label.resolveFrom(context),
         ),
@@ -488,7 +518,9 @@ class AgendaCalendarState extends State<AgendaCalendar> {
         markersAlignment: Alignment.bottomCenter,
         markersAnchor: 0.7,
         todayDecoration: BoxDecoration(
-          color: CupertinoColors.systemBlue.resolveFrom(context).withOpacity(0.3),
+          color: CupertinoColors.systemBlue
+              .resolveFrom(context)
+              .withValues(alpha: 0.3),
           shape: BoxShape.circle,
         ),
         todayTextStyle: TextStyle(
@@ -507,12 +539,14 @@ class AgendaCalendarState extends State<AgendaCalendar> {
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         weekdayStyle: TextStyle(
-          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+          fontSize: 14 +
+              Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
           color: CupertinoColors.secondaryLabel.resolveFrom(context),
           fontWeight: FontWeight.w500,
         ),
         weekendStyle: TextStyle(
-          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+          fontSize: 14 +
+              Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
           color: CupertinoColors.systemGrey.resolveFrom(context),
           fontWeight: FontWeight.w500,
         ),
@@ -522,8 +556,8 @@ class AgendaCalendarState extends State<AgendaCalendar> {
           if (events.isEmpty) return null;
           List<Widget> markers = [];
 
-          bool hasRent = events
-              .any((e) => (e as Map<String, dynamic>)['type'] == 'rent');
+          bool hasRent =
+              events.any((e) => (e as Map<String, dynamic>)['type'] == 'rent');
           bool hasPurchase = events.any((e) =>
               (e as Map<String, dynamic>)['type'] == 'transaction' &&
               e['transactionType'] == DataManager.transactionTypePurchase);
@@ -540,7 +574,7 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                 width: 6,
                 height: 6,
                 decoration: BoxDecoration(
-                    color: CupertinoColors.systemGreen.resolveFrom(context), 
+                    color: CupertinoColors.systemGreen.resolveFrom(context),
                     shape: BoxShape.circle)));
           }
           if (hasPurchase) {
@@ -549,7 +583,7 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                 width: 6,
                 height: 6,
                 decoration: BoxDecoration(
-                    color: CupertinoColors.systemBlue.resolveFrom(context), 
+                    color: CupertinoColors.systemBlue.resolveFrom(context),
                     shape: BoxShape.circle)));
           }
           if (hasYAM) {
@@ -558,7 +592,7 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                 width: 6,
                 height: 6,
                 decoration: BoxDecoration(
-                    color: CupertinoColors.systemOrange.resolveFrom(context), 
+                    color: CupertinoColors.systemOrange.resolveFrom(context),
                     shape: BoxShape.circle)));
           }
           if (hasTransfer) {
@@ -567,7 +601,7 @@ class AgendaCalendarState extends State<AgendaCalendar> {
                 width: 6,
                 height: 6,
                 decoration: BoxDecoration(
-                    color: CupertinoColors.systemGrey.resolveFrom(context), 
+                    color: CupertinoColors.systemGrey.resolveFrom(context),
                     shape: BoxShape.circle)));
           }
 
@@ -580,10 +614,18 @@ class AgendaCalendarState extends State<AgendaCalendar> {
       ),
     );
   }
-  
+
   // Fonction pour obtenir le jour de la semaine formaté
   String _getFormattedDay(DateTime date) {
-    const days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    const days = [
+      'Lundi',
+      'Mardi',
+      'Mercredi',
+      'Jeudi',
+      'Vendredi',
+      'Samedi',
+      'Dimanche'
+    ];
     // Le weekday de DateTime va de 1 (lundi) à 7 (dimanche)
     final dayIndex = date.weekday - 1;
     return days[dayIndex];
@@ -612,9 +654,10 @@ class AgendaCalendarState extends State<AgendaCalendar> {
       return CupertinoColors.systemTeal.resolveFrom(context);
     }
   }
-  
+
   // Méthode pour traduire les constantes en textes localisés
-  String _getLocalizedTransactionType(String transactionType, BuildContext context) {
+  String _getLocalizedTransactionType(
+      String transactionType, BuildContext context) {
     if (transactionType == DataManager.transactionTypePurchase) {
       return S.of(context).purchase;
     } else if (transactionType == DataManager.transactionTypeTransfer) {

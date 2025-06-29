@@ -13,7 +13,8 @@ class RealEstateCard extends StatelessWidget {
   final bool showAmounts;
   final bool isLoading;
 
-  const RealEstateCard({super.key, required this.showAmounts, required this.isLoading});
+  const RealEstateCard(
+      {super.key, required this.showAmounts, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +24,20 @@ class RealEstateCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     // Filtrer les tokens de type real_estate_rental
-    final realEstateTokens = dataManager.portfolio.where((token) => 
-      (token['productType'] ?? '').toLowerCase() == 'real_estate_rental'
-    ).toList();
+    final realEstateTokens = dataManager.portfolio
+        .where((token) =>
+            (token['productType'] ?? '').toLowerCase() == 'real_estate_rental')
+        .toList();
 
     final totalTokens = realEstateTokens.length;
-    final totalUnits = realEstateTokens.fold<int>(0, (sum, token) => 
-      sum + ((token['totalUnits'] as num?)?.toInt() ?? 0)
-    );
-    final rentedUnits = realEstateTokens.fold<int>(0, (sum, token) => 
-      sum + ((token['rentedUnits'] as num?)?.toInt() ?? 0)
-    );
-    final totalValue = realEstateTokens.fold<double>(0.0, (sum, token) => 
-      sum + ((token['totalValue'] as num?)?.toDouble() ?? 0.0)
-    );
+    final totalUnits = realEstateTokens.fold<int>(
+        0, (sum, token) => sum + ((token['totalUnits'] as num?)?.toInt() ?? 0));
+    final rentedUnits = realEstateTokens.fold<int>(0,
+        (sum, token) => sum + ((token['rentedUnits'] as num?)?.toInt() ?? 0));
+    final totalValue = realEstateTokens.fold<double>(
+        0.0,
+        (sum, token) =>
+            sum + ((token['totalValue'] as num?)?.toDouble() ?? 0.0));
     // Filtrer selon rentStartDate pour ne prendre que les tokens qui génèrent déjà des revenus
     final today = DateTime.now();
     final monthlyIncome = realEstateTokens.fold<double>(0.0, (sum, token) {
@@ -54,15 +55,11 @@ class RealEstateCard extends StatelessWidget {
       'Estate',
       Icons.home_outlined,
       _buildValueWithIconSmall(
-        context, 
-        currencyUtils.getFormattedAmount(
-          currencyUtils.convert(monthlyIncome), 
-          currencyUtils.currencySymbol, 
-          showAmounts
-        ), 
-        Icons.attach_money_rounded,
-        isLoading
-      ),
+          context,
+          currencyUtils.getFormattedAmount(currencyUtils.convert(monthlyIncome),
+              currencyUtils.currencySymbol, showAmounts),
+          Icons.attach_money_rounded,
+          isLoading),
       [
         _buildTextWithShimmerSmall(
           '$totalTokens',
@@ -71,9 +68,15 @@ class RealEstateCard extends StatelessWidget {
           context,
         ),
         _buildTextWithShimmerSmall(
-          showAmounts 
-            ? _formatCurrencyWithoutDecimals(currencyUtils.convert(totalValue), currencyUtils.currencySymbol)
-            : '*' * _formatCurrencyWithoutDecimals(currencyUtils.convert(totalValue), currencyUtils.currencySymbol).length,
+          showAmounts
+              ? _formatCurrencyWithoutDecimals(
+                  currencyUtils.convert(totalValue),
+                  currencyUtils.currencySymbol)
+              : '*' *
+                  _formatCurrencyWithoutDecimals(
+                          currencyUtils.convert(totalValue),
+                          currencyUtils.currencySymbol)
+                      .length,
           'Total',
           isLoading,
           context,
@@ -83,7 +86,8 @@ class RealEstateCard extends StatelessWidget {
         Center(
           child: Builder(
             builder: (context) {
-              double rentedPercentage = totalUnits > 0 ? (rentedUnits / totalUnits * 100) : 0.0;
+              double rentedPercentage =
+                  totalUnits > 0 ? (rentedUnits / totalUnits * 100) : 0.0;
               if (rentedPercentage.isNaN || rentedPercentage < 0) {
                 rentedPercentage = 0;
               }
@@ -124,7 +128,9 @@ class RealEstateCard extends StatelessWidget {
                   title: '',
                   radius: 18,
                   titleStyle: TextStyle(
-                    fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 10 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -141,7 +147,7 @@ class RealEstateCard extends StatelessWidget {
                   radius: 13,
                   gradient: LinearGradient(
                     colors: [
-                      theme.primaryColor.withOpacity(0.6),
+                      theme.primaryColor.withValues(alpha: 0.6),
                       theme.primaryColor,
                     ],
                     begin: Alignment.topLeft,
@@ -161,7 +167,9 @@ class RealEstateCard extends StatelessWidget {
             child: Text(
               '${rentedPercentage.toStringAsFixed(0)}%',
               style: TextStyle(
-                fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                fontSize: 10 +
+                    Provider.of<AppState>(context, listen: false)
+                        .getTextSizeOffset(),
                 fontWeight: FontWeight.bold,
                 color: theme.textTheme.bodyLarge?.color,
               ),
@@ -172,7 +180,8 @@ class RealEstateCard extends StatelessWidget {
     );
   }
 
-  Widget _buildValueBeforeTextSmall(BuildContext context, String? value, String text, bool isLoading) {
+  Widget _buildValueBeforeTextSmall(
+      BuildContext context, String? value, String text, bool isLoading) {
     final appState = Provider.of<AppState>(context);
     final theme = Theme.of(context);
 
@@ -183,7 +192,8 @@ class RealEstateCard extends StatelessWidget {
                 child: Text(
                   value ?? '',
                   style: TextStyle(
-                    fontSize: 14 + appState.getTextSizeOffset(), // Réduit de 16 à 14
+                    fontSize:
+                        14 + appState.getTextSizeOffset(), // Réduit de 16 à 14
                     fontWeight: FontWeight.bold,
                     color: theme.textTheme.bodyLarge?.color,
                     height: 1.1,
@@ -194,7 +204,8 @@ class RealEstateCard extends StatelessWidget {
             : Text(
                 value ?? '',
                 style: TextStyle(
-                  fontSize: 14 + appState.getTextSizeOffset(), // Réduit de 16 à 14
+                  fontSize:
+                      14 + appState.getTextSizeOffset(), // Réduit de 16 à 14
                   fontWeight: FontWeight.bold,
                   color: theme.textTheme.bodyLarge?.color,
                   height: 1.1,
@@ -213,7 +224,8 @@ class RealEstateCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTextWithShimmerSmall(String? value, String text, bool isLoading, BuildContext context) {
+  Widget _buildTextWithShimmerSmall(
+      String? value, String text, bool isLoading, BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final theme = Theme.of(context);
 
@@ -223,10 +235,12 @@ class RealEstateCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            text, 
+            text,
             style: TextStyle(
               fontSize: 12 + appState.getTextSizeOffset(), // Réduit de 14 à 12
-              color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+              color: theme.brightness == Brightness.light
+                  ? Colors.black54
+                  : Colors.white70,
               letterSpacing: -0.2,
               height: 1.1,
             ),
@@ -235,9 +249,10 @@ class RealEstateCard extends StatelessWidget {
           isLoading
               ? ShimmerUtils.originalColorShimmer(
                   child: Text(
-                    value ?? '', 
+                    value ?? '',
                     style: TextStyle(
-                      fontSize: 13 + appState.getTextSizeOffset(), // Réduit de 15 à 13
+                      fontSize: 13 +
+                          appState.getTextSizeOffset(), // Réduit de 15 à 13
                       fontWeight: FontWeight.w600,
                       color: theme.textTheme.bodyLarge?.color,
                       letterSpacing: -0.3,
@@ -247,9 +262,10 @@ class RealEstateCard extends StatelessWidget {
                   color: theme.textTheme.bodyLarge?.color,
                 )
               : Text(
-                  value ?? '', 
+                  value ?? '',
                   style: TextStyle(
-                    fontSize: 13 + appState.getTextSizeOffset(), // Réduit de 15 à 13
+                    fontSize:
+                        13 + appState.getTextSizeOffset(), // Réduit de 15 à 13
                     fontWeight: FontWeight.w600,
                     color: theme.textTheme.bodyLarge?.color,
                     letterSpacing: -0.3,
@@ -261,7 +277,8 @@ class RealEstateCard extends StatelessWidget {
     );
   }
 
-  Widget _buildValueWithIconSmall(BuildContext context, String? value, IconData icon, bool isLoading) {
+  Widget _buildValueWithIconSmall(
+      BuildContext context, String? value, IconData icon, bool isLoading) {
     final appState = Provider.of<AppState>(context);
     final theme = Theme.of(context);
 
@@ -269,15 +286,26 @@ class RealEstateCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 2),
       child: Row(
         children: [
-        Icon(
-          icon,
-          size: 16 + appState.getTextSizeOffset(),
-          color: theme.primaryColor,
-        ),
-        const SizedBox(width: 4),
-        isLoading
-            ? ShimmerUtils.originalColorShimmer(
-                child: Text(
+          Icon(
+            icon,
+            size: 16 + appState.getTextSizeOffset(),
+            color: theme.primaryColor,
+          ),
+          const SizedBox(width: 4),
+          isLoading
+              ? ShimmerUtils.originalColorShimmer(
+                  child: Text(
+                    value ?? '',
+                    style: TextStyle(
+                      fontSize: 14 + appState.getTextSizeOffset(),
+                      fontWeight: FontWeight.bold,
+                      color: theme.textTheme.bodyLarge?.color,
+                      height: 1.1,
+                    ),
+                  ),
+                  color: theme.textTheme.bodyLarge?.color,
+                )
+              : Text(
                   value ?? '',
                   style: TextStyle(
                     fontSize: 14 + appState.getTextSizeOffset(),
@@ -286,19 +314,8 @@ class RealEstateCard extends StatelessWidget {
                     height: 1.1,
                   ),
                 ),
-                color: theme.textTheme.bodyLarge?.color,
-              )
-            : Text(
-                value ?? '',
-                style: TextStyle(
-                  fontSize: 14 + appState.getTextSizeOffset(),
-                  fontWeight: FontWeight.bold,
-                  color: theme.textTheme.bodyLarge?.color,
-                  height: 1.1,
-                ),
-              ),
         ],
       ),
     );
   }
-} 
+}

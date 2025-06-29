@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Helpers pour factoriser les patterns répétitifs dans ApiService
 class ApiServiceHelpers {
-  
   /// Pattern générique pour fetch des données depuis plusieurs wallets
   /// Réduit la duplication de code dans fetchWalletTokens, fetchTransactionsHistory, etc.
   static Future<List<dynamic>> fetchFromMultipleWallets({
@@ -16,7 +15,8 @@ class ApiServiceHelpers {
     List<String>? customWallets,
   }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final List<String> wallets = customWallets ?? prefs.getStringList('evmAddresses') ?? [];
+    final List<String> wallets =
+        customWallets ?? prefs.getStringList('evmAddresses') ?? [];
 
     if (wallets.isEmpty) {
       debugPrint("⚠️ Aucun wallet renseigné pour $debugName");
@@ -31,11 +31,12 @@ class ApiServiceHelpers {
 
     for (String wallet in wallets) {
       final apiUrl = urlBuilder(wallet);
-      
+
       try {
-        final response = await http.get(Uri.parse(apiUrl))
-            .timeout(timeout, onTimeout: () {
-          throw TimeoutException('Délai dépassé pour $debugName du wallet $wallet');
+        final response =
+            await http.get(Uri.parse(apiUrl)).timeout(timeout, onTimeout: () {
+          throw TimeoutException(
+              'Délai dépassé pour $debugName du wallet $wallet');
         });
 
         if (response.statusCode == 200) {
@@ -43,13 +44,15 @@ class ApiServiceHelpers {
           if (walletData is List && walletData.isNotEmpty) {
             allData.addAll(walletData);
             successCount++;
-            debugPrint("✅ $debugName récupéré pour wallet: $wallet (${walletData.length} éléments)");
+            debugPrint(
+                "✅ $debugName récupéré pour wallet: $wallet (${walletData.length} éléments)");
           } else {
             debugPrint("⚠️ Aucune donnée $debugName pour wallet: $wallet");
           }
         } else {
           errorCount++;
-          debugPrint("❌ Erreur $debugName pour wallet $wallet: HTTP ${response.statusCode}");
+          debugPrint(
+              "❌ Erreur $debugName pour wallet $wallet: HTTP ${response.statusCode}");
         }
       } catch (e) {
         errorCount++;
@@ -57,7 +60,8 @@ class ApiServiceHelpers {
       }
     }
 
-    debugPrint("📊 Récapitulatif $debugName: $successCount wallets réussis, $errorCount en erreur");
+    debugPrint(
+        "📊 Récapitulatif $debugName: $successCount wallets réussis, $errorCount en erreur");
     debugPrint("✅ ${allData.length} éléments $debugName récupérés au total");
 
     return allData;
@@ -69,12 +73,15 @@ class ApiServiceHelpers {
     required String debugName,
     required String Function(String wallet) urlBuilder,
     required Duration timeout,
-    required Function(String wallet, List<Map<String, dynamic>> allData) onCacheLoad,
-    required Function(String wallet, List<Map<String, dynamic>> data) onDataProcess,
+    required Function(String wallet, List<Map<String, dynamic>> allData)
+        onCacheLoad,
+    required Function(String wallet, List<Map<String, dynamic>> data)
+        onDataProcess,
     List<String>? customWallets,
   }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final List<String> wallets = customWallets ?? prefs.getStringList('evmAddresses') ?? [];
+    final List<String> wallets =
+        customWallets ?? prefs.getStringList('evmAddresses') ?? [];
 
     if (wallets.isEmpty) {
       debugPrint("⚠️ Aucun wallet renseigné pour $debugName");
@@ -88,33 +95,35 @@ class ApiServiceHelpers {
 
     for (String wallet in wallets) {
       final url = urlBuilder(wallet);
-      
+
       try {
         debugPrint("🌐 Tentative de requête $debugName pour $wallet");
 
-        final response = await http.get(Uri.parse(url))
-            .timeout(timeout, onTimeout: () {
+        final response =
+            await http.get(Uri.parse(url)).timeout(timeout, onTimeout: () {
           throw TimeoutException('Timeout pour $debugName du wallet $wallet');
         });
 
         // Gestion spéciale des erreurs 429
         if (response.statusCode == 429) {
-          debugPrint('⚠️ 429 Too Many Requests pour $debugName du wallet $wallet');
+          debugPrint(
+              '⚠️ 429 Too Many Requests pour $debugName du wallet $wallet');
           onCacheLoad(wallet, allData);
           hasError = true;
           break;
         }
 
         if (response.statusCode == 200) {
-          final List<Map<String, dynamic>> walletData = List<Map<String, dynamic>>.from(
-            json.decode(response.body)
-          );
-          
+          final List<Map<String, dynamic>> walletData =
+              List<Map<String, dynamic>>.from(json.decode(response.body));
+
           onDataProcess(wallet, walletData);
           allData.addAll(walletData);
-          debugPrint("✅ $debugName récupéré pour $wallet: ${walletData.length} entrées");
+          debugPrint(
+              "✅ $debugName récupéré pour $wallet: ${walletData.length} entrées");
         } else {
-          debugPrint('❌ Erreur $debugName pour $wallet: HTTP ${response.statusCode}');
+          debugPrint(
+              '❌ Erreur $debugName pour $wallet: HTTP ${response.statusCode}');
           onCacheLoad(wallet, allData);
           hasError = true;
         }
@@ -126,7 +135,8 @@ class ApiServiceHelpers {
     }
 
     if (hasError) {
-      throw Exception("Erreurs rencontrées lors de la récupération de $debugName");
+      throw Exception(
+          "Erreurs rencontrées lors de la récupération de $debugName");
     }
 
     debugPrint('✅ $debugName terminé - ${allData.length} entrées au total');
@@ -157,7 +167,9 @@ class ApiServiceHelpers {
     debugPrint("❌ Erreur $operation pour $wallet: $error");
   }
 
-  static void logApiSummary(String operation, int successCount, int errorCount, int totalItems) {
-    debugPrint("📊 Récapitulatif $operation: $successCount réussis, $errorCount erreurs, $totalItems éléments total");
+  static void logApiSummary(
+      String operation, int successCount, int errorCount, int totalItems) {
+    debugPrint(
+        "📊 Récapitulatif $operation: $successCount réussis, $errorCount erreurs, $totalItems éléments total");
   }
-} 
+}

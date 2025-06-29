@@ -7,19 +7,18 @@ import 'package:provider/provider.dart';
 
 /// Factory pour créer des cartes d'information standardisées
 class InfoCardWidgets {
-  
   /// Construit un header de section standardisé
   static Widget buildSectionHeader(
-    BuildContext context, 
-    String title, 
-    double textSizeOffset
-  ) {
+      BuildContext context, String title, double textSizeOffset) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, bottom: 12.0, left: 4.0),
       child: Text(
         title,
         style: TextStyle(
-          fontSize: 20 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+          fontSize: 20 +
+              Provider.of<AppState>(context, listen: false)
+                  .getTextSizeOffset() +
+              textSizeOffset,
           fontWeight: FontWeight.bold,
           color: CupertinoColors.label.resolveFrom(context),
         ),
@@ -49,7 +48,8 @@ class InfoCardWidgets {
             _buildIconContainer(context, icon, iconColor),
             const SizedBox(width: 14),
             Expanded(
-              child: _buildTextContent(context, title, subtitle, textSizeOffset),
+              child:
+                  _buildTextContent(context, title, subtitle, textSizeOffset),
             ),
             if (linkUrl != null || onTap != null)
               Icon(
@@ -97,14 +97,12 @@ class InfoCardWidgets {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildIconContainer(
-              context, 
-              CupertinoIcons.heart_fill, 
-              CupertinoColors.systemPink.resolveFrom(context)
-            ),
+            _buildIconContainer(context, CupertinoIcons.heart_fill,
+                CupertinoColors.systemPink.resolveFrom(context)),
             const SizedBox(width: 14),
             Expanded(
-              child: _buildTextContent(context, title, subtitle, textSizeOffset),
+              child:
+                  _buildTextContent(context, title, subtitle, textSizeOffset),
             ),
           ],
         ),
@@ -140,7 +138,10 @@ class InfoCardWidgets {
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: 15 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+                        fontSize: 15 +
+                            Provider.of<AppState>(context, listen: false)
+                                .getTextSizeOffset() +
+                            textSizeOffset,
                         fontWeight: FontWeight.w500,
                         color: CupertinoColors.label.resolveFrom(context),
                       ),
@@ -149,7 +150,10 @@ class InfoCardWidgets {
                     Text(
                       url,
                       style: TextStyle(
-                        fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+                        fontSize: 14 +
+                            Provider.of<AppState>(context, listen: false)
+                                .getTextSizeOffset() +
+                            textSizeOffset,
                         color: CupertinoColors.systemBlue.resolveFrom(context),
                       ),
                     ),
@@ -180,7 +184,8 @@ class InfoCardWidgets {
     Color? cardColor,
   }) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final finalCardColor = cardColor ?? (isDarkMode ? const Color(0xFF2C2C2E) : Colors.white);
+    final finalCardColor =
+        cardColor ?? (isDarkMode ? const Color(0xFF2C2C2E) : Colors.white);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -201,7 +206,10 @@ class InfoCardWidgets {
           Text(
             value,
             style: TextStyle(
-              fontSize: 22 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+              fontSize: 22 +
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset() +
+                  textSizeOffset,
               fontWeight: FontWeight.bold,
               color: valueColor ?? (isDarkMode ? Colors.white : Colors.black),
             ),
@@ -210,7 +218,10 @@ class InfoCardWidgets {
           Text(
             title,
             style: TextStyle(
-              fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+              fontSize: 14 +
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset() +
+                  textSizeOffset,
               color: isDarkMode ? Colors.white70 : Colors.black54,
             ),
           ),
@@ -236,16 +247,16 @@ class InfoCardWidgets {
           children: [
             Row(
               children: [
-                _buildIconContainer(
-                  context, 
-                  CupertinoIcons.money_dollar_circle,
-                  CupertinoColors.systemGreen.resolveFrom(context)
-                ),
+                _buildIconContainer(context, CupertinoIcons.money_dollar_circle,
+                    CupertinoColors.systemGreen.resolveFrom(context)),
                 const SizedBox(width: 12),
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 17 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+                    fontSize: 17 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset() +
+                        textSizeOffset,
                     fontWeight: FontWeight.w600,
                     color: CupertinoColors.label.resolveFrom(context),
                   ),
@@ -258,7 +269,10 @@ class InfoCardWidgets {
               child: Text(
                 subtitle,
                 style: TextStyle(
-                  fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+                  fontSize: 14 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset() +
+                      textSizeOffset,
                   color: CupertinoColors.secondaryLabel.resolveFrom(context),
                 ),
               ),
@@ -272,7 +286,8 @@ class InfoCardWidgets {
   // --- MÉTHODES PRIVÉES UTILITAIRES ---
 
   /// Construit le container d'icône standardisé
-  static Widget _buildIconContainer(BuildContext context, IconData icon, Color? iconColor) {
+  static Widget _buildIconContainer(
+      BuildContext context, IconData icon, Color? iconColor) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -288,19 +303,18 @@ class InfoCardWidgets {
   }
 
   /// Construit le contenu textuel standardisé (titre + sous-titre)
-  static Widget _buildTextContent(
-    BuildContext context, 
-    String title, 
-    String subtitle, 
-    double textSizeOffset
-  ) {
+  static Widget _buildTextContent(BuildContext context, String title,
+      String subtitle, double textSizeOffset) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
           style: TextStyle(
-            fontSize: 15 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+            fontSize: 15 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset() +
+                textSizeOffset,
             fontWeight: FontWeight.w500,
             color: CupertinoColors.label.resolveFrom(context),
           ),
@@ -309,11 +323,14 @@ class InfoCardWidgets {
         Text(
           subtitle,
           style: TextStyle(
-            fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
+            fontSize: 14 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset() +
+                textSizeOffset,
             color: CupertinoColors.secondaryLabel.resolveFrom(context),
           ),
         ),
       ],
     );
   }
-} 
+}

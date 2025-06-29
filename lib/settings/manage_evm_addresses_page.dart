@@ -28,12 +28,15 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
     // Charger les relations userId-adresses
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dataManager = Provider.of<DataManager>(context, listen: false);
-      debugPrint("🔑 ManageEvmAddresses: chargement des relations userId-adresses");
-      dataManager.loadUserIdToAddresses(); // Charger les relations userId-adresses
-      
+      debugPrint(
+          "🔑 ManageEvmAddresses: chargement des relations userId-adresses");
+      dataManager
+          .loadUserIdToAddresses(); // Charger les relations userId-adresses
+
       // Forcé la mise à jour des données car c'est une page de gestion d'adresses
       // On a besoin des données les plus récentes ici
-      debugPrint("🔑 ManageEvmAddresses: forçage de la mise à jour des données");
+      debugPrint(
+          "🔑 ManageEvmAddresses: forçage de la mise à jour des données");
       DataFetchUtils.refreshData(context);
     });
   }
@@ -72,7 +75,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
       final dataManager = Provider.of<DataManager>(context, listen: false);
 
       // Utilisation de la nouvelle API pour récupérer le userId et les adresses associées
-      final result = await ApiService.fetchUserAndAddresses(address.toLowerCase());
+      final result =
+          await ApiService.fetchUserAndAddresses(address.toLowerCase());
 
       if (result != null) {
         final String userId = result['userId'];
@@ -90,7 +94,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
       }
 
       // Forcer la mise à jour des données après l'ajout
-      debugPrint("🔑 ManageEvmAddresses: forçage de la mise à jour après ajout d'adresse");
+      debugPrint(
+          "🔑 ManageEvmAddresses: forçage de la mise à jour après ajout d'adresse");
       DataFetchUtils.refreshData(context);
     }
   }
@@ -154,13 +159,19 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
   @override
   Widget build(BuildContext context) {
     final dataManager = Provider.of<DataManager>(context);
-    final appState = Provider.of<AppState>(context); // Récupérer AppState pour le texte
+    final appState =
+        Provider.of<AppState>(context); // Récupérer AppState pour le texte
 
     // Récupérer toutes les adresses liées à un userId
-    final List linkedAddresses = dataManager.getAllUserIds().expand((userId) => dataManager.getAddressesForUserId(userId) ?? []).toList();
+    final List linkedAddresses = dataManager
+        .getAllUserIds()
+        .expand((userId) => dataManager.getAddressesForUserId(userId) ?? [])
+        .toList();
 
     // Filtrer les adresses non liées
-    final unlinkedAddresses = evmAddresses.where((address) => !linkedAddresses.contains(address)).toList();
+    final unlinkedAddresses = evmAddresses
+        .where((address) => !linkedAddresses.contains(address))
+        .toList();
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -177,7 +188,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
         padding: EdgeInsets.zero,
         children: [
           const SizedBox(height: 12),
-          _buildSectionHeader(context, S.of(context).addAddress, CupertinoIcons.plus_circle),
+          _buildSectionHeader(
+              context, S.of(context).addAddress, CupertinoIcons.plus_circle),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             padding: const EdgeInsets.all(12),
@@ -186,7 +198,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 1,
                   offset: const Offset(0, 1),
                 ),
@@ -200,12 +212,14 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                     Expanded(
                       child: CupertinoTextField(
                         controller: _evmAddressController,
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
                         placeholder: S.of(context).walletAddress,
                         decoration: BoxDecoration(
                           color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                          border: Border.all(
+                              color: Colors.grey.withValues(alpha: 0.3)),
                         ),
                       ),
                     ),
@@ -220,7 +234,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(CupertinoIcons.qrcode_viewfinder, color: Colors.white, size: 20),
+                        child: const Icon(CupertinoIcons.qrcode_viewfinder,
+                            color: Colors.white, size: 20),
                       ),
                     ),
                   ],
@@ -239,7 +254,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                         _evmAddressController.clear();
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Invalid wallet address')),
+                          const SnackBar(
+                              content: Text('Invalid wallet address')),
                         );
                       }
                     },
@@ -257,7 +273,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
           ),
           if (unlinkedAddresses.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _buildSectionHeader(context, "Adresses non associées", CupertinoIcons.creditcard),
+            _buildSectionHeader(
+                context, "Adresses non associées", CupertinoIcons.creditcard),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -275,7 +292,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
           ],
           if (dataManager.getAllUserIds().isNotEmpty) ...[
             const SizedBox(height: 16),
-            _buildSectionHeader(context, "Adresses associées", CupertinoIcons.person_crop_circle),
+            _buildSectionHeader(context, "Adresses associées",
+                CupertinoIcons.person_crop_circle),
             for (final userId in dataManager.getAllUserIds())
               _buildUserSection(
                 context,
@@ -290,7 +308,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 2),
       child: Row(
@@ -325,7 +344,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -345,7 +364,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
               ),
             ),
             IconButton(
-              icon: Icon(CupertinoIcons.doc_on_clipboard, color: Theme.of(context).primaryColor, size: 20),
+              icon: Icon(CupertinoIcons.doc_on_clipboard,
+                  color: Theme.of(context).primaryColor, size: 20),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               onPressed: () {
@@ -357,7 +377,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
             ),
             const SizedBox(width: 12),
             IconButton(
-              icon: const Icon(CupertinoIcons.delete, color: Colors.red, size: 20),
+              icon: const Icon(CupertinoIcons.delete,
+                  color: Colors.red, size: 20),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               onPressed: onDelete,
@@ -383,7 +404,7 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -402,7 +423,9 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                     Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: Theme.of(context)
+                            .primaryColor
+                            .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Icon(
@@ -422,7 +445,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                   ],
                 ),
                 IconButton(
-                  icon: const Icon(CupertinoIcons.delete, color: Colors.red, size: 20),
+                  icon: const Icon(CupertinoIcons.delete,
+                      color: Colors.red, size: 20),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () {
@@ -440,7 +464,8 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
               children: [
                 if (i == 0) const Divider(height: 1, thickness: 0.5),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   child: Row(
                     children: [
                       Expanded(
@@ -453,25 +478,32 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(CupertinoIcons.doc_on_clipboard, color: Theme.of(context).primaryColor, size: 20),
+                        icon: Icon(CupertinoIcons.doc_on_clipboard,
+                            color: Theme.of(context).primaryColor, size: 20),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         onPressed: () {
                           Clipboard.setData(ClipboardData(text: addresses[i]));
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Address copied: ${addresses[i]}')),
+                            SnackBar(
+                                content:
+                                    Text('Address copied: ${addresses[i]}')),
                           );
                         },
                       ),
                       const SizedBox(width: 12),
                       IconButton(
-                        icon: const Icon(CupertinoIcons.delete, color: Colors.red, size: 20),
+                        icon: const Icon(CupertinoIcons.delete,
+                            color: Colors.red, size: 20),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         onPressed: () {
-                          dataManager.removeAddressForUserId(userId, addresses[i]);
+                          dataManager.removeAddressForUserId(
+                              userId, addresses[i]);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Address ${addresses[i]} deleted')),
+                            SnackBar(
+                                content:
+                                    Text('Address ${addresses[i]} deleted')),
                           );
                         },
                       ),
@@ -481,7 +513,10 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
                 if (i < addresses.length - 1)
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
-                    child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withOpacity(0.3)),
+                    child: Divider(
+                        height: 1,
+                        thickness: 0.5,
+                        color: Colors.grey.withValues(alpha: 0.3)),
                   ),
               ],
             ),

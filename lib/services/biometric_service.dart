@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BiometricService {
@@ -58,7 +57,8 @@ class BiometricService {
     try {
       return await _localAuth.getAvailableBiometrics();
     } catch (e) {
-      debugPrint('Erreur lors de la récupération des biométries disponibles: $e');
+      debugPrint(
+          'Erreur lors de la récupération des biométries disponibles: $e');
       return [];
     }
   }
@@ -79,7 +79,8 @@ class BiometricService {
     }
   }
 
-  Future<bool> authenticate({String reason = 'Veuillez vous authentifier pour continuer'}) async {
+  Future<bool> authenticate(
+      {String reason = 'Veuillez vous authentifier pour continuer'}) async {
     // Si la biométrie n'est pas disponible ou pas activée, considérer comme authentifié
     if (!await isBiometricAvailable() || !await isBiometricEnabled()) {
       return true;
@@ -110,7 +111,8 @@ class BiometricService {
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,
-          sensitiveTransaction: true, // Indique que c'est une transaction sensible
+          sensitiveTransaction:
+              true, // Indique que c'est une transaction sensible
           useErrorDialogs: true, // Utiliser les dialogues d'erreur du système
         ),
       );

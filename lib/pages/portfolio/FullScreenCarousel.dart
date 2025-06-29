@@ -32,7 +32,8 @@ class FullScreenCarousel extends StatelessWidget {
             enableInfiniteScroll: true,
             enlargeCenterPage: true,
             autoPlay: true,
-            autoPlayInterval: Duration(seconds: 2), // Défilement automatique après 2 secondes
+            autoPlayInterval:
+                Duration(seconds: 2), // Défilement automatique après 2 secondes
           ),
           items: imageLinks.map<Widget>((imageUrl) {
             return InteractiveViewer(
@@ -47,7 +48,8 @@ class FullScreenCarousel extends StatelessWidget {
                   : CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.contain,
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
             );
           }).toList(),

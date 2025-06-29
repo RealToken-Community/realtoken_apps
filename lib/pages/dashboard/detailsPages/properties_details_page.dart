@@ -4,10 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/pages/Statistics/portfolio/charts/token_distribution_chart.dart';
-import 'package:realtoken_asset_tracker/pages/Statistics/portfolio/charts/token_distribution_by_wallet_card.dart';
 import 'package:flutter/services.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
-import 'package:fl_chart/fl_chart.dart'; // Nouvelle bibliothèque pour graphiques
+// Nouvelle bibliothèque pour graphiques
 
 class PropertiesDetailsPage extends StatelessWidget {
   const PropertiesDetailsPage({super.key});
@@ -19,7 +18,8 @@ class PropertiesDetailsPage extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDarkMode ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
+      backgroundColor:
+          isDarkMode ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
       appBar: AppBar(
         title: Text(
           S.of(context).properties,
@@ -28,7 +28,8 @@ class PropertiesDetailsPage extends StatelessWidget {
             fontSize: 17 + appState.getTextSizeOffset(),
           ),
         ),
-        backgroundColor: isDarkMode ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
+        backgroundColor:
+            isDarkMode ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
         elevation: 0,
         scrolledUnderElevation: 0,
       ),
@@ -51,19 +52,23 @@ class PropertiesDetailsPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildSectionTitle(context, S.of(context).overview, appState),
+                        _buildSectionTitle(
+                            context, S.of(context).overview, appState),
                         const SizedBox(height: 12),
                         _buildOverviewCards(context, dataManager, appState),
                         const SizedBox(height: 24),
-                        _buildSectionTitle(context, S.of(context).occupancyRate, appState),
+                        _buildSectionTitle(
+                            context, S.of(context).occupancyRate, appState),
                         const SizedBox(height: 12),
                         _buildOccupancyChart(context, dataManager, appState),
                         const SizedBox(height: 24),
-                        _buildSectionTitle(context, S.of(context).tokenDistribution, appState),
+                        _buildSectionTitle(
+                            context, S.of(context).tokenDistribution, appState),
                         const SizedBox(height: 12),
                         _buildTokenDistribution(context, dataManager),
                         const SizedBox(height: 24),
-                        _buildSectionTitle(context, S.of(context).wallets, appState),
+                        _buildSectionTitle(
+                            context, S.of(context).wallets, appState),
                       ],
                     ),
                   ),
@@ -71,7 +76,8 @@ class PropertiesDetailsPage extends StatelessWidget {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final walletDetails = _getSortedWalletDetails(dataManager);
+                      final walletDetails =
+                          _getSortedWalletDetails(dataManager);
                       if (walletDetails.isEmpty) {
                         return Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -80,7 +86,9 @@ class PropertiesDetailsPage extends StatelessWidget {
                               S.of(context).noWalletsAvailable,
                               style: TextStyle(
                                 fontSize: 16 + appState.getTextSizeOffset(),
-                                color: isDarkMode ? Colors.white70 : Colors.black54,
+                                color: isDarkMode
+                                    ? Colors.white70
+                                    : Colors.black54,
                               ),
                             ),
                           ),
@@ -88,10 +96,13 @@ class PropertiesDetailsPage extends StatelessWidget {
                       }
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        child: _buildWalletCard(context, walletDetails[index], appState),
+                        child: _buildWalletCard(
+                            context, walletDetails[index], appState),
                       );
                     },
-                    childCount: _getSortedWalletDetails(dataManager).isEmpty ? 1 : _getSortedWalletDetails(dataManager).length,
+                    childCount: _getSortedWalletDetails(dataManager).isEmpty
+                        ? 1
+                        : _getSortedWalletDetails(dataManager).length,
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -104,7 +115,8 @@ class PropertiesDetailsPage extends StatelessWidget {
 
   List<Map<String, dynamic>> _getSortedWalletDetails(DataManager dataManager) {
     final List<Map<String, dynamic>> walletDetails = dataManager.walletStats;
-    final List<Map<String, dynamic>> perWalletBalances = dataManager.perWalletBalances;
+    final List<Map<String, dynamic>> perWalletBalances =
+        dataManager.perWalletBalances;
 
     // Associer les informations d'emprunt et de dépôt à chaque wallet
     for (var wallet in walletDetails) {
@@ -136,7 +148,8 @@ class PropertiesDetailsPage extends StatelessWidget {
     return walletDetails;
   }
 
-  Widget _buildSectionTitle(BuildContext context, String title, AppState appState) {
+  Widget _buildSectionTitle(
+      BuildContext context, String title, AppState appState) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Text(
@@ -149,7 +162,8 @@ class PropertiesDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOverviewCards(BuildContext context, DataManager dataManager, AppState appState) {
+  Widget _buildOverviewCards(
+      BuildContext context, DataManager dataManager, AppState appState) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDarkMode ? const Color(0xFF2C2C2E) : Colors.white;
 
@@ -197,7 +211,7 @@ class PropertiesDetailsPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -233,10 +247,12 @@ class PropertiesDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOccupancyChart(BuildContext context, DataManager dataManager, AppState appState) {
+  Widget _buildOccupancyChart(
+      BuildContext context, DataManager dataManager, AppState appState) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDarkMode ? const Color(0xFF2C2C2E) : Colors.white;
-    final double rentedPercentage = (dataManager.rentedUnits / dataManager.totalUnits) * 100;
+    final double rentedPercentage =
+        (dataManager.rentedUnits / dataManager.totalUnits) * 100;
 
     // Déterminer la couleur en fonction du pourcentage
     Color progressColor;
@@ -265,7 +281,7 @@ class PropertiesDetailsPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -289,7 +305,9 @@ class PropertiesDetailsPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    S.of(context).rentedUnits(dataManager.rentedUnits.toString(), dataManager.totalUnits.toString()),
+                    S.of(context).rentedUnits(
+                        dataManager.rentedUnits.toString(),
+                        dataManager.totalUnits.toString()),
                     style: TextStyle(
                       fontSize: 14 + appState.getTextSizeOffset(),
                       color: isDarkMode ? Colors.white70 : Colors.black54,
@@ -298,9 +316,10 @@ class PropertiesDetailsPage extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: progressColor.withOpacity(0.2),
+                  color: progressColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -318,7 +337,9 @@ class PropertiesDetailsPage extends StatelessWidget {
           Container(
             height: 10,
             decoration: BoxDecoration(
-              color: isDarkMode ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.05),
+              color: isDarkMode
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : Colors.black.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(5),
             ),
             child: Stack(
@@ -328,7 +349,10 @@ class PropertiesDetailsPage extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [progressColor.withOpacity(0.7), progressColor],
+                        colors: [
+                          progressColor.withValues(alpha: 0.7),
+                          progressColor
+                        ],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
@@ -344,7 +368,8 @@ class PropertiesDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTokenDistribution(BuildContext context, DataManager dataManager) {
+  Widget _buildTokenDistribution(
+      BuildContext context, DataManager dataManager) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDarkMode ? const Color(0xFF2C2C2E) : Colors.white;
 
@@ -355,7 +380,7 @@ class PropertiesDetailsPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -366,7 +391,8 @@ class PropertiesDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildWalletCard(BuildContext context, Map<String, dynamic> wallet, AppState appState) {
+  Widget _buildWalletCard(
+      BuildContext context, Map<String, dynamic> wallet, AppState appState) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDarkMode ? const Color(0xFF2C2C2E) : Colors.white;
     final String address = wallet['address'] as String;
@@ -383,7 +409,7 @@ class PropertiesDetailsPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -401,7 +427,8 @@ class PropertiesDetailsPage extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.2),
+                      color:
+                          Theme.of(context).primaryColor.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -428,7 +455,9 @@ class PropertiesDetailsPage extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: isDarkMode ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.05),
+                    color: isDarkMode
+                        ? Colors.white.withValues(alpha: 0.1)
+                        : Colors.black.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -443,7 +472,9 @@ class PropertiesDetailsPage extends StatelessWidget {
           const SizedBox(height: 16),
           Container(
             decoration: BoxDecoration(
-              color: isDarkMode ? Colors.black.withOpacity(0.2) : Colors.grey.withOpacity(0.1),
+              color: isDarkMode
+                  ? Colors.black.withValues(alpha: 0.2)
+                  : Colors.grey.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.all(12),
@@ -452,14 +483,19 @@ class PropertiesDetailsPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildWalletStat(context, S.of(context).properties, tokenCount.toString(), appState),
-                    _buildWalletStat(context, 'Wallet', walletTokensSum.toStringAsFixed(2), appState),
-                    _buildWalletStat(context, 'RMM', rmmTokensSum.toStringAsFixed(2), appState),
+                    _buildWalletStat(context, S.of(context).properties,
+                        tokenCount.toString(), appState),
+                    _buildWalletStat(context, 'Wallet',
+                        walletTokensSum.toStringAsFixed(2), appState),
+                    _buildWalletStat(context, 'RMM',
+                        rmmTokensSum.toStringAsFixed(2), appState),
                   ],
                 ),
                 const SizedBox(height: 12),
                 Divider(
-                  color: isDarkMode ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.1),
+                  color: isDarkMode
+                      ? Colors.white.withValues(alpha: 0.1)
+                      : Colors.black.withValues(alpha: 0.1),
                   height: 1,
                 ),
                 const SizedBox(height: 12),
@@ -491,7 +527,8 @@ class PropertiesDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildWalletStat(BuildContext context, String label, String value, AppState appState) {
+  Widget _buildWalletStat(
+      BuildContext context, String label, String value, AppState appState) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Column(

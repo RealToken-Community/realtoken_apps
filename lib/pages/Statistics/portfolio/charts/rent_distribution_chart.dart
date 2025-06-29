@@ -43,7 +43,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -53,7 +53,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -75,9 +75,12 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
                 DropdownButton<String>(
                   value: _selectedFilter,
                   items: [
-                    DropdownMenuItem(value: 'Country', child: Text(S.of(context).country)),
-                    DropdownMenuItem(value: 'Region', child: Text(S.of(context).region)),
-                    DropdownMenuItem(value: 'City', child: Text(S.of(context).city)),
+                    DropdownMenuItem(
+                        value: 'Country', child: Text(S.of(context).country)),
+                    DropdownMenuItem(
+                        value: 'Region', child: Text(S.of(context).region)),
+                    DropdownMenuItem(
+                        value: 'City', child: Text(S.of(context).city)),
                   ],
                   onChanged: (String? value) {
                     setState(() {
@@ -104,17 +107,22 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
                           sectionsSpace: 3,
                           borderData: FlBorderData(show: false),
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
-                              if (response != null && response.touchedSection != null) {
-                                final touchedIndex = response.touchedSection!.touchedSectionIndex;
-                                _selectedIndexNotifier.value = touchedIndex >= 0 ? touchedIndex : null;
+                            touchCallback: (FlTouchEvent event,
+                                PieTouchResponse? response) {
+                              if (response != null &&
+                                  response.touchedSection != null) {
+                                final touchedIndex = response
+                                    .touchedSection!.touchedSectionIndex;
+                                _selectedIndexNotifier.value =
+                                    touchedIndex >= 0 ? touchedIndex : null;
                               } else {
                                 _selectedIndexNotifier.value = null;
                               }
                             },
                           ),
                         ),
-                        swapAnimationDuration: const Duration(milliseconds: 300),
+                        swapAnimationDuration:
+                            const Duration(milliseconds: 300),
                         swapAnimationCurve: Curves.easeInOutCubic,
                       ),
                       _buildCenterText(selectedIndex),
@@ -152,7 +160,8 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
         key = S.of(context).unknown;
       }
 
-      groupedData[key] = (groupedData[key] ?? 0) + (token['monthlyIncome'] ?? 0.0);
+      groupedData[key] =
+          (groupedData[key] ?? 0) + (token['monthlyIncome'] ?? 0.0);
     }
 
     return groupedData;
@@ -167,13 +176,14 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
         PieChartSectionData(
           value: 1,
           title: '',
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           radius: 40,
         )
       ];
     }
 
-    final sortedEntries = groupedData.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = groupedData.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     return sortedEntries.asMap().entries.map((entry) {
       final index = entry.key;
@@ -186,15 +196,17 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
       return PieChartSectionData(
         value: data.value,
         title: percentage < 5 ? '' : '${percentage.toStringAsFixed(1)}%',
-        color: generateColor(index).withOpacity(opacity),
+        color: generateColor(index).withValues(alpha: opacity),
         radius: isSelected ? 52 : 45,
         titleStyle: TextStyle(
-          fontSize: isSelected ? 14 + Provider.of<AppState>(context).getTextSizeOffset() : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
+          fontSize: isSelected
+              ? 14 + Provider.of<AppState>(context).getTextSizeOffset()
+              : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
           color: Colors.white,
           fontWeight: FontWeight.w600,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(1, 1),
             ),
@@ -219,7 +231,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -247,7 +259,8 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
           ),
           const SizedBox(height: 4),
           Text(
-            currencyUtils.getFormattedAmount(currencyUtils.convert(totalRent), currencyUtils.currencySymbol, true),
+            currencyUtils.getFormattedAmount(currencyUtils.convert(totalRent),
+                currencyUtils.currencySymbol, true),
             style: TextStyle(
               fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
               color: Colors.grey.shade600,
@@ -259,7 +272,8 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
     }
 
     // Obtenir l'entrée sélectionnée
-    final sortedEntries = groupedData.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = groupedData.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     if (selectedIndex >= sortedEntries.length) return Container();
 
@@ -279,7 +293,10 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
         ),
         const SizedBox(height: 4),
         Text(
-          currencyUtils.getFormattedAmount(currencyUtils.convert(selectedEntry.value), currencyUtils.currencySymbol, true),
+          currencyUtils.getFormattedAmount(
+              currencyUtils.convert(selectedEntry.value),
+              currencyUtils.currencySymbol,
+              true),
           style: TextStyle(
             fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
             color: Colors.grey.shade600,
@@ -295,7 +312,8 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
     final appState = Provider.of<AppState>(context);
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
 
-    final sortedEntries = groupedData.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = groupedData.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     return Wrap(
       spacing: 8.0,
@@ -308,16 +326,21 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
 
         return InkWell(
           onTap: () {
-            _selectedIndexNotifier.value = (_selectedIndexNotifier.value == index) ? null : index;
+            _selectedIndexNotifier.value =
+                (_selectedIndexNotifier.value == index) ? null : index;
           },
           borderRadius: BorderRadius.circular(8),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifier.value == index ? color.withOpacity(0.1) : Colors.transparent,
+              color: _selectedIndexNotifier.value == index
+                  ? color.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: _selectedIndexNotifier.value == index ? color : Colors.transparent,
+                color: _selectedIndexNotifier.value == index
+                    ? color
+                    : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -332,7 +355,7 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 2,
                         offset: const Offset(1, 1),
                       ),
@@ -341,11 +364,15 @@ class _RentDistributionChartState extends State<RentDistributionChart> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '${data.key}',
+                  data.key,
                   style: TextStyle(
                     fontSize: 12 + appState.getTextSizeOffset(),
-                    color: _selectedIndexNotifier.value == index ? color : Theme.of(context).textTheme.bodyMedium?.color,
-                    fontWeight: _selectedIndexNotifier.value == index ? FontWeight.w600 : FontWeight.normal,
+                    color: _selectedIndexNotifier.value == index
+                        ? color
+                        : Theme.of(context).textTheme.bodyMedium?.color,
+                    fontWeight: _selectedIndexNotifier.value == index
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
               ],

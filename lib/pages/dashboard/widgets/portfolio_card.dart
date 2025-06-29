@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
@@ -8,7 +7,6 @@ import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:realtoken_asset_tracker/utils/parameters.dart';
 import 'package:realtoken_asset_tracker/utils/widget_factory.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:realtoken_asset_tracker/settings/personalization_settings_page.dart';
 import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/portfolio_details_page.dart';
 import 'package:realtoken_asset_tracker/utils/shimmer_utils.dart';
@@ -41,7 +39,10 @@ class PortfolioCard extends StatelessWidget {
             dataManager.totalUsdcBorrowBalance -
             dataManager.totalXdaiBorrowBalance +
             Parameters.manualAdjustment
-        : dataManager.walletValue + dataManager.rmmValue + dataManager.rwaHoldingsValue + Parameters.manualAdjustment;
+        : dataManager.walletValue +
+            dataManager.rmmValue +
+            dataManager.rwaHoldingsValue +
+            Parameters.manualAdjustment;
 
     // Calcul du total sans les dépôts et emprunts si showNetTotal est false
     double portfolioDisplayValue = Parameters.showNetTotal
@@ -52,23 +53,31 @@ class PortfolioCard extends StatelessWidget {
             dataManager.totalUsdcBorrowBalance -
             dataManager.totalXdaiBorrowBalance +
             Parameters.manualAdjustment
-        : dataManager.yamTotalValue + dataManager.rwaHoldingsValue + Parameters.manualAdjustment;
+        : dataManager.yamTotalValue +
+            dataManager.rwaHoldingsValue +
+            Parameters.manualAdjustment;
 
     // Calcul du pourcentage de rendement par rapport à l'investissement total
-    double percentageYam = ((portfolioDisplayValue / totalPortfolioValue - 1) * 100);
-    String percentageYamDisplay = percentageYam.isNaN || percentageYam.isInfinite ? '0' : percentageYam.toStringAsFixed(0);
+    double percentageYam =
+        ((portfolioDisplayValue / totalPortfolioValue - 1) * 100);
+    String percentageYamDisplay =
+        percentageYam.isNaN || percentageYam.isInfinite
+            ? '0'
+            : percentageYam.toStringAsFixed(0);
 
     // Calculer le nombre d'éléments visibles pour estimer la hauteur minimale
     int visibleSections = 2; // Toujours afficher la section "Actifs"
-    if (Parameters.showNetTotal) visibleSections++; // Section "Dépôts & Emprunts"
-    if (Parameters.manualAdjustment != 0) visibleSections++; // Section "Ajustements"
+    if (Parameters.showNetTotal)
+      visibleSections++; // Section "Dépôts & Emprunts"
+    if (Parameters.manualAdjustment != 0)
+      visibleSections++; // Section "Ajustements"
     if (Parameters.showTotalInvested) visibleSections++; // Total investi
 
     // Hauteur minimale basée sur le nombre de sections visibles
     double minHeight = 220.0; // Hauteur de base
-    if (visibleSections <= 2)
+    if (visibleSections <= 2) {
       minHeight = 220.0; // Hauteur minimale pour peu de contenu
-    else if (visibleSections == 3)
+    } else if (visibleSections == 3)
       minHeight = 240.0;
     else
       minHeight = 260.0;
@@ -83,7 +92,10 @@ class PortfolioCard extends StatelessWidget {
         Parameters.showYamProjection
             ? UIUtils.buildValueBeforeText(
                 context,
-                currencyUtils.getFormattedAmount(currencyUtils.convert(portfolioDisplayValue), currencyUtils.currencySymbol, showAmounts),
+                currencyUtils.getFormattedAmount(
+                    currencyUtils.convert(portfolioDisplayValue),
+                    currencyUtils.currencySymbol,
+                    showAmounts),
                 '${S.of(context).projection} YAM ($percentageYamDisplay%)',
                 isLoading,
                 highlightPercentage: true,
@@ -91,15 +103,27 @@ class PortfolioCard extends StatelessWidget {
             : const SizedBox.shrink(),
         [
           // Section des totaux - mise en évidence avec un style particulier
-          WidgetFactory.buildSectionHeader(context, S.of(context).totalPortfolio),
-          _buildTotalValue(context, currencyUtils.getFormattedAmount(currencyUtils.convert(totalPortfolioValue), currencyUtils.currencySymbol, showAmounts), isLoading, theme,
+          WidgetFactory.buildSectionHeader(
+              context, S.of(context).totalPortfolio),
+          _buildTotalValue(
+              context,
+              currencyUtils.getFormattedAmount(
+                  currencyUtils.convert(totalPortfolioValue),
+                  currencyUtils.currencySymbol,
+                  showAmounts),
+              isLoading,
+              theme,
               showNetLabel: Parameters.showNetTotal),
 
           // Ajout du total investi si l'option est activée
           if (Parameters.showTotalInvested)
             _buildSubtotalValue(
                 context,
-                currencyUtils.getFormattedAmount(currencyUtils.convert(dataManager.initialTotalValue + Parameters.initialInvestmentAdjustment), currencyUtils.currencySymbol, showAmounts),
+                currencyUtils.getFormattedAmount(
+                    currencyUtils.convert(dataManager.initialTotalValue +
+                        Parameters.initialInvestmentAdjustment),
+                    currencyUtils.currencySymbol,
+                    showAmounts),
                 S.of(context).initialInvestment,
                 isLoading,
                 theme),
@@ -108,26 +132,63 @@ class PortfolioCard extends StatelessWidget {
 
           // Section des actifs - avec titre de section
           WidgetFactory.buildSectionHeader(context, S.of(context).assets),
-          _buildIndentedBalance(S.of(context).wallet, currencyUtils.convert(dataManager.walletValue), currencyUtils.currencySymbol, true, context, isLoading),
-          _buildIndentedBalance(S.of(context).rmm, currencyUtils.convert(dataManager.rmmValue), currencyUtils.currencySymbol, true, context, isLoading),
-          _buildIndentedBalance(S.of(context).rwaHoldings, currencyUtils.convert(dataManager.rwaHoldingsValue), currencyUtils.currencySymbol, true, context, isLoading),
+          _buildIndentedBalance(
+              S.of(context).wallet,
+              currencyUtils.convert(dataManager.walletValue),
+              currencyUtils.currencySymbol,
+              true,
+              context,
+              isLoading),
+          _buildIndentedBalance(
+              S.of(context).rmm,
+              currencyUtils.convert(dataManager.rmmValue),
+              currencyUtils.currencySymbol,
+              true,
+              context,
+              isLoading),
+          _buildIndentedBalance(
+              S.of(context).rwaHoldings,
+              currencyUtils.convert(dataManager.rwaHoldingsValue),
+              currencyUtils.currencySymbol,
+              true,
+              context,
+              isLoading),
 
           if (Parameters.showNetTotal) ...[
             const SizedBox(height: 3), // Réduit de 6 à 3
             // Section des dépôts et emprunts - avec titre de section
-            WidgetFactory.buildSectionHeader(context, S.of(context).depositsAndLoans),
+            WidgetFactory.buildSectionHeader(
+                context, S.of(context).depositsAndLoans),
             _buildIndentedBalance(
-                S.of(context).depositBalance, currencyUtils.convert(dataManager.totalUsdcDepositBalance + dataManager.totalXdaiDepositBalance), currencyUtils.currencySymbol, true, context, isLoading),
+                S.of(context).depositBalance,
+                currencyUtils.convert(dataManager.totalUsdcDepositBalance +
+                    dataManager.totalXdaiDepositBalance),
+                currencyUtils.currencySymbol,
+                true,
+                context,
+                isLoading),
             _buildIndentedBalance(
-                S.of(context).borrowBalance, currencyUtils.convert(dataManager.totalUsdcBorrowBalance + dataManager.totalXdaiBorrowBalance), currencyUtils.currencySymbol, false, context, isLoading),
+                S.of(context).borrowBalance,
+                currencyUtils.convert(dataManager.totalUsdcBorrowBalance +
+                    dataManager.totalXdaiBorrowBalance),
+                currencyUtils.currencySymbol,
+                false,
+                context,
+                isLoading),
           ],
 
           // Affichage de l'ajustement manuel si différent de zéro
           if (Parameters.manualAdjustment != 0) ...[
             const SizedBox(height: 3), // Réduit de 6 à 3
-            WidgetFactory.buildSectionHeader(context, S.of(context).adjustments),
+            WidgetFactory.buildSectionHeader(
+                context, S.of(context).adjustments),
             _buildIndentedBalance(
-                S.of(context).manualAdjustment, currencyUtils.convert(Parameters.manualAdjustment), currencyUtils.currencySymbol, Parameters.manualAdjustment > 0, context, isLoading),
+                S.of(context).manualAdjustment,
+                currencyUtils.convert(Parameters.manualAdjustment),
+                currencyUtils.currencySymbol,
+                Parameters.manualAdjustment > 0,
+                context,
+                isLoading),
           ],
 
           // Ajouter un espace pour assurer une hauteur minimale si nécessaire
@@ -136,7 +197,8 @@ class PortfolioCard extends StatelessWidget {
         dataManager,
         context,
         hasGraph: true,
-        rightWidget: _buildVerticalGauge(dataManager.roiGlobalValue, context, visibleSections),
+        rightWidget: _buildVerticalGauge(
+            dataManager.roiGlobalValue, context, visibleSections),
         headerRightWidget: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -155,7 +217,9 @@ class PortfolioCard extends StatelessWidget {
                     child: Icon(
                       Icons.settings_outlined,
                       size: 20,
-                      color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black54
+                          : Colors.white70,
                     ),
                   ),
                   onTap: () {
@@ -164,7 +228,7 @@ class PortfolioCard extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: 36,
               width: 36,
               child: Material(
@@ -177,7 +241,9 @@ class PortfolioCard extends StatelessWidget {
                     child: Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 16,
-                      color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black54
+                          : Colors.white70,
                     ),
                   ),
                   onTap: () {
@@ -220,7 +286,7 @@ class PortfolioCard extends StatelessWidget {
                   width: 40,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Colors.grey.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2.5),
                   ),
                 ),
@@ -235,21 +301,28 @@ class PortfolioCard extends StatelessWidget {
     );
   }
 
-
-
-  Widget _buildTotalValue(BuildContext context, String formattedAmount, bool isLoading, ThemeData theme, {bool showNetLabel = false}) {
+  Widget _buildTotalValue(BuildContext context, String formattedAmount,
+      bool isLoading, ThemeData theme,
+      {bool showNetLabel = false}) {
     final dataManager = Provider.of<DataManager>(context, listen: false);
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
-    
+
     // Calculer le montant brut
-    double grossValue = dataManager.walletValue + dataManager.rmmValue + dataManager.rwaHoldingsValue + Parameters.manualAdjustment;
-    String grossFormattedAmount = currencyUtils.getFormattedAmount(currencyUtils.convert(grossValue), currencyUtils.currencySymbol, showAmounts);
+    double grossValue = dataManager.walletValue +
+        dataManager.rmmValue +
+        dataManager.rwaHoldingsValue +
+        Parameters.manualAdjustment;
+    String grossFormattedAmount = currencyUtils.getFormattedAmount(
+        currencyUtils.convert(grossValue),
+        currencyUtils.currencySymbol,
+        showAmounts);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 6.0, right: 6.0, top: 1, bottom: 2),
+          padding:
+              const EdgeInsets.only(left: 6.0, right: 6.0, top: 1, bottom: 2),
           child: Row(
             children: [
               isLoading
@@ -257,7 +330,9 @@ class PortfolioCard extends StatelessWidget {
                       child: Text(
                         formattedAmount,
                         style: TextStyle(
-                          fontSize: 18 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                          fontSize: 18 +
+                              Provider.of<AppState>(context, listen: false)
+                                  .getTextSizeOffset(),
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.5,
                           color: theme.primaryColor,
@@ -268,7 +343,9 @@ class PortfolioCard extends StatelessWidget {
                   : Text(
                       formattedAmount,
                       style: TextStyle(
-                        fontSize: 18 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                        fontSize: 18 +
+                            Provider.of<AppState>(context, listen: false)
+                                .getTextSizeOffset(),
                         fontWeight: FontWeight.bold,
                         letterSpacing: -0.5,
                         color: theme.primaryColor,
@@ -279,13 +356,15 @@ class PortfolioCard extends StatelessWidget {
                   margin: EdgeInsets.only(left: 8),
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.15),
+                    color: theme.primaryColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     "net",
                     style: TextStyle(
-                      fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                      fontSize: 12 +
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset(),
                       fontWeight: FontWeight.w500,
                       color: theme.primaryColor,
                     ),
@@ -302,25 +381,32 @@ class PortfolioCard extends StatelessWidget {
                 Text(
                   grossFormattedAmount,
                   style: TextStyle(
-                    fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 14 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.w500,
                     letterSpacing: -0.3,
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                    color: theme.textTheme.bodyMedium?.color
+                        ?.withValues(alpha: 0.7),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 8),
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.1),
+                    color: theme.textTheme.bodyMedium?.color
+                        ?.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     "brut",
                     style: TextStyle(
-                      fontSize: 11 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                      fontSize: 11 +
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset(),
                       fontWeight: FontWeight.w500,
-                      color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                      color: theme.textTheme.bodyMedium?.color
+                          ?.withValues(alpha: 0.7),
                     ),
                   ),
                 ),
@@ -331,7 +417,8 @@ class PortfolioCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSubtotalValue(BuildContext context, String formattedAmount, String label, bool isLoading, ThemeData theme) {
+  Widget _buildSubtotalValue(BuildContext context, String formattedAmount,
+      String label, bool isLoading, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.only(left: 12.0, top: 1, bottom: 1),
       child: Row(
@@ -341,7 +428,9 @@ class PortfolioCard extends StatelessWidget {
                   child: Text(
                     formattedAmount,
                     style: TextStyle(
-                      fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                      fontSize: 14 +
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset(),
                       fontWeight: FontWeight.w500,
                       letterSpacing: -0.3,
                       color: theme.textTheme.bodyMedium?.color,
@@ -352,7 +441,9 @@ class PortfolioCard extends StatelessWidget {
               : Text(
                   formattedAmount,
                   style: TextStyle(
-                    fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 14 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.w500,
                     letterSpacing: -0.3,
                     color: theme.textTheme.bodyMedium?.color,
@@ -362,9 +453,11 @@ class PortfolioCard extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+              fontSize: 12 +
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset(),
               letterSpacing: -0.2,
-              color: theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -372,13 +465,17 @@ class PortfolioCard extends StatelessWidget {
     );
   }
 
-  Widget _buildIndentedBalance(String label, double value, String symbol, bool isPositive, BuildContext context, bool isLoading) {
+  Widget _buildIndentedBalance(String label, double value, String symbol,
+      bool isPositive, BuildContext context, bool isLoading) {
     final appState = Provider.of<AppState>(context, listen: false);
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
     final theme = Theme.of(context);
 
-    String formattedAmount =
-        showAmounts ? (isPositive ? "+ ${currencyUtils.formatCurrency(value, symbol)}" : "- ${currencyUtils.formatCurrency(value, symbol)}") : (isPositive ? "+ " : "- ") + ('*' * 10);
+    String formattedAmount = showAmounts
+        ? (isPositive
+            ? "+ ${currencyUtils.formatCurrency(value, symbol)}"
+            : "- ${currencyUtils.formatCurrency(value, symbol)}")
+        : (isPositive ? "+ " : "- ") + ('*' * 10);
 
     Color valueColor = isPositive
         ? Color(0xFF34C759) // Vert iOS
@@ -393,7 +490,9 @@ class PortfolioCard extends StatelessWidget {
                   child: Text(
                     formattedAmount,
                     style: TextStyle(
-                      fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                      fontSize: 13 +
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset(),
                       fontWeight: FontWeight.w600,
                       letterSpacing: -0.3,
                       color: valueColor,
@@ -404,7 +503,9 @@ class PortfolioCard extends StatelessWidget {
               : Text(
                   formattedAmount,
                   style: TextStyle(
-                    fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 13 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.3,
                     color: valueColor,
@@ -416,7 +517,9 @@ class PortfolioCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 13 + appState.getTextSizeOffset(),
               letterSpacing: -0.2,
-              color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+              color: theme.brightness == Brightness.light
+                  ? Colors.black54
+                  : Colors.white70,
             ),
           ),
         ],
@@ -424,7 +527,8 @@ class PortfolioCard extends StatelessWidget {
     );
   }
 
-  Widget _buildVerticalGauge(double value, BuildContext context, int visibleSections) {
+  Widget _buildVerticalGauge(
+      double value, BuildContext context, int visibleSections) {
     // Récupérer directement du DataManager pour les calculs
     final dataManager = Provider.of<DataManager>(context, listen: false);
     final theme = Theme.of(context);
@@ -432,7 +536,8 @@ class PortfolioCard extends StatelessWidget {
     // Utiliser la méthode d'origine qui calcule le ROI basé sur les loyers reçus
     // ROI = (Total des loyers reçus / Investissement initial) * 100
     double totalRentReceived = dataManager.getTotalRentReceived();
-    double initialInvestment = dataManager.initialTotalValue + Parameters.initialInvestmentAdjustment;
+    double initialInvestment =
+        dataManager.initialTotalValue + Parameters.initialInvestmentAdjustment;
 
     // Vérifier si l'investissement initial est valide pour éviter la division par zéro
     double displayValue = 0.0;
@@ -456,16 +561,17 @@ class PortfolioCard extends StatelessWidget {
 
     // Ajuster la hauteur de la jauge en fonction du nombre de sections visibles
     double gaugeHeight = 90.0; // Hauteur par défaut
-    if (visibleSections <= 2)
+    if (visibleSections <= 2) {
       gaugeHeight = 75.0;
-    else if (visibleSections == 3)
+    } else if (visibleSections == 3)
       gaugeHeight = 120.0;
     else
       gaugeHeight = 160.0;
 
-    double containerHeight = gaugeHeight + 50; // Ajouter de l'espace pour le texte et les marges
+    double containerHeight =
+        gaugeHeight + 50; // Ajouter de l'espace pour le texte et les marges
 
-    return Container(
+    return SizedBox(
       width: 90,
       height: containerHeight,
       child: Column(
@@ -477,7 +583,9 @@ class PortfolioCard extends StatelessWidget {
               Text(
                 'ROI',
                 style: TextStyle(
-                  fontSize: 15 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 15 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.3,
                   color: theme.textTheme.bodyMedium?.color,
@@ -510,7 +618,9 @@ class PortfolioCard extends StatelessWidget {
                 child: Icon(
                   Icons.info_outline,
                   size: 14,
-                  color: theme.brightness == Brightness.light ? Colors.black38 : Colors.white38,
+                  color: theme.brightness == Brightness.light
+                      ? Colors.black38
+                      : Colors.white38,
                 ),
               ),
             ],
@@ -521,7 +631,9 @@ class PortfolioCard extends StatelessWidget {
             width: 26,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(13),
-              color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+              color: theme.brightness == Brightness.light
+                  ? Colors.black.withValues(alpha: 0.05)
+                  : Colors.white.withValues(alpha: 0.1),
             ),
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -530,8 +642,10 @@ class PortfolioCard extends StatelessWidget {
                 width: 26,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: progress > 0.95 ? Radius.circular(13) : Radius.zero,
-                    topRight: progress > 0.95 ? Radius.circular(13) : Radius.zero,
+                    topLeft:
+                        progress > 0.95 ? Radius.circular(13) : Radius.zero,
+                    topRight:
+                        progress > 0.95 ? Radius.circular(13) : Radius.zero,
                     bottomLeft: Radius.circular(13),
                     bottomRight: Radius.circular(13),
                   ),
@@ -544,13 +658,17 @@ class PortfolioCard extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: theme.primaryColor.withOpacity(0.15),
+              color: theme.primaryColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              displayValue >= 3650 ? "∞" : "${displayValue.toStringAsFixed(1)}%",
+              displayValue >= 3650
+                  ? "∞"
+                  : "${displayValue.toStringAsFixed(1)}%",
               style: TextStyle(
-                fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                fontSize: 13 +
+                    Provider.of<AppState>(context, listen: false)
+                        .getTextSizeOffset(),
                 fontWeight: FontWeight.bold,
                 color: theme.primaryColor,
               ),

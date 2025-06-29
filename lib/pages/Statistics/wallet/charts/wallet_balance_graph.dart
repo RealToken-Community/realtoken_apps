@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
@@ -14,7 +13,8 @@ class EditableBalanceRecord {
   final TextEditingController valueController;
   final TextEditingController dateController;
 
-  EditableBalanceRecord(this.original, this.valueController, this.dateController);
+  EditableBalanceRecord(
+      this.original, this.valueController, this.dateController);
 }
 
 class WalletBalanceGraph extends StatefulWidget {
@@ -55,23 +55,25 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
     super.dispose();
   }
 
-  List<EditableBalanceRecord> _createEditableRecords(List<BalanceRecord> records) {
+  List<EditableBalanceRecord> _createEditableRecords(
+      List<BalanceRecord> records) {
     return records.map((record) {
       return EditableBalanceRecord(
         record,
         TextEditingController(text: record.balance.toStringAsFixed(2)),
-        TextEditingController(text: DateFormat('yyyy-MM-dd HH:mm:ss').format(record.timestamp)),
+        TextEditingController(
+            text: DateFormat('yyyy-MM-dd HH:mm:ss').format(record.timestamp)),
       );
     }).toList();
   }
 
-  void _updateBalanceValue(DataManager dataManager, EditableBalanceRecord editableRecord, double newValue) {
+  void _updateBalanceValue(DataManager dataManager,
+      EditableBalanceRecord editableRecord, double newValue) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.walletBalanceHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.balance == editableRecord.original.balance
-    );
-    
+    final index = dataManager.walletBalanceHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.balance == editableRecord.original.balance);
+
     if (index != -1) {
       // Créer un nouvel enregistrement avec la valeur mise à jour
       final updatedRecord = BalanceRecord(
@@ -79,21 +81,21 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
         balance: newValue,
         tokenType: editableRecord.original.tokenType,
       );
-      
+
       // Mettre à jour la liste
       dataManager.walletBalanceHistory[index] = updatedRecord;
       // Mettre à jour l'original dans l'enregistrement éditable
       editableRecord.original = updatedRecord;
-      
+
       // Sauvegarder dans Hive
       dataManager.saveWalletBalanceHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Mettre à jour l'enregistrement éditable
       editableRecord.valueController.text = newValue.toStringAsFixed(2);
-      
+
       // Pour le débogage
       print('Balance mise à jour à l\'index $index: $newValue');
     } else {
@@ -101,13 +103,13 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
     }
   }
 
-  void _updateBalanceDate(DataManager dataManager, EditableBalanceRecord editableRecord, DateTime newDate) {
+  void _updateBalanceDate(DataManager dataManager,
+      EditableBalanceRecord editableRecord, DateTime newDate) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.walletBalanceHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.balance == editableRecord.original.balance
-    );
-    
+    final index = dataManager.walletBalanceHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.balance == editableRecord.original.balance);
+
     if (index != -1) {
       // Créer un nouvel enregistrement avec la date mise à jour
       final updatedRecord = BalanceRecord(
@@ -115,53 +117,55 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
         balance: editableRecord.original.balance,
         tokenType: editableRecord.original.tokenType,
       );
-      
+
       // Mettre à jour la liste
       dataManager.walletBalanceHistory[index] = updatedRecord;
       // Mettre à jour l'original dans l'enregistrement éditable
       editableRecord.original = updatedRecord;
-      
+
       // Sauvegarder dans Hive
       dataManager.saveWalletBalanceHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Mettre à jour l'enregistrement éditable
-      editableRecord.dateController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(newDate);
-      
+      editableRecord.dateController.text =
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(newDate);
+
       // Pour le débogage
-      print('Date balance mise à jour à l\'index $index: ${newDate.toIso8601String()}');
+      print(
+          'Date balance mise à jour à l\'index $index: ${newDate.toIso8601String()}');
     } else {
       print('Enregistrement non trouvé pour la mise à jour de la date');
     }
   }
 
-  void _deleteBalanceRecord(DataManager dataManager, EditableBalanceRecord editableRecord, StateSetter setState) {
+  void _deleteBalanceRecord(DataManager dataManager,
+      EditableBalanceRecord editableRecord, StateSetter setState) {
     // Récupérer l'index de l'enregistrement original
-    final index = dataManager.walletBalanceHistory.indexWhere((r) => 
-      r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-      r.balance == editableRecord.original.balance
-    );
-    
+    final index = dataManager.walletBalanceHistory.indexWhere((r) =>
+        r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) &&
+        r.balance == editableRecord.original.balance);
+
     if (index != -1) {
       // Supprimer de la liste
       dataManager.walletBalanceHistory.removeAt(index);
-      
+
       // Sauvegarder dans Hive
       dataManager.saveWalletBalanceHistory();
-      
+
       // Notifier les écouteurs
       dataManager.notifyListeners();
-      
+
       // Pour le débogage
       print('Balance supprimée à l\'index $index');
-      
+
       // Recréer les enregistrements éditables
       setState(() {
         _editableRecords = _createEditableRecords(
-          List<BalanceRecord>.from(dataManager.walletBalanceHistory)..sort((a, b) => b.timestamp.compareTo(a.timestamp))
-        );
+            List<BalanceRecord>.from(dataManager.walletBalanceHistory)
+              ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
       });
     } else {
       print('Enregistrement non trouvé pour la suppression');
@@ -171,8 +175,8 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
   void _showEditModal(BuildContext context, DataManager dataManager) {
     // Créer des enregistrements éditables à partir des enregistrements triés
     _editableRecords = _createEditableRecords(
-      List<BalanceRecord>.from(dataManager.walletBalanceHistory)..sort((a, b) => b.timestamp.compareTo(a.timestamp))
-    );
+        List<BalanceRecord>.from(dataManager.walletBalanceHistory)
+          ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
 
     showModalBottomSheet(
       context: context,
@@ -194,7 +198,7 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, -1),
                   ),
@@ -210,7 +214,9 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                       Text(
                         S.of(context).editWalletBalance,
                         style: TextStyle(
-                          fontSize: 20 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                          fontSize: 20 +
+                              Provider.of<AppState>(context, listen: false)
+                                  .getTextSizeOffset(),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -229,7 +235,9 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                             child: Text(
                               "Aucun historique disponible",
                               style: TextStyle(
-                                fontSize: 16 + Provider.of<AppState>(context).getTextSizeOffset(),
+                                fontSize: 16 +
+                                    Provider.of<AppState>(context)
+                                        .getTextSizeOffset(),
                                 color: Colors.grey.shade600,
                               ),
                             ),
@@ -248,7 +256,9 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                                         S.of(context).date,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context)
+                                                  .getTextSizeOffset(),
                                         ),
                                       ),
                                     ),
@@ -260,7 +270,9 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                                         S.of(context).balance,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context)
+                                                  .getTextSizeOffset(),
                                         ),
                                       ),
                                     ),
@@ -272,7 +284,9 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                                         "Actions",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
+                                          fontSize: 14 +
+                                              Provider.of<AppState>(context)
+                                                  .getTextSizeOffset(),
                                         ),
                                         textAlign: TextAlign.right,
                                       ),
@@ -286,59 +300,86 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                                         SizedBox(
                                           width: 150,
                                           child: TextField(
-                                            controller: editableRecord.dateController,
-                                            keyboardType: TextInputType.datetime,
-                                            textInputAction: TextInputAction.done,
+                                            controller:
+                                                editableRecord.dateController,
+                                            keyboardType:
+                                                TextInputType.datetime,
+                                            textInputAction:
+                                                TextInputAction.done,
                                             style: TextStyle(
-                                              fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  Provider.of<AppState>(context)
+                                                      .getTextSizeOffset(),
                                             ),
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor: Colors.white,
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
-                                                  color: Theme.of(context).primaryColor,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                               ),
-                                              contentPadding: const EdgeInsets.symmetric(
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 12,
                                                 vertical: 8,
                                               ),
                                             ),
                                             onSubmitted: (value) {
                                               try {
-                                                DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(value);
-                                                _updateBalanceDate(dataManager, editableRecord, newDate);
-                                                FocusScope.of(context).unfocus();
+                                                DateTime newDate = DateFormat(
+                                                        'yyyy-MM-dd HH:mm:ss')
+                                                    .parse(value);
+                                                _updateBalanceDate(dataManager,
+                                                    editableRecord, newDate);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } catch (e) {
-                                                print('Erreur de format de date: $e');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Format de date invalide')),
+                                                print(
+                                                    'Erreur de format de date: $e');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Format de date invalide')),
                                                 );
                                               }
                                             },
                                             onEditingComplete: () {
                                               try {
-                                                DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(editableRecord.dateController.text);
-                                                _updateBalanceDate(dataManager, editableRecord, newDate);
-                                                FocusScope.of(context).unfocus();
+                                                DateTime newDate = DateFormat(
+                                                        'yyyy-MM-dd HH:mm:ss')
+                                                    .parse(editableRecord
+                                                        .dateController.text);
+                                                _updateBalanceDate(dataManager,
+                                                    editableRecord, newDate);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } catch (e) {
-                                                print('Erreur de format de date: $e');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Format de date invalide')),
+                                                print(
+                                                    'Erreur de format de date: $e');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Format de date invalide')),
                                                 );
                                               }
                                             },
@@ -349,62 +390,89 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                                         SizedBox(
                                           width: 100,
                                           child: TextField(
-                                            controller: editableRecord.valueController,
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                            textInputAction: TextInputAction.done,
+                                            controller:
+                                                editableRecord.valueController,
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(
+                                                decimal: true),
+                                            textInputAction:
+                                                TextInputAction.done,
                                             inputFormatters: [
-                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'^\d*\.?\d*')),
                                             ],
                                             style: TextStyle(
-                                              fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
+                                              fontSize: 14 +
+                                                  Provider.of<AppState>(context)
+                                                      .getTextSizeOffset(),
                                             ),
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor: Colors.white,
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 borderSide: BorderSide(
-                                                  color: Theme.of(context).primaryColor,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                 ),
                                               ),
-                                              contentPadding: const EdgeInsets.symmetric(
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 12,
                                                 vertical: 8,
                                               ),
                                             ),
                                             onSubmitted: (value) {
-                                              double? newValue = double.tryParse(value);
+                                              double? newValue =
+                                                  double.tryParse(value);
                                               if (newValue != null) {
-                                                _updateBalanceValue(dataManager, editableRecord, newValue);
-                                                FocusScope.of(context).unfocus();
+                                                _updateBalanceValue(dataManager,
+                                                    editableRecord, newValue);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } else {
-                                                print('Valeur non valide: $value');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Valeur non valide')),
+                                                print(
+                                                    'Valeur non valide: $value');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Valeur non valide')),
                                                 );
                                               }
                                             },
                                             onEditingComplete: () {
-                                              double? newValue = double.tryParse(editableRecord.valueController.text);
+                                              double? newValue =
+                                                  double.tryParse(editableRecord
+                                                      .valueController.text);
                                               if (newValue != null) {
-                                                _updateBalanceValue(dataManager, editableRecord, newValue);
-                                                FocusScope.of(context).unfocus();
+                                                _updateBalanceValue(dataManager,
+                                                    editableRecord, newValue);
+                                                FocusScope.of(context)
+                                                    .unfocus();
                                               } else {
-                                                print('Valeur non valide: ${editableRecord.valueController.text}');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Valeur non valide')),
+                                                print(
+                                                    'Valeur non valide: ${editableRecord.valueController.text}');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Valeur non valide')),
                                                 );
                                               }
                                             },
@@ -415,16 +483,23 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                                         SizedBox(
                                           width: 60,
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: [
                                               IconButton(
                                                 icon: Icon(
                                                   Icons.delete_outline,
                                                   color: Colors.red.shade700,
-                                                  size: 20 + Provider.of<AppState>(context).getTextSizeOffset(),
+                                                  size: 20 +
+                                                      Provider.of<AppState>(
+                                                              context)
+                                                          .getTextSizeOffset(),
                                                 ),
                                                 onPressed: () {
-                                                  _deleteBalanceRecord(dataManager, editableRecord, setState);
+                                                  _deleteBalanceRecord(
+                                                      dataManager,
+                                                      editableRecord,
+                                                      setState);
                                                 },
                                               ),
                                             ],
@@ -448,47 +523,58 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                           for (var editableRecord in _editableRecords) {
                             try {
                               // Mettre à jour la date
-                              final dateText = editableRecord.dateController.text;
-                              final DateTime newDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateText);
-                              
+                              final dateText =
+                                  editableRecord.dateController.text;
+                              final DateTime newDate =
+                                  DateFormat('yyyy-MM-dd HH:mm:ss')
+                                      .parse(dateText);
+
                               // Mettre à jour la valeur
-                              final valueText = editableRecord.valueController.text;
-                              final double? newValue = double.tryParse(valueText);
-                              
+                              final valueText =
+                                  editableRecord.valueController.text;
+                              final double? newValue =
+                                  double.tryParse(valueText);
+
                               if (newValue != null) {
                                 // Trouver l'index dans la liste originale
-                                final index = dataManager.walletBalanceHistory.indexWhere((r) => 
-                                  r.timestamp.isAtSameMomentAs(editableRecord.original.timestamp) && 
-                                  r.balance == editableRecord.original.balance
-                                );
-                                
+                                final index = dataManager.walletBalanceHistory
+                                    .indexWhere((r) =>
+                                        r.timestamp.isAtSameMomentAs(
+                                            editableRecord
+                                                .original.timestamp) &&
+                                        r.balance ==
+                                            editableRecord.original.balance);
+
                                 if (index != -1) {
                                   // Créer un nouvel enregistrement avec les nouvelles valeurs
                                   final updatedRecord = BalanceRecord(
                                     timestamp: newDate,
                                     balance: newValue,
-                                    tokenType: editableRecord.original.tokenType,
+                                    tokenType:
+                                        editableRecord.original.tokenType,
                                   );
-                                  
+
                                   // Mettre à jour la liste
-                                  dataManager.walletBalanceHistory[index] = updatedRecord;
-                                  print('Mise à jour index $index: ${newDate.toIso8601String()} -> $newValue');
+                                  dataManager.walletBalanceHistory[index] =
+                                      updatedRecord;
+                                  print(
+                                      'Mise à jour index $index: ${newDate.toIso8601String()} -> $newValue');
                                 }
                               }
                             } catch (e) {
                               print('Erreur lors de la mise à jour: $e');
                             }
                           }
-                          
+
                           // Sauvegarder dans Hive
                           dataManager.saveWalletBalanceHistory();
-                          
+
                           // Notifier les écouteurs
                           dataManager.notifyListeners();
-                          
+
                           // Fermer le modal
                           Navigator.pop(context);
-                          
+
                           // Forcer la mise à jour du widget parent
                           setState(() {});
                         },
@@ -504,7 +590,9 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
                         child: Text(
                           S.of(context).save,
                           style: TextStyle(
-                            fontSize: 16 + Provider.of<AppState>(context).getTextSizeOffset(),
+                            fontSize: 16 +
+                                Provider.of<AppState>(context)
+                                    .getTextSizeOffset(),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

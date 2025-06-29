@@ -43,7 +43,9 @@ class RentedHistoryGraph extends StatelessWidget {
             child: Text(
               S.of(context).noDataAvailable,
               style: TextStyle(
-                fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                fontSize: 16 +
+                    Provider.of<AppState>(context, listen: false)
+                        .getTextSizeOffset(),
                 color: Colors.grey.shade600,
               ),
             ),
@@ -53,9 +55,12 @@ class RentedHistoryGraph extends StatelessWidget {
     }
 
     // Récupérer les données pour les graphiques
-    List<FlSpot> rentedHistoryData = _buildRentedHistoryChartData(context, dataManager, selectedPeriod);
-    List<BarChartGroupData> barChartData = _buildRentedHistoryBarChartData(context, dataManager, selectedPeriod);
-    List<String> dateLabels = _buildDateLabelsForRented(context, dataManager, selectedPeriod);
+    List<FlSpot> rentedHistoryData =
+        _buildRentedHistoryChartData(context, dataManager, selectedPeriod);
+    List<BarChartGroupData> barChartData =
+        _buildRentedHistoryBarChartData(context, dataManager, selectedPeriod);
+    List<String> dateLabels =
+        _buildDateLabelsForRented(context, dataManager, selectedPeriod);
 
     return Card(
       elevation: 0,
@@ -68,7 +73,7 @@ class RentedHistoryGraph extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -78,7 +83,7 @@ class RentedHistoryGraph extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -104,7 +109,8 @@ class RentedHistoryGraph extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   ),
                   style: IconButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                    backgroundColor:
+                        Theme.of(context).primaryColor.withValues(alpha: 0.1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -131,7 +137,8 @@ class RentedHistoryGraph extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 12.0, left: 8.0),
+                                padding: const EdgeInsets.only(
+                                    bottom: 12.0, left: 8.0),
                                 child: Text(
                                   "Type de graphique",
                                   style: TextStyle(
@@ -217,7 +224,7 @@ class RentedHistoryGraph extends StatelessWidget {
                               drawVerticalLine: false,
                               getDrawingHorizontalLine: (value) {
                                 return FlLine(
-                                  color: Colors.grey.withOpacity(0.15),
+                                  color: Colors.grey.withValues(alpha: 0.15),
                                   strokeWidth: 1,
                                 );
                               },
@@ -229,7 +236,8 @@ class RentedHistoryGraph extends StatelessWidget {
                                   reservedSize: 45,
                                   getTitlesWidget: (value, meta) {
                                     return Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
                                       child: Text(
                                         '${value.toStringAsFixed(0)}%',
                                         style: TextStyle(
@@ -245,9 +253,11 @@ class RentedHistoryGraph extends StatelessWidget {
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
-                                    if (value.toInt() >= 0 && value.toInt() < dateLabels.length) {
+                                    if (value.toInt() >= 0 &&
+                                        value.toInt() < dateLabels.length) {
                                       return Padding(
-                                        padding: const EdgeInsets.only(top: 10.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
                                         child: Transform.rotate(
                                           angle: -0.5,
                                           child: Text(
@@ -282,11 +292,12 @@ class RentedHistoryGraph extends StatelessWidget {
                                     toY: group.barRods.first.toY,
                                     color: const Color(0xFF007AFF),
                                     width: 12,
-                                    borderRadius: const BorderRadius.all(Radius.circular(6)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(6)),
                                     backDrawRodData: BackgroundBarChartRodData(
                                       show: true,
                                       toY: 100,
-                                      color: Colors.grey.withOpacity(0.1),
+                                      color: Colors.grey.withValues(alpha: 0.1),
                                     ),
                                   ),
                                 ],
@@ -294,7 +305,8 @@ class RentedHistoryGraph extends StatelessWidget {
                             }).toList(),
                             barTouchData: BarTouchData(
                               touchTooltipData: BarTouchTooltipData(
-                                getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                                getTooltipItem:
+                                    (group, groupIndex, rod, rodIndex) {
                                   final periodLabel = dateLabels[groupIndex];
                                   return BarTooltipItem(
                                     '$periodLabel\n${rod.toY.toStringAsFixed(1)}%',
@@ -320,26 +332,30 @@ class RentedHistoryGraph extends StatelessWidget {
                               drawVerticalLine: false,
                               getDrawingHorizontalLine: (value) {
                                 return FlLine(
-                                  color: Colors.grey.withOpacity(0.15),
+                                  color: Colors.grey.withValues(alpha: 0.15),
                                   strokeWidth: 1,
                                 );
                               },
                             ),
                             titlesData: FlTitlesData(
-                              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                              topTitles: AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false)),
                               leftTitles: AxisTitles(
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   reservedSize: 45,
                                   getTitlesWidget: (value, meta) {
-                                    final highestValue = rentedHistoryData.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+                                    final highestValue = rentedHistoryData
+                                        .map((e) => e.y)
+                                        .reduce((a, b) => a > b ? a : b);
 
                                     if (value == highestValue) {
                                       return const SizedBox.shrink();
                                     }
 
                                     return Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
                                       child: Text(
                                         '${value.toStringAsFixed(0)}%',
                                         style: TextStyle(
@@ -355,11 +371,15 @@ class RentedHistoryGraph extends StatelessWidget {
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
-                                    List<String> labels = _buildDateLabelsForRented(context, dataManager, selectedPeriod);
+                                    List<String> labels =
+                                        _buildDateLabelsForRented(context,
+                                            dataManager, selectedPeriod);
 
-                                    if (value.toInt() >= 0 && value.toInt() < labels.length) {
+                                    if (value.toInt() >= 0 &&
+                                        value.toInt() < labels.length) {
                                       return Padding(
-                                        padding: const EdgeInsets.only(top: 10.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
                                         child: Transform.rotate(
                                           angle: -0.5,
                                           child: Text(
@@ -392,7 +412,8 @@ class RentedHistoryGraph extends StatelessWidget {
                                 color: const Color(0xFF34C759),
                                 dotData: FlDotData(
                                   show: true,
-                                  getDotPainter: (spot, percent, barData, index) {
+                                  getDotPainter:
+                                      (spot, percent, barData, index) {
                                     return FlDotCirclePainter(
                                       radius: 3,
                                       color: Colors.white,
@@ -403,8 +424,13 @@ class RentedHistoryGraph extends StatelessWidget {
                                   checkToShowDot: (spot, barData) {
                                     // Montrer les points uniquement aux extrémités et points intermédiaires
                                     final isFirst = spot.x == 0;
-                                    final isLast = spot.x == barData.spots.length - 1;
-                                    final isInteresting = spot.x % (barData.spots.length > 10 ? 5 : 2) == 0;
+                                    final isLast =
+                                        spot.x == barData.spots.length - 1;
+                                    final isInteresting = spot.x %
+                                            (barData.spots.length > 10
+                                                ? 5
+                                                : 2) ==
+                                        0;
                                     return isFirst || isLast || isInteresting;
                                   },
                                 ),
@@ -412,8 +438,10 @@ class RentedHistoryGraph extends StatelessWidget {
                                   show: true,
                                   gradient: LinearGradient(
                                     colors: [
-                                      const Color(0xFF34C759).withOpacity(0.3),
-                                      const Color(0xFF34C759).withOpacity(0.05),
+                                      const Color(0xFF34C759)
+                                          .withValues(alpha: 0.3),
+                                      const Color(0xFF34C759)
+                                          .withValues(alpha: 0.05),
                                     ],
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
@@ -423,11 +451,14 @@ class RentedHistoryGraph extends StatelessWidget {
                             ],
                             lineTouchData: LineTouchData(
                               touchTooltipData: LineTouchTooltipData(
-                                getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                                getTooltipItems:
+                                    (List<LineBarSpot> touchedSpots) {
                                   return touchedSpots.map((touchedSpot) {
                                     final index = touchedSpot.x.toInt();
                                     final value = touchedSpot.y;
-                                    final String periodLabel = _buildDateLabelsForRented(context, dataManager, selectedPeriod)[index];
+                                    final String periodLabel =
+                                        _buildDateLabelsForRented(context,
+                                            dataManager, selectedPeriod)[index];
 
                                     return LineTooltipItem(
                                       '$periodLabel\n${value.toStringAsFixed(1)}%',
@@ -460,7 +491,8 @@ class RentedHistoryGraph extends StatelessWidget {
     );
   }
 
-  List<FlSpot> _buildRentedHistoryChartData(BuildContext context, DataManager dataManager, String selectedPeriod) {
+  List<FlSpot> _buildRentedHistoryChartData(
+      BuildContext context, DataManager dataManager, String selectedPeriod) {
     return ChartUtils.buildHistoryChartData<RentedRecord>(
       context,
       dataManager.rentedHistory,
@@ -470,8 +502,10 @@ class RentedHistoryGraph extends StatelessWidget {
     );
   }
 
-  List<BarChartGroupData> _buildRentedHistoryBarChartData(BuildContext context, DataManager dataManager, String selectedPeriod) {
-    List<FlSpot> rentedHistoryData = _buildRentedHistoryChartData(context, dataManager, selectedPeriod);
+  List<BarChartGroupData> _buildRentedHistoryBarChartData(
+      BuildContext context, DataManager dataManager, String selectedPeriod) {
+    List<FlSpot> rentedHistoryData =
+        _buildRentedHistoryChartData(context, dataManager, selectedPeriod);
     return rentedHistoryData
         .asMap()
         .entries
@@ -487,7 +521,7 @@ class RentedHistoryGraph extends StatelessWidget {
                 backDrawRodData: BackgroundBarChartRodData(
                   show: true,
                   toY: 100,
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withValues(alpha: 0.1),
                 ),
               ),
             ],
@@ -496,7 +530,8 @@ class RentedHistoryGraph extends StatelessWidget {
         .toList();
   }
 
-  List<String> _buildDateLabelsForRented(BuildContext context, DataManager dataManager, String selectedPeriod) {
+  List<String> _buildDateLabelsForRented(
+      BuildContext context, DataManager dataManager, String selectedPeriod) {
     List<RentedRecord> rentedHistory = dataManager.rentedHistory;
 
     // Grouper les données en fonction de la période sélectionnée
@@ -508,7 +543,8 @@ class RentedHistoryGraph extends StatelessWidget {
       if (selectedPeriod == S.of(context).day) {
         periodKey = DateFormat('yyyy/MM/dd').format(date); // Grouper par jour
       } else if (selectedPeriod == S.of(context).week) {
-        periodKey = "${date.year}-S${CustomDateUtils.weekNumber(date).toString().padLeft(2, '0')}";
+        periodKey =
+            "${date.year}-S${CustomDateUtils.weekNumber(date).toString().padLeft(2, '0')}";
       } else if (selectedPeriod == S.of(context).month) {
         periodKey = DateFormat('yyyy/MM').format(date);
       } else {
@@ -529,12 +565,10 @@ class RentedHistoryGraph extends StatelessWidget {
     final dataManager = Provider.of<DataManager>(context, listen: false);
 
     for (var token in dataManager.portfolio) {
-  
-      
       // Vérifier si le token a un revenu mensuel positif
       if (token['monthlyIncome'] != null) {
         double monthlyIncome = (token['monthlyIncome'] ?? 0.0).toDouble();
-        
+
         // Vérifier si la valeur est valide
         if (monthlyIncome > 0) {
           spots.add(FlSpot(index.toDouble(), monthlyIncome));
@@ -571,7 +605,7 @@ class RentedHistoryGraph extends StatelessWidget {
             backDrawRodData: BackgroundBarChartRodData(
               show: true,
               toY: _calculateMaxY(context),
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
             ),
           ),
         ],

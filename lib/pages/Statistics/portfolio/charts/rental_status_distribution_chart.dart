@@ -11,10 +11,12 @@ class RentalStatusDistributionChart extends StatefulWidget {
   const RentalStatusDistributionChart({super.key, required this.dataManager});
 
   @override
-  _RentalStatusDistributionChartState createState() => _RentalStatusDistributionChartState();
+  _RentalStatusDistributionChartState createState() =>
+      _RentalStatusDistributionChartState();
 }
 
-class _RentalStatusDistributionChartState extends State<RentalStatusDistributionChart> {
+class _RentalStatusDistributionChartState
+    extends State<RentalStatusDistributionChart> {
   final ValueNotifier<int?> _selectedIndexNotifier = ValueNotifier<int?>(null);
 
   @override
@@ -32,7 +34,7 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -42,7 +44,7 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -74,17 +76,22 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
                           sectionsSpace: 3,
                           borderData: FlBorderData(show: false),
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
-                              if (response != null && response.touchedSection != null) {
-                                final touchedIndex = response.touchedSection!.touchedSectionIndex;
-                                _selectedIndexNotifier.value = touchedIndex >= 0 ? touchedIndex : null;
+                            touchCallback: (FlTouchEvent event,
+                                PieTouchResponse? response) {
+                              if (response != null &&
+                                  response.touchedSection != null) {
+                                final touchedIndex = response
+                                    .touchedSection!.touchedSectionIndex;
+                                _selectedIndexNotifier.value =
+                                    touchedIndex >= 0 ? touchedIndex : null;
                               } else {
                                 _selectedIndexNotifier.value = null;
                               }
                             },
                           ),
                         ),
-                        swapAnimationDuration: const Duration(milliseconds: 300),
+                        swapAnimationDuration:
+                            const Duration(milliseconds: 300),
                         swapAnimationCurve: Curves.easeInOutCubic,
                       ),
                       _buildCenterText(selectedIndex),
@@ -137,14 +144,14 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
         PieChartSectionData(
           value: 1,
           title: '',
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           radius: 40,
         )
       ];
     }
 
-    final List<MapEntry<String, int>> sortedEntries = statusData.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final List<MapEntry<String, int>> sortedEntries =
+        statusData.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     return sortedEntries.asMap().entries.map((entry) {
       final index = entry.key;
@@ -173,15 +180,17 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
       return PieChartSectionData(
         value: count.toDouble(),
         title: percentage < 5 ? '' : '${percentage.toStringAsFixed(1)}%',
-        color: color.withOpacity(opacity),
+        color: color.withValues(alpha: opacity),
         radius: isSelected ? 52 : 45,
         titleStyle: TextStyle(
-          fontSize: isSelected ? 14 + Provider.of<AppState>(context).getTextSizeOffset() : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
+          fontSize: isSelected
+              ? 14 + Provider.of<AppState>(context).getTextSizeOffset()
+              : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
           color: Colors.white,
           fontWeight: FontWeight.w600,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(1, 1),
             ),
@@ -206,7 +215,7 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -244,8 +253,8 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
       );
     }
 
-    final List<MapEntry<String, int>> sortedEntries = statusData.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final List<MapEntry<String, int>> sortedEntries =
+        statusData.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     if (selectedIndex >= sortedEntries.length) return Container();
 
@@ -307,8 +316,8 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
     final Map<String, int> statusData = _calculateRentalStatusData();
     final appState = Provider.of<AppState>(context);
 
-    final List<MapEntry<String, int>> sortedEntries = statusData.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final List<MapEntry<String, int>> sortedEntries =
+        statusData.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     return Wrap(
       spacing: 8.0,
@@ -324,16 +333,21 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
 
         return InkWell(
           onTap: () {
-            _selectedIndexNotifier.value = (_selectedIndexNotifier.value == index) ? null : index;
+            _selectedIndexNotifier.value =
+                (_selectedIndexNotifier.value == index) ? null : index;
           },
           borderRadius: BorderRadius.circular(8),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifier.value == index ? color.withOpacity(0.1) : Colors.transparent,
+              color: _selectedIndexNotifier.value == index
+                  ? color.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: _selectedIndexNotifier.value == index ? color : Colors.transparent,
+                color: _selectedIndexNotifier.value == index
+                    ? color
+                    : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -348,7 +362,7 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 2,
                         offset: const Offset(1, 1),
                       ),
@@ -360,8 +374,12 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
                   '$statusName: $count',
                   style: TextStyle(
                     fontSize: 12 + appState.getTextSizeOffset(),
-                    color: _selectedIndexNotifier.value == index ? color : Theme.of(context).textTheme.bodyMedium?.color,
-                    fontWeight: _selectedIndexNotifier.value == index ? FontWeight.w600 : FontWeight.normal,
+                    color: _selectedIndexNotifier.value == index
+                        ? color
+                        : Theme.of(context).textTheme.bodyMedium?.color,
+                    fontWeight: _selectedIndexNotifier.value == index
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
               ],
@@ -371,4 +389,4 @@ class _RentalStatusDistributionChartState extends State<RentalStatusDistribution
       }).toList(),
     );
   }
-} 
+}

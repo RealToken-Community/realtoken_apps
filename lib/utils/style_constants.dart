@@ -34,98 +34,128 @@ class StyleConstants {
 
   // Ombres standardisées
   static List<BoxShadow> get cardShadow => [
-    BoxShadow(
-      color: Colors.black.withOpacity(0.05),
-      blurRadius: 10,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.05),
+          blurRadius: 10,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
   static List<BoxShadow> get subtleShadow => [
-    BoxShadow(
-      color: Colors.black.withOpacity(0.03),
-      blurRadius: 4,
-      offset: const Offset(0, 1),
-    ),
-  ];
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.03),
+          blurRadius: 4,
+          offset: const Offset(0, 1),
+        ),
+      ];
 
   static List<BoxShadow> get modalShadow => [
-    BoxShadow(
-      color: Colors.black.withOpacity(0.1),
-      blurRadius: 10,
-      spreadRadius: 0,
-    ),
-  ];
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.1),
+          blurRadius: 10,
+          spreadRadius: 0,
+        ),
+      ];
 
   // Décoration de carte standardisée
   static BoxDecoration cardDecoration(BuildContext context) => BoxDecoration(
-    color: Theme.of(context).cardColor,
-    borderRadius: BorderRadius.circular(cardBorderRadius),
-    boxShadow: cardShadow,
-  );
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(cardBorderRadius),
+        boxShadow: cardShadow,
+      );
 
   // Décoration de bouton standardisée
-  static BoxDecoration buttonDecoration(BuildContext context, {Color? backgroundColor}) => BoxDecoration(
-    color: backgroundColor ?? Theme.of(context).primaryColor,
-    borderRadius: BorderRadius.circular(buttonBorderRadius),
-    boxShadow: subtleShadow,
-  );
+  static BoxDecoration buttonDecoration(BuildContext context,
+          {Color? backgroundColor}) =>
+      BoxDecoration(
+        color: backgroundColor ?? Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(buttonBorderRadius),
+        boxShadow: subtleShadow,
+      );
 
   // Décoration de modal standardisée
   static BoxDecoration modalDecoration(BuildContext context) => BoxDecoration(
-    color: Theme.of(context).brightness == Brightness.dark 
-        ? Colors.black.withOpacity(0.9) 
-        : Colors.white.withOpacity(0.9),
-    borderRadius: const BorderRadius.vertical(top: Radius.circular(modalBorderRadius)),
-    boxShadow: modalShadow,
-  );
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.black.withValues(alpha: 0.9)
+            : Colors.white.withValues(alpha: 0.9),
+        borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(modalBorderRadius)),
+        boxShadow: modalShadow,
+      );
 
   // Styles de texte avec offset
-  static TextStyle titleStyle(BuildContext context, double textSizeOffset) => TextStyle(
-    fontSize: 18 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
-    fontWeight: FontWeight.bold,
-    color: Theme.of(context).textTheme.bodyLarge?.color,
-  );
+  static TextStyle titleStyle(BuildContext context, double textSizeOffset) =>
+      TextStyle(
+        fontSize: 18 +
+            Provider.of<AppState>(context, listen: false).getTextSizeOffset() +
+            textSizeOffset,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).textTheme.bodyLarge?.color,
+      );
 
-  static TextStyle subtitleStyle(BuildContext context, double textSizeOffset) => TextStyle(
-    fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
-    fontWeight: FontWeight.w600,
-    color: Theme.of(context).textTheme.bodyLarge?.color,
-  );
+  static TextStyle subtitleStyle(BuildContext context, double textSizeOffset) =>
+      TextStyle(
+        fontSize: 16 +
+            Provider.of<AppState>(context, listen: false).getTextSizeOffset() +
+            textSizeOffset,
+        fontWeight: FontWeight.w600,
+        color: Theme.of(context).textTheme.bodyLarge?.color,
+      );
 
-  static TextStyle bodyStyle(BuildContext context, double textSizeOffset) => TextStyle(
-    fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
-    color: Theme.of(context).textTheme.bodyLarge?.color,
-  );
+  static TextStyle bodyStyle(BuildContext context, double textSizeOffset) =>
+      TextStyle(
+        fontSize: 14 +
+            Provider.of<AppState>(context, listen: false).getTextSizeOffset() +
+            textSizeOffset,
+        color: Theme.of(context).textTheme.bodyLarge?.color,
+      );
 
-  static TextStyle captionStyle(BuildContext context, double textSizeOffset) => TextStyle(
-    fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
-    color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
-  );
+  static TextStyle captionStyle(BuildContext context, double textSizeOffset) =>
+      TextStyle(
+        fontSize: 12 +
+            Provider.of<AppState>(context, listen: false).getTextSizeOffset() +
+            textSizeOffset,
+        color: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.color
+            ?.withValues(alpha: 0.7),
+      );
 
-  static TextStyle smallStyle(BuildContext context, double textSizeOffset) => TextStyle(
-    fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset() + textSizeOffset,
-    color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
-  );
+  static TextStyle smallStyle(BuildContext context, double textSizeOffset) =>
+      TextStyle(
+        fontSize: 10 +
+            Provider.of<AppState>(context, listen: false).getTextSizeOffset() +
+            textSizeOffset,
+        color: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.color
+            ?.withValues(alpha: 0.7),
+      );
 
   // Decorations spécialisées
-  static BoxDecoration primaryColorDecoration(BuildContext context, {double opacity = 0.1}) => BoxDecoration(
-    color: Theme.of(context).primaryColor.withOpacity(opacity),
-    borderRadius: BorderRadius.circular(smallBorderRadius),
-  );
+  static BoxDecoration primaryColorDecoration(BuildContext context,
+          {double opacity = 0.1}) =>
+      BoxDecoration(
+        color: Theme.of(context).primaryColor.withValues(alpha: opacity),
+        borderRadius: BorderRadius.circular(smallBorderRadius),
+      );
 
-  static BoxDecoration glassmorphismDecoration(BuildContext context, {double opacity = 0.05}) => BoxDecoration(
-    color: Theme.of(context).brightness == Brightness.dark 
-        ? Colors.white.withOpacity(opacity) 
-        : Colors.black.withOpacity(opacity),
-    borderRadius: BorderRadius.circular(cardBorderRadius),
-    border: Border.all(
-      color: Theme.of(context).brightness == Brightness.dark 
-          ? Colors.white.withOpacity(0.1) 
-          : Colors.black.withOpacity(0.05),
-      width: borderMedium,
-    ),
-  );
+  static BoxDecoration glassmorphismDecoration(BuildContext context,
+          {double opacity = 0.05}) =>
+      BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white.withValues(alpha: opacity)
+            : Colors.black.withValues(alpha: opacity),
+        borderRadius: BorderRadius.circular(cardBorderRadius),
+        border: Border.all(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.black.withValues(alpha: 0.05),
+          width: borderMedium,
+        ),
+      );
 
   // Constantes d'animation
   static const Duration animationFast = Duration(milliseconds: 150);
@@ -140,4 +170,4 @@ class StyleConstants {
   static const double maxModalHeight = 0.8;
   static const double minButtonHeight = 44.0;
   static const double standardAppBarHeight = 56.0;
-} 
+}

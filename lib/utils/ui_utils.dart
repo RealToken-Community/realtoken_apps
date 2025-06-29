@@ -6,17 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
-import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/properties_details_page.dart';
-import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/rent_details_page.dart';
-import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/rmm_details_page.dart';
-import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/portfolio_details_page.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:realtoken_asset_tracker/utils/shimmer_utils.dart';
 import 'package:realtoken_asset_tracker/utils/widget_factory.dart';
 
 class UIUtils {
   static double getAppBarHeight(BuildContext context) {
-    double pixelRatio = MediaQuery.of(context).devicePixelRatio; // Ratio de densité
+    double pixelRatio =
+        MediaQuery.of(context).devicePixelRatio; // Ratio de densité
     double longestSide = MediaQuery.of(context).size.longestSide * pixelRatio;
     double shortestSide = MediaQuery.of(context).size.shortestSide * pixelRatio;
 
@@ -39,13 +35,19 @@ class UIUtils {
 
       if (shortestSide >= 1500) {
         // Tablettes (toute orientation)
-        return orientation == Orientation.portrait ? kToolbarHeight : kToolbarHeight; // Exemple d'ajustement en paysage
+        return orientation == Orientation.portrait
+            ? kToolbarHeight
+            : kToolbarHeight; // Exemple d'ajustement en paysage
       } else if (longestSide > 2000) {
         // Grands téléphones
-        return orientation == Orientation.portrait ? kToolbarHeight + 40 : kToolbarHeight; // Exemple d'ajustement en paysage
+        return orientation == Orientation.portrait
+            ? kToolbarHeight + 40
+            : kToolbarHeight; // Exemple d'ajustement en paysage
       } else {
         // Taille par défaut pour les téléphones standards
-        return orientation == Orientation.portrait ? kToolbarHeight : kToolbarHeight - 10; // Exemple d'ajustement en paysage
+        return orientation == Orientation.portrait
+            ? kToolbarHeight
+            : kToolbarHeight - 10; // Exemple d'ajustement en paysage
       }
     } else {
       // Par défaut pour desktop
@@ -56,7 +58,8 @@ class UIUtils {
   static double getSliverAppBarHeight(BuildContext context) {
     double baseHeight = getAppBarHeight(context);
 
-    double pixelRatio = MediaQuery.of(context).devicePixelRatio; // Ratio de densité
+    double pixelRatio =
+        MediaQuery.of(context).devicePixelRatio; // Ratio de densité
     double longestSide = MediaQuery.of(context).size.longestSide * pixelRatio;
     double shortestSide = MediaQuery.of(context).size.shortestSide * pixelRatio;
 
@@ -79,13 +82,21 @@ class UIUtils {
 
       if (shortestSide >= 1500) {
         // Tablettes
-        return orientation == Orientation.portrait ? baseHeight + 25 : baseHeight + 25; // Ajustement en paysage pour les tablettes
+        return orientation == Orientation.portrait
+            ? baseHeight + 25
+            : baseHeight + 25; // Ajustement en paysage pour les tablettes
       } else if (longestSide > 2500) {
         // Grands téléphones
-        return orientation == Orientation.portrait ? baseHeight - 15 : baseHeight + 40; // Ajustement en paysage pour les grands téléphones
+        return orientation == Orientation.portrait
+            ? baseHeight - 15
+            : baseHeight +
+                40; // Ajustement en paysage pour les grands téléphones
       } else {
         // Taille par défaut pour téléphones standards
-        return orientation == Orientation.portrait ? baseHeight + 30 : baseHeight + 45; // Ajustement en paysage pour téléphones standards
+        return orientation == Orientation.portrait
+            ? baseHeight + 30
+            : baseHeight +
+                45; // Ajustement en paysage pour téléphones standards
       }
     } else {
       // Par défaut pour desktop
@@ -122,7 +133,8 @@ class UIUtils {
     BuildContext context, {
     bool hasGraph = false,
     Widget? rightWidget, // Widget pour le graphique
-    Widget? headerRightWidget, // Widget pour l'icône dans l'en-tête (ex: paramètres)
+    Widget?
+        headerRightWidget, // Widget pour l'icône dans l'en-tête (ex: paramètres)
   }) {
     final appState = Provider.of<AppState>(context);
     // Début de la logique responsive pour le graphique
@@ -143,8 +155,12 @@ class UIUtils {
         borderRadius: BorderRadius.circular(16),
       ),
       elevation: 0.3,
-      shadowColor: Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.1) : Colors.white.withOpacity(0.05),
-      color: Theme.of(context).brightness == Brightness.light ? Colors.white : Color(0xFF1C1C1E),
+      shadowColor: Theme.of(context).brightness == Brightness.light
+          ? Colors.black.withValues(alpha: 0.1)
+          : Colors.white.withValues(alpha: 0.05),
+      color: Theme.of(context).brightness == Brightness.light
+          ? Colors.white
+          : Color(0xFF1C1C1E),
       margin: EdgeInsets.symmetric(vertical: 6.0, horizontal: 2.0),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -163,7 +179,8 @@ class UIUtils {
                       Container(
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: getIconColor(title, context).withOpacity(0.15),
+                          color: getIconColor(title, context)
+                              .withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -237,7 +254,8 @@ class UIUtils {
 
   // Fonction pour obtenir la couleur en fonction du titre traduit
   static Color getIconColor(String title, BuildContext context) {
-    final String translatedTitle = title.trim(); // Supprime les espaces éventuels
+    final String translatedTitle =
+        title.trim(); // Supprime les espaces éventuels
 
     if (translatedTitle == S.of(context).rents) {
       return Color(0xFF34C759); // Vert iOS
@@ -262,7 +280,9 @@ class UIUtils {
     }
   }
 
-  static Widget buildValueBeforeText(BuildContext context, String? value, String text, bool isLoading, {bool highlightPercentage = false}) {
+  static Widget buildValueBeforeText(
+      BuildContext context, String? value, String text, bool isLoading,
+      {bool highlightPercentage = false}) {
     final appState = Provider.of<AppState>(context);
     final theme = Theme.of(context);
 
@@ -340,7 +360,8 @@ class UIUtils {
     );
   }
 
-  static Widget buildTextWithShimmer(String? value, String text, bool isLoading, BuildContext context) {
+  static Widget buildTextWithShimmer(
+      String? value, String text, bool isLoading, BuildContext context) {
     // Utiliser le WidgetFactory optimisé
     return WidgetFactory.buildOptimizedTextWithShimmer(
       context: context,

@@ -5,13 +5,11 @@ import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/date_utils.dart';
-import 'package:realtoken_asset_tracker/models/apy_record.dart';
 import 'package:provider/provider.dart';
 
 /// Factory pour construire les éléments de graphiques de manière standardisée
 /// Réduit la duplication dans GenericChartWidget
 class ChartBuilders {
-  
   /// Construit les données de grille standardisées pour les graphiques
   static FlGridData buildStandardGridData() {
     return FlGridData(
@@ -19,7 +17,7 @@ class ChartBuilders {
       drawVerticalLine: false,
       getDrawingHorizontalLine: (value) {
         return FlLine(
-          color: Colors.grey.withOpacity(0.15),
+          color: Colors.grey.withValues(alpha: 0.15),
           strokeWidth: 1,
         );
       },
@@ -78,7 +76,8 @@ class ChartBuilders {
                 currencyUtils.currencySymbol,
               );
             } else {
-              formattedValue = '$valuePrefix${value.toStringAsFixed(1)}$valueSuffix';
+              formattedValue =
+                  '$valuePrefix${value.toStringAsFixed(1)}$valueSuffix';
             }
 
             return Padding(
@@ -148,7 +147,8 @@ class ChartBuilders {
                 currencyUtils.currencySymbol,
               );
             } else {
-              formattedValue = '$valuePrefix${value.toStringAsFixed(1)}$valueSuffix';
+              formattedValue =
+                  '$valuePrefix${value.toStringAsFixed(1)}$valueSuffix';
             }
 
             return Padding(
@@ -191,7 +191,8 @@ class ChartBuilders {
       TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.w600,
-        fontSize: 12 + (Provider.of<AppState>(context, listen: false).getTextSizeOffset()),
+        fontSize: 12 +
+            (Provider.of<AppState>(context, listen: false).getTextSizeOffset()),
       ),
     );
   }
@@ -239,7 +240,7 @@ class ChartBuilders {
       backDrawRodData: BackgroundBarChartRodData(
         show: true,
         toY: maxY,
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
       ),
     );
   }
@@ -275,28 +276,30 @@ class ChartBuilders {
           final isLast = spot.x == barData.spots.length - 1;
           final int dataLength = barData.spots.length;
           int step = 1;
-          
+
           if (dataLength > 20) {
             step = (dataLength / 20).ceil();
           } else if (dataLength > 10) {
             step = 2;
           }
-          
+
           final isInteresting = spot.x % step == 0;
           return isFirst || isLast || isInteresting;
         },
       ),
-      belowBarData: showArea ? BarAreaData(
-        show: true,
-        gradient: LinearGradient(
-          colors: [
-            color.withOpacity(0.3),
-            color.withOpacity(0.05),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ) : BarAreaData(show: false),
+      belowBarData: showArea
+          ? BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                colors: [
+                  color.withValues(alpha: 0.3),
+                  color.withValues(alpha: 0.05),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            )
+          : BarAreaData(show: false),
     );
   }
 
@@ -325,7 +328,8 @@ class ChartBuilders {
   }
 
   /// Construit une clé de période standardisée pour le regroupement de données
-  static String buildPeriodKey(DateTime date, String selectedPeriod, BuildContext context) {
+  static String buildPeriodKey(
+      DateTime date, String selectedPeriod, BuildContext context) {
     if (selectedPeriod == S.of(context).day) {
       return DateFormat('yyyy/MM/dd').format(date);
     } else if (selectedPeriod == S.of(context).week) {
@@ -346,7 +350,8 @@ class ChartBuilders {
   }
 
   /// Construit un widget de carte vide standardisé
-  static Widget buildEmptyCard(BuildContext context, AppState appState, String message) {
+  static Widget buildEmptyCard(
+      BuildContext context, AppState appState, String message) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -367,4 +372,4 @@ class ChartBuilders {
       ),
     );
   }
-} 
+}

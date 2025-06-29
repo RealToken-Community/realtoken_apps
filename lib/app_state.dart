@@ -73,7 +73,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // --- Gestion du compteur d'ouvertures de l'app pour la popup dons ---
   int _appOpenCount = 0;
-  int _lastDonationPopupTimestamp = 0; // Timestamp de la dernière fois que la popup a été affichée
+  int _lastDonationPopupTimestamp =
+      0; // Timestamp de la dernière fois que la popup a été affichée
   int get appOpenCount => _appOpenCount;
 
   // Optimisation: Éviter les notifyListeners multiples
@@ -82,10 +83,10 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   /// Retourne true si la popup dons doit être affichée (après 10 ouvertures ET au moins 1h depuis la dernière)
   bool get shouldShowDonationPopup {
     if (_appOpenCount < 10) return false;
-    
+
     final currentTimestamp = DateTime.now().millisecondsSinceEpoch;
     final oneHourInMillis = 60 * 60 * 1000; // 1 heure en millisecondes
-    
+
     // Vérifier si au moins 1 heure s'est écoulée depuis la dernière popup
     return (currentTimestamp - _lastDonationPopupTimestamp) >= oneHourInMillis;
   }
@@ -95,12 +96,14 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     loadAppOpenCount(); // Charger le compteur d'ouvertures
     loadLastDonationPopupTimestamp(); // Charger le timestamp de la dernière popup
     incrementAppOpenCount(); // Incrémenter à chaque lancement
-    WidgetsBinding.instance.addObserver(this); // Add observer to listen to system changes
+    WidgetsBinding.instance
+        .addObserver(this); // Add observer to listen to system changes
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this); // Remove observer when AppState is disposed
+    WidgetsBinding.instance
+        .removeObserver(this); // Remove observer when AppState is disposed
     super.dispose();
   }
 
@@ -117,7 +120,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   // Load settings from SharedPreferences
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    
+
     // Regrouper toutes les mises à jour pour éviter les notifications multiples
     batchUpdate(() {
       isDarkTheme = prefs.getBool('isDarkTheme') ?? false;
@@ -125,18 +128,20 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
       selectedTextSize = prefs.getString('textSize') ?? 'normal';
       selectedLanguage = prefs.getString('language') ?? 'en';
       evmAddresses = prefs.getStringList('evmAddresses'); // Load EVM addresses
-      _showAmounts = prefs.getBool('showAmounts') ?? true; // Charge la préférence du montant affiché
+      _showAmounts = prefs.getBool('showAmounts') ??
+          true; // Charge la préférence du montant affiché
 
       // Charger les paramètres du portfolio
       _showTotalInvested = prefs.getBool('showTotalInvested') ?? false;
       _showNetTotal = prefs.getBool('showNetTotal') ?? true;
       _manualAdjustment = prefs.getDouble('manualAdjustment') ?? 0.0;
       _showYamProjection = prefs.getBool('showYamProjection') ?? true;
-      _initialInvestmentAdjustment = prefs.getDouble('initialInvestmentAdjustment') ?? 0.0;
-      
+      _initialInvestmentAdjustment =
+          prefs.getDouble('initialInvestmentAdjustment') ?? 0.0;
+
       _applyTheme(); // Apply the theme based on the loaded themeMode
     });
-    
+
     // Charger la couleur primaire séparément car elle est asynchrone
     _primaryColor = await getSavedPrimaryColor(); // Load primary color
     _notifyListenersIfNeeded();
@@ -151,7 +156,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   void toggleShowAmounts() async {
     _showAmounts = !_showAmounts;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('showAmounts', _showAmounts); // Sauvegarde la préférence utilisateur
+    await prefs.setBool(
+        'showAmounts', _showAmounts); // Sauvegarde la préférence utilisateur
     _notifyListenersIfNeeded(); // Notifie les widgets dépendants
   }
 
@@ -190,7 +196,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   // Update dark/light theme directly and save to SharedPreferences (for manual switch)
   void updateTheme(bool value) async {
     isDarkTheme = value;
-    themeMode = value ? 'dark' : 'light'; // Set theme mode based on manual selection
+    themeMode =
+        value ? 'dark' : 'light'; // Set theme mode based on manual selection
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isDarkTheme', value);
     await prefs.setString('themeMode', themeMode); // Save theme mode
@@ -292,13 +299,15 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> loadLastDonationPopupTimestamp() async {
     final prefs = await SharedPreferences.getInstance();
-    _lastDonationPopupTimestamp = prefs.getInt('lastDonationPopupTimestamp') ?? 0;
+    _lastDonationPopupTimestamp =
+        prefs.getInt('lastDonationPopupTimestamp') ?? 0;
   }
 
   Future<void> updateLastDonationPopupTimestamp() async {
     final prefs = await SharedPreferences.getInstance();
     _lastDonationPopupTimestamp = DateTime.now().millisecondsSinceEpoch;
-    await prefs.setInt('lastDonationPopupTimestamp', _lastDonationPopupTimestamp);
+    await prefs.setInt(
+        'lastDonationPopupTimestamp', _lastDonationPopupTimestamp);
   }
 
   // Méthode pour regrouper les mises à jour

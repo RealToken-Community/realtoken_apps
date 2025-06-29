@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -19,10 +18,12 @@ class PropertiesForSaleSecondary extends StatefulWidget {
   const PropertiesForSaleSecondary({super.key});
 
   @override
-  _PropertiesForSaleSecondaryState createState() => _PropertiesForSaleSecondaryState();
+  _PropertiesForSaleSecondaryState createState() =>
+      _PropertiesForSaleSecondaryState();
 }
 
-class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary> {
+class _PropertiesForSaleSecondaryState
+    extends State<PropertiesForSaleSecondary> {
   String? lastUpdateTime;
   bool isSearching = false;
   String searchQuery = '';
@@ -75,13 +76,19 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
     final groupedOffers = <String, List<Map<String, dynamic>>>{};
     for (var offer in dataManager.yamMarket) {
       // Filtrer par type d'offre
-      if (selectedOfferType == "vente" && offer['token_to_buy'] != null) continue;
-      if (selectedOfferType == "achat" && offer['token_to_buy'] == null) continue;
+      if (selectedOfferType == "vente" && offer['token_to_buy'] != null)
+        continue;
+      if (selectedOfferType == "achat" && offer['token_to_buy'] == null)
+        continue;
 
       // Si on veut cacher les offres non whitelistées, on vérifie
       if (hideNonWhitelisted) {
-        final String? tokenIdentifier = offer['token_to_sell'] ?? offer['token_to_buy'];
-        final bool isOfferWhitelisted = dataManager.whitelistTokens.any((whitelisted) => whitelisted['token'].toLowerCase() == tokenIdentifier?.toLowerCase());
+        final String? tokenIdentifier =
+            offer['token_to_sell'] ?? offer['token_to_buy'];
+        final bool isOfferWhitelisted = dataManager.whitelistTokens.any(
+            (whitelisted) =>
+                whitelisted['token'].toLowerCase() ==
+                tokenIdentifier?.toLowerCase());
         if (!isOfferWhitelisted) continue;
       }
 
@@ -105,7 +112,9 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
         } else {
           final deltaA = ((a['token_value'] / a['token_price'] - 1) * 100);
           final deltaB = ((b['token_value'] / b['token_price'] - 1) * 100);
-          return ascending ? deltaA.compareTo(deltaB) : deltaB.compareTo(deltaA);
+          return ascending
+              ? deltaA.compareTo(deltaB)
+              : deltaB.compareTo(deltaA);
         }
       });
     });
@@ -120,7 +129,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
           children: [
             // Barre de recherche et affichage de la dernière mise à jour dans un style iOS
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -148,9 +158,11 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                             controller: searchController,
                             decoration: InputDecoration(
                               hintText: S.of(context).search_hint,
-                              prefixIcon: Icon(Icons.search, color: Colors.grey, size: 20),
+                              prefixIcon: Icon(Icons.search,
+                                  color: Colors.grey, size: 20),
                               suffixIcon: IconButton(
-                                icon: Icon(Icons.clear, color: Colors.grey, size: 18),
+                                icon: Icon(Icons.clear,
+                                    color: Colors.grey, size: 18),
                                 onPressed: () {
                                   setState(() {
                                     searchController.clear();
@@ -171,8 +183,10 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                             child: Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Icon(Icons.search, color: Colors.grey, size: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Icon(Icons.search,
+                                      color: Colors.grey, size: 20),
                                 ),
                                 Text(
                                   S.of(context).search_hint,
@@ -200,16 +214,21 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          _buildFilterChip("tout", Icons.all_inclusive, selectedOfferType == "tout", context),
+                          _buildFilterChip("tout", Icons.all_inclusive,
+                              selectedOfferType == "tout", context),
                           const SizedBox(width: 8),
-                          _buildFilterChip("vente", Icons.add_shopping_cart, selectedOfferType == "vente", context),
+                          _buildFilterChip("vente", Icons.add_shopping_cart,
+                              selectedOfferType == "vente", context),
                           const SizedBox(width: 8),
-                          _buildFilterChip("achat", Icons.sell, selectedOfferType == "achat", context),
+                          _buildFilterChip("achat", Icons.sell,
+                              selectedOfferType == "achat", context),
                           const SizedBox(width: 8),
                           // Contrôle de visibilité
                           _buildFilterChip(
                             hideNonWhitelisted ? "whitelisted" : "all",
-                            hideNonWhitelisted ? Icons.visibility_off : Icons.visibility,
+                            hideNonWhitelisted
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             false,
                             context,
                             onTap: () {
@@ -217,7 +236,9 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                 hideNonWhitelisted = !hideNonWhitelisted;
                               });
                             },
-                            customColor: hideNonWhitelisted ? Colors.red.withOpacity(0.2) : Colors.green.withOpacity(0.2),
+                            customColor: hideNonWhitelisted
+                                ? Colors.red.withValues(alpha: 0.2)
+                                : Colors.green.withValues(alpha: 0.2),
                           ),
                         ],
                       ),
@@ -228,11 +249,13 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                   Container(
                     margin: EdgeInsets.only(left: 8),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).brightness == Brightness.light ? Colors.white : Color(0xFF1C1C1E),
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.white
+                          : Color(0xFF1C1C1E),
                       borderRadius: BorderRadius.circular(6),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 3,
                           offset: Offset(0, 1),
                         ),
@@ -243,7 +266,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                       value: selectedSortOption == "delta" ? "delta" : "date",
                       underline: SizedBox(),
                       isDense: true,
-                      icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).primaryColor, size: 18),
+                      icon: Icon(Icons.keyboard_arrow_down,
+                          color: Theme.of(context).primaryColor, size: 18),
                       items: [
                         DropdownMenuItem(
                           value: "delta",
@@ -276,13 +300,19 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.arrow_upward, size: 14, color: ascending ? Theme.of(context).primaryColor : Colors.grey),
+                              Icon(Icons.arrow_upward,
+                                  size: 14,
+                                  color: ascending
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey),
                               SizedBox(width: 3),
                               Text(
                                 "Ascendant",
                                 style: TextStyle(
                                   fontSize: 13 + appState.getTextSizeOffset(),
-                                  color: ascending ? Theme.of(context).primaryColor : Colors.grey,
+                                  color: ascending
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey,
                                 ),
                               ),
                             ],
@@ -293,13 +323,19 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.arrow_downward, size: 14, color: !ascending ? Theme.of(context).primaryColor : Colors.grey),
+                              Icon(Icons.arrow_downward,
+                                  size: 14,
+                                  color: !ascending
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey),
                               SizedBox(width: 3),
                               Text(
                                 "Descendant",
                                 style: TextStyle(
                                   fontSize: 13 + appState.getTextSizeOffset(),
-                                  color: !ascending ? Theme.of(context).primaryColor : Colors.grey,
+                                  color: !ascending
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey,
                                 ),
                               ),
                             ],
@@ -346,23 +382,39 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           padding: const EdgeInsets.all(16),
                           itemCount: groupedOffers.keys.length,
                           itemBuilder: (context, index) {
-                            String tokenKey = groupedOffers.keys.elementAt(index);
-                            List<Map<String, dynamic>> offers = groupedOffers[tokenKey]!;
-                            final imageUrl = (offers.first['imageLink'] != null && offers.first['imageLink'] is List && offers.first['imageLink'].isNotEmpty) ? offers.first['imageLink'][0] : '';
-                            final shortName = offers.first['shortName'] ?? 'N/A';
+                            String tokenKey =
+                                groupedOffers.keys.elementAt(index);
+                            List<Map<String, dynamic>> offers =
+                                groupedOffers[tokenKey]!;
+                            final imageUrl =
+                                (offers.first['imageLink'] != null &&
+                                        offers.first['imageLink'] is List &&
+                                        offers.first['imageLink'].isNotEmpty)
+                                    ? offers.first['imageLink'][0]
+                                    : '';
+                            final shortName =
+                                offers.first['shortName'] ?? 'N/A';
                             final country = offers.first['country'] ?? 'USA';
-                            final String? tokenIdentifier = offers.first['token_to_sell'] ?? offers.first['token_to_buy'];
-                            final bool isWhitelisted = dataManager.whitelistTokens.any((whitelisted) => whitelisted['token'].toLowerCase() == tokenIdentifier?.toLowerCase());
+                            final String? tokenIdentifier =
+                                offers.first['token_to_sell'] ??
+                                    offers.first['token_to_buy'];
+                            final bool isWhitelisted =
+                                dataManager.whitelistTokens.any((whitelisted) =>
+                                    whitelisted['token'].toLowerCase() ==
+                                    tokenIdentifier?.toLowerCase());
 
                             // Card style iOS
                             return Container(
                               margin: const EdgeInsets.symmetric(vertical: 3),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).brightness == Brightness.light ? Colors.white : Color(0xFF1C1C1E),
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.white
+                                    : Color(0xFF1C1C1E),
                                 borderRadius: BorderRadius.circular(14),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
+                                    color: Colors.black.withValues(alpha: 0.05),
                                     blurRadius: 8,
                                     offset: Offset(0, 2),
                                   ),
@@ -387,7 +439,9 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                                 : CachedNetworkImage(
                                                     imageUrl: imageUrl,
                                                     fit: BoxFit.cover,
-                                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                    errorWidget: (context, url,
+                                                            error) =>
+                                                        const Icon(Icons.error),
                                                   ),
                                           ),
                                           // Badge style iOS pour whitelisted
@@ -395,26 +449,45 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                             top: 6,
                                             right: 6,
                                             child: Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 6, vertical: 2),
                                               decoration: BoxDecoration(
-                                                color: isWhitelisted ? Colors.green.withOpacity(0.8) : Colors.red.withOpacity(0.8),
-                                                borderRadius: BorderRadius.circular(10),
+                                                color: isWhitelisted
+                                                    ? Colors.green
+                                                        .withValues(alpha: 0.8)
+                                                    : Colors.red
+                                                        .withValues(alpha: 0.8),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                               ),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Icon(
-                                                    isWhitelisted ? Icons.check_circle : Icons.cancel,
+                                                    isWhitelisted
+                                                        ? Icons.check_circle
+                                                        : Icons.cancel,
                                                     color: Colors.white,
                                                     size: 10,
                                                   ),
                                                   SizedBox(width: 2),
                                                   Text(
-                                                    isWhitelisted ? S.of(context).tokenWhitelisted : S.of(context).tokenNotWhitelisted,
+                                                    isWhitelisted
+                                                        ? S
+                                                            .of(context)
+                                                            .tokenWhitelisted
+                                                        : S
+                                                            .of(context)
+                                                            .tokenNotWhitelisted,
                                                     style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 9 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
-                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 9 +
+                                                          Provider.of<AppState>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .getTextSizeOffset(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                 ],
@@ -428,7 +501,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                     Padding(
                                       padding: const EdgeInsets.all(12.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           // Nom de la propriété avec icône pays à gauche
                                           Row(
@@ -437,8 +511,10 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                                 'assets/country/${Parameters.getCountryFileName(country)}.png',
                                                 width: 16,
                                                 height: 16,
-                                                errorBuilder: (context, error, stackTrace) {
-                                                  return const Icon(Icons.flag, size: 16);
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return const Icon(Icons.flag,
+                                                      size: 16);
                                                 },
                                               ),
                                               SizedBox(width: 6),
@@ -446,7 +522,9 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                                 child: Text(
                                                   shortName,
                                                   style: TextStyle(
-                                                    fontSize: 16 + appState.getTextSizeOffset(),
+                                                    fontSize: 16 +
+                                                        appState
+                                                            .getTextSizeOffset(),
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
@@ -458,14 +536,36 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                           ...offers.map((offer) {
                                             bool isTokenWhitelisted = true;
                                             if (selectedOfferType == "vente") {
-                                              return _buildSaleOfferCard(context, appState, currencyUtils, offer, isTokenWhitelisted);
-                                            } else if (selectedOfferType == "achat") {
-                                              return _buildPurchaseOfferCard(context, appState, currencyUtils, offer, isTokenWhitelisted);
+                                              return _buildSaleOfferCard(
+                                                  context,
+                                                  appState,
+                                                  currencyUtils,
+                                                  offer,
+                                                  isTokenWhitelisted);
+                                            } else if (selectedOfferType ==
+                                                "achat") {
+                                              return _buildPurchaseOfferCard(
+                                                  context,
+                                                  appState,
+                                                  currencyUtils,
+                                                  offer,
+                                                  isTokenWhitelisted);
                                             } else {
-                                              if (offer['token_to_buy'] == null) {
-                                                return _buildSaleOfferCard(context, appState, currencyUtils, offer, isTokenWhitelisted);
+                                              if (offer['token_to_buy'] ==
+                                                  null) {
+                                                return _buildSaleOfferCard(
+                                                    context,
+                                                    appState,
+                                                    currencyUtils,
+                                                    offer,
+                                                    isTokenWhitelisted);
                                               } else {
-                                                return _buildPurchaseOfferCard(context, appState, currencyUtils, offer, isTokenWhitelisted);
+                                                return _buildPurchaseOfferCard(
+                                                    context,
+                                                    appState,
+                                                    currencyUtils,
+                                                    offer,
+                                                    isTokenWhitelisted);
                                               }
                                             }
                                           }),
@@ -488,10 +588,12 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
   }
 
   // Widget pour créer un filtre chip style iOS
-  Widget _buildFilterChip(String type, IconData icon, bool isSelected, BuildContext context, {VoidCallback? onTap, Color? customColor}) {
+  Widget _buildFilterChip(
+      String type, IconData icon, bool isSelected, BuildContext context,
+      {VoidCallback? onTap, Color? customColor}) {
     final color = customColor ??
         (isSelected
-            ? Theme.of(context).primaryColor.withOpacity(0.2)
+            ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
             : Theme.of(context).brightness == Brightness.light
                 ? Colors.white
                 : Color(0xFF1C1C1E));
@@ -509,12 +611,14 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
           color: color,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? Theme.of(context).primaryColor : Colors.transparent,
+            color: isSelected
+                ? Theme.of(context).primaryColor
+                : Colors.transparent,
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 4,
               offset: Offset(0, 2),
             ),
@@ -526,14 +630,18 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
             Icon(
               icon,
               size: 16,
-              color: isSelected ? Theme.of(context).primaryColor : Colors.grey[600],
+              color: isSelected
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey[600],
             ),
             if (type == "whitelisted" || type == "all") SizedBox(width: 4),
             if (type == "whitelisted")
               Text(
                 "Whitelisted",
                 style: TextStyle(
-                  fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 12 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   color: Colors.grey[600],
                 ),
               ),
@@ -541,7 +649,9 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
               Text(
                 "Tous",
                 style: TextStyle(
-                  fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 12 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   color: Colors.grey[600],
                 ),
               ),
@@ -561,18 +671,28 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
   ) {
     final dataManager = Provider.of<DataManager>(context, listen: false);
     // Vérification du statut du token
-    final String? tokenIdentifier = offer['token_to_sell'] ?? offer['token_to_buy'];
-    final bool isTokenWhitelisted = dataManager.whitelistTokens.any((whitelisted) => whitelisted['token'].toLowerCase() == tokenIdentifier?.toLowerCase());
-    final baseYield = double.tryParse(offer['annualPercentageYield']?.toString() ?? '0') ?? 0;
-    final initialPrice = double.tryParse(offer['token_price']?.toString() ?? '0') ?? 0;
-    final offerPrice = double.tryParse(offer['token_value']?.toString() ?? '0') ?? 0;
+    final String? tokenIdentifier =
+        offer['token_to_sell'] ?? offer['token_to_buy'];
+    final bool isTokenWhitelisted = dataManager.whitelistTokens.any(
+        (whitelisted) =>
+            whitelisted['token'].toLowerCase() ==
+            tokenIdentifier?.toLowerCase());
+    final baseYield =
+        double.tryParse(offer['annualPercentageYield']?.toString() ?? '0') ?? 0;
+    final initialPrice =
+        double.tryParse(offer['token_price']?.toString() ?? '0') ?? 0;
+    final offerPrice =
+        double.tryParse(offer['token_value']?.toString() ?? '0') ?? 0;
 
-    if (baseYield <= 0 || initialPrice <= 0 || offerPrice <= 0) return const SizedBox();
+    if (baseYield <= 0 || initialPrice <= 0 || offerPrice <= 0)
+      return const SizedBox();
 
     final newYield = baseYield * (initialPrice / offerPrice);
-    final premiumPercentage = ((offerPrice - initialPrice) / initialPrice) * 100;
+    final premiumPercentage =
+        ((offerPrice - initialPrice) / initialPrice) * 100;
     final roiWeeks = (premiumPercentage * 52) / baseYield;
-    final double deltaValue = ((offer['token_value'] / offer['token_price'] - 1) * 100);
+    final double deltaValue =
+        ((offer['token_value'] / offer['token_price'] - 1) * 100);
 
     // Définir les couleurs selon le delta avec une palette plus iOS
     Color deltaColor;
@@ -596,7 +716,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 6,
                 offset: Offset(0, 1),
               ),
@@ -615,7 +735,9 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         Container(
                           padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Image.asset(
@@ -635,7 +757,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                               ),
                             ),
                             Text(
-                              CustomDateUtils.formatReadableDate(offer['creationDate']),
+                              CustomDateUtils.formatReadableDate(
+                                  offer['creationDate']),
                               style: TextStyle(
                                 fontSize: 10 + appState.getTextSizeOffset(),
                                 color: Colors.grey[500],
@@ -655,9 +778,13 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         // Montant du token
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).brightness == Brightness.light ? Colors.grey[100] : Color(0xFF3A3A3C),
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Colors.grey[100]
+                                  : Color(0xFF3A3A3C),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
@@ -687,9 +814,10 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         // Delta price
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: deltaColor.withOpacity(0.1),
+                              color: deltaColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
@@ -705,14 +833,17 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                 Row(
                                   children: [
                                     Icon(
-                                      deltaValue < 0 ? Icons.arrow_downward : Icons.arrow_upward,
+                                      deltaValue < 0
+                                          ? Icons.arrow_downward
+                                          : Icons.arrow_upward,
                                       color: deltaColor,
                                       size: 12,
                                     ),
                                     Text(
                                       '${deltaValue.abs().toStringAsFixed(2)}%',
                                       style: TextStyle(
-                                        fontSize: 14 + appState.getTextSizeOffset(),
+                                        fontSize:
+                                            14 + appState.getTextSizeOffset(),
                                         fontWeight: FontWeight.bold,
                                         color: deltaColor,
                                       ),
@@ -734,8 +865,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.blue.withOpacity(0.1),
-                            deltaColor.withOpacity(0.1),
+                            Colors.blue.withValues(alpha: 0.1),
+                            deltaColor.withValues(alpha: 0.1),
                           ],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -757,7 +888,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                 ),
                               ),
                               Text(
-                                currencyUtils.formatCurrency(initialPrice, currencyUtils.currencySymbol),
+                                currencyUtils.formatCurrency(
+                                    initialPrice, currencyUtils.currencySymbol),
                                 style: TextStyle(
                                   fontSize: 13 + appState.getTextSizeOffset(),
                                   fontWeight: FontWeight.bold,
@@ -783,7 +915,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                 ),
                               ),
                               Text(
-                                currencyUtils.formatCurrency(offerPrice, currencyUtils.currencySymbol),
+                                currencyUtils.formatCurrency(
+                                    offerPrice, currencyUtils.currencySymbol),
                                 style: TextStyle(
                                   fontSize: 13 + appState.getTextSizeOffset(),
                                   fontWeight: FontWeight.bold,
@@ -804,8 +937,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.blue.withOpacity(0.1),
-                            deltaColor.withOpacity(0.1),
+                            Colors.blue.withValues(alpha: 0.1),
+                            deltaColor.withValues(alpha: 0.1),
                           ],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -876,12 +1009,15 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 6),
                             decoration: BoxDecoration(
-                              color: Color(0xFFFF9500).withOpacity(0.2), // Orange iOS
+                              color: Color(0xFFFF9500)
+                                  .withValues(alpha: 0.2), // Orange iOS
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
                               child: Text(
-                                S.of(context).roi_label(roiWeeks.toStringAsFixed(1)),
+                                S
+                                    .of(context)
+                                    .roi_label(roiWeeks.toStringAsFixed(1)),
                                 style: TextStyle(
                                   fontSize: 12 + appState.getTextSizeOffset(),
                                   fontWeight: FontWeight.bold,
@@ -898,12 +1034,15 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         Expanded(
                           child: Material(
                             borderRadius: BorderRadius.circular(10),
-                            color: isTokenWhitelisted ? Color(0xFF007AFF) : Colors.grey,
+                            color: isTokenWhitelisted
+                                ? Color(0xFF007AFF)
+                                : Colors.grey,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(10),
                               onTap: isTokenWhitelisted
                                   ? () {
-                                      UrlUtils.launchURL('https://yambyofferid.netlify.app/?offerId=${offer['id_offer']}');
+                                      UrlUtils.launchURL(
+                                          'https://yambyofferid.netlify.app/?offerId=${offer['id_offer']}');
                                     }
                                   : null,
                               child: Container(
@@ -914,7 +1053,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12 + appState.getTextSizeOffset(),
+                                      fontSize:
+                                          12 + appState.getTextSizeOffset(),
                                     ),
                                   ),
                                 ),
@@ -933,7 +1073,10 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                 right: 10,
                 child: Builder(
                   builder: (context) {
-                    if (offer['token_to_pay'] == '0x0ca4f5554dd9da6217d62d8df2816c82bba4157b' || offer['token_to_pay'] == '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d') {
+                    if (offer['token_to_pay'] ==
+                            '0x0ca4f5554dd9da6217d62d8df2816c82bba4157b' ||
+                        offer['token_to_pay'] ==
+                            '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d') {
                       return Container(
                         padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
@@ -941,7 +1084,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),
@@ -953,7 +1096,10 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           height: 18,
                         ),
                       );
-                    } else if (offer['token_to_pay'] == '0xddafbb505ad214d7b80b1f830fccc89b60fb7a83' || offer['token_to_pay'] == '0xed56f76e9cbc6a64b821e9c016eafbd3db5436d1') {
+                    } else if (offer['token_to_pay'] ==
+                            '0xddafbb505ad214d7b80b1f830fccc89b60fb7a83' ||
+                        offer['token_to_pay'] ==
+                            '0xed56f76e9cbc6a64b821e9c016eafbd3db5436d1') {
                       return Container(
                         padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
@@ -961,7 +1107,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),
@@ -994,15 +1140,21 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
     bool isTokenWhitelisted,
   ) {
     final dataManager = Provider.of<DataManager>(context, listen: false);
-    final String? tokenIdentifier = offer['token_to_sell'] ?? offer['token_to_buy'];
-    final bool isTokenWhitelisted = dataManager.whitelistTokens.any((whitelisted) => whitelisted['token'].toLowerCase() == tokenIdentifier?.toLowerCase());
+    final String? tokenIdentifier =
+        offer['token_to_sell'] ?? offer['token_to_buy'];
+    final bool isTokenWhitelisted = dataManager.whitelistTokens.any(
+        (whitelisted) =>
+            whitelisted['token'].toLowerCase() ==
+            tokenIdentifier?.toLowerCase());
 
-    final double deltaValue = ((offer['token_value'] / offer['token_price'] - 1) * 100);
+    final double deltaValue =
+        ((offer['token_value'] / offer['token_price'] - 1) * 100);
 
     // Définir les couleurs selon le delta avec une palette plus iOS
-    Color deltaColor = ((offer['token_value'] / offer['token_price'] - 1) * 100) < 0
-        ? Color(0xFFFF3B30) // Rouge iOS
-        : Color(0xFF34C759); // Vert iOS
+    Color deltaColor =
+        ((offer['token_value'] / offer['token_price'] - 1) * 100) < 0
+            ? Color(0xFFFF3B30) // Rouge iOS
+            : Color(0xFF34C759); // Vert iOS
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
@@ -1016,7 +1168,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 6,
                 offset: Offset(0, 1),
               ),
@@ -1035,7 +1187,9 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         Container(
                           padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Image.asset(
@@ -1055,7 +1209,8 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                               ),
                             ),
                             Text(
-                              CustomDateUtils.formatReadableDate(offer['creationDate']),
+                              CustomDateUtils.formatReadableDate(
+                                  offer['creationDate']),
                               style: TextStyle(
                                 fontSize: 10 + appState.getTextSizeOffset(),
                                 color: Colors.grey[500],
@@ -1074,9 +1229,13 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         // Montant du token
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).brightness == Brightness.light ? Colors.grey[100] : Color(0xFF3A3A3C),
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Colors.grey[100]
+                                  : Color(0xFF3A3A3C),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
@@ -1106,9 +1265,13 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                         // Valeur du token
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).brightness == Brightness.light ? Colors.grey[100] : Color(0xFF3A3A3C),
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Colors.grey[100]
+                                  : Color(0xFF3A3A3C),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
@@ -1122,7 +1285,10 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                                   ),
                                 ),
                                 Text(
-                                  currencyUtils.formatCurrency(currencyUtils.convert(offer['token_value']), currencyUtils.currencySymbol),
+                                  currencyUtils.formatCurrency(
+                                      currencyUtils
+                                          .convert(offer['token_value']),
+                                      currencyUtils.currencySymbol),
                                   style: TextStyle(
                                     fontSize: 14 + appState.getTextSizeOffset(),
                                     fontWeight: FontWeight.bold,
@@ -1141,7 +1307,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: deltaColor.withOpacity(0.1),
+                        color: deltaColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -1155,7 +1321,9 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                             ),
                           ),
                           Icon(
-                            deltaValue < 0 ? Icons.arrow_downward : Icons.arrow_upward,
+                            deltaValue < 0
+                                ? Icons.arrow_downward
+                                : Icons.arrow_upward,
                             color: deltaColor,
                             size: 14,
                           ),
@@ -1176,12 +1344,15 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                     // Bouton d'action style iOS
                     Material(
                       borderRadius: BorderRadius.circular(10),
-                      color: isTokenWhitelisted ? Color(0xFF34C759) : Colors.grey, // Vert iOS
+                      color: isTokenWhitelisted
+                          ? Color(0xFF34C759)
+                          : Colors.grey, // Vert iOS
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: isTokenWhitelisted
                             ? () {
-                                UrlUtils.launchURL('https://yambyofferid.netlify.app/?offerId=${offer['id_offer']}');
+                                UrlUtils.launchURL(
+                                    'https://yambyofferid.netlify.app/?offerId=${offer['id_offer']}');
                               }
                             : null,
                         child: Container(
@@ -1208,7 +1379,10 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                 right: 10,
                 child: Builder(
                   builder: (context) {
-                    if (offer['token_to_pay'] == '0x0ca4f5554dd9da6217d62d8df2816c82bba4157b' || offer['token_to_pay'] == '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d') {
+                    if (offer['token_to_pay'] ==
+                            '0x0ca4f5554dd9da6217d62d8df2816c82bba4157b' ||
+                        offer['token_to_pay'] ==
+                            '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d') {
                       return Container(
                         padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
@@ -1216,7 +1390,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),
@@ -1228,7 +1402,10 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           height: 18,
                         ),
                       );
-                    } else if (offer['token_to_pay'] == '0xddafbb505ad214d7b80b1f830fccc89b60fb7a83' || offer['token_to_pay'] == '0xed56f76e9cbc6a64b821e9c016eafbd3db5436d1') {
+                    } else if (offer['token_to_pay'] ==
+                            '0xddafbb505ad214d7b80b1f830fccc89b60fb7a83' ||
+                        offer['token_to_pay'] ==
+                            '0xed56f76e9cbc6a64b821e9c016eafbd3db5436d1') {
                       return Container(
                         padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
@@ -1236,7 +1413,7 @@ class _PropertiesForSaleSecondaryState extends State<PropertiesForSaleSecondary>
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),

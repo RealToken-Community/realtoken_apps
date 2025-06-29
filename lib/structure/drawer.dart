@@ -47,10 +47,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   Future<void> _fetchVersions() async {
     // Throttle pour éviter les appels répétitifs
-    if (!PerformanceUtils.throttle('drawer_version_check', const Duration(minutes: 30))) {
+    if (!PerformanceUtils.throttle(
+        'drawer_version_check', const Duration(minutes: 30))) {
       // Charger depuis le cache si disponible
-      final cachedCurrent = PerformanceUtils.getFromCache<String>('current_version');
-      final cachedLatest = PerformanceUtils.getFromCache<String>('latest_version');
+      final cachedCurrent =
+          PerformanceUtils.getFromCache<String>('current_version');
+      final cachedLatest =
+          PerformanceUtils.getFromCache<String>('latest_version');
       if (cachedCurrent != null && cachedLatest != null) {
         setState(() {
           currentVersion = cachedCurrent;
@@ -64,15 +67,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
       // Récupérer la version actuelle de l'application
       final packageInfo = await PackageInfo.fromPlatform();
       final currentVer = packageInfo.version;
-      
+
       // Mettre en cache et setState pour la version actuelle
-      PerformanceUtils.setCache('current_version', currentVer, CacheConstants.versionCache);
+      PerformanceUtils.setCache(
+          'current_version', currentVer, CacheConstants.versionCache);
       setState(() {
         currentVersion = currentVer;
       });
 
       // Vérifier le cache pour la version latest d'abord
-      final cachedLatest = PerformanceUtils.getFromCache<String>('latest_version');
+      final cachedLatest =
+          PerformanceUtils.getFromCache<String>('latest_version');
       if (cachedLatest != null) {
         setState(() {
           latestVersion = cachedLatest;
@@ -82,17 +87,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
       // Récupérer la dernière version depuis GitHub seulement si pas en cache
       final response = await http.get(
-        Uri.parse('https://api.github.com/repos/RealToken-Community/realtoken_apps/releases/latest'),
+        Uri.parse(
+            'https://api.github.com/repos/RealToken-Community/realtoken_apps/releases/latest'),
         headers: {'Accept': 'application/vnd.github.v3+json'},
       ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final releaseData = json.decode(response.body);
         final tagName = releaseData['tag_name'];
-        final latestVer = tagName.startsWith('v') ? tagName.substring(1) : tagName;
+        final latestVer =
+            tagName.startsWith('v') ? tagName.substring(1) : tagName;
 
         // Mettre en cache et setState
-        PerformanceUtils.setCache('latest_version', latestVer, CacheConstants.versionCache);
+        PerformanceUtils.setCache(
+            'latest_version', latestVer, CacheConstants.versionCache);
         if (mounted) {
           setState(() {
             latestVersion = latestVer;
@@ -139,7 +147,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           content: Text(
             S.of(context).reviewRequestUnavailable,
-            style: TextStyle(fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset()),
+            style: TextStyle(
+                fontSize: 14 +
+                    Provider.of<AppState>(context, listen: false)
+                        .getTextSizeOffset()),
           ),
           actions: [
             CupertinoDialogAction(
@@ -172,11 +183,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
               children: [
                 // En-tête avec sa propre SafeArea
                 Material(
-                  color: Theme.of(context).primaryColor.withOpacity(0.9),
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.9),
                   child: SafeArea(
                     bottom: false,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                      padding: const EdgeInsets.only(
+                          left: 16.0, right: 16.0, bottom: 16.0),
                       child: GestureDetector(
                         onTap: () {
                           UrlUtils.launchURL('https://realt.co/marketplace/');
@@ -190,7 +202,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 Container(
                                   padding: const EdgeInsets.all(6),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Image.asset(
@@ -202,21 +214,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 const SizedBox(width: 14),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'RealToken Asset Tracker',
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 18 + appState.getTextSizeOffset(),
+                                          fontSize:
+                                              18 + appState.getTextSizeOffset(),
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       Text(
                                         S.of(context).appDescription,
                                         style: TextStyle(
-                                          color: Colors.white.withOpacity(0.9),
-                                          fontSize: 14 + appState.getTextSizeOffset(),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.9),
+                                          fontSize:
+                                              14 + appState.getTextSizeOffset(),
                                         ),
                                       ),
                                     ],
@@ -224,7 +240,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 ),
                               ],
                             ),
-                           ],
+                          ],
                         ),
                       ),
                     ),
@@ -243,7 +259,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         bottom: 0,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: CupertinoColors.systemBackground.resolveFrom(context),
+                            color: CupertinoColors.systemBackground
+                                .resolveFrom(context),
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(16),
                               topRight: Radius.circular(16),
@@ -270,7 +287,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     items: [
                                       DrawerMenuFactory.createPageNavItem(
                                         context: context,
-                                        icon: CupertinoIcons.person_crop_circle_fill,
+                                        icon: CupertinoIcons
+                                            .person_crop_circle_fill,
                                         title: S.of(context).manageEvmAddresses,
                                         page: const ManageEvmAddressesPage(),
                                       ),
@@ -301,7 +319,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       ),
                                       DrawerMenuFactory.createPageNavItem(
                                         context: context,
-                                        icon: CupertinoIcons.arrow_clockwise_circle_fill,
+                                        icon: CupertinoIcons
+                                            .arrow_clockwise_circle_fill,
                                         title: S.of(context).recentChanges,
                                         page: const UpdatesPage(),
                                         iconColor: Colors.orange,
@@ -347,7 +366,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       ),
                                       DrawerMenuFactory.createPageNavItem(
                                         context: context,
-                                        icon: CupertinoIcons.chat_bubble_text_fill,
+                                        icon: CupertinoIcons
+                                            .chat_bubble_text_fill,
                                         title: S.of(context).support,
                                         page: const SupportPage(),
                                         iconColor: Colors.green,

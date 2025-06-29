@@ -12,10 +12,12 @@ class RentDistributionByWalletChart extends StatefulWidget {
   const RentDistributionByWalletChart({super.key, required this.dataManager});
 
   @override
-  _RentDistributionByWalletChartState createState() => _RentDistributionByWalletChartState();
+  _RentDistributionByWalletChartState createState() =>
+      _RentDistributionByWalletChartState();
 }
 
-class _RentDistributionByWalletChartState extends State<RentDistributionByWalletChart> {
+class _RentDistributionByWalletChartState
+    extends State<RentDistributionByWalletChart> {
   int? _selectedIndex;
   final ValueNotifier<int?> _selectedIndexNotifier = ValueNotifier<int?>(null);
 
@@ -58,7 +60,7 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -68,7 +70,7 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -104,17 +106,22 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
                           centerSpaceRadius: 65,
                           sectionsSpace: 3,
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
-                              if (response != null && response.touchedSection != null) {
-                                final touchedIndex = response.touchedSection!.touchedSectionIndex;
-                                _selectedIndexNotifier.value = touchedIndex >= 0 ? touchedIndex : null;
+                            touchCallback: (FlTouchEvent event,
+                                PieTouchResponse? response) {
+                              if (response != null &&
+                                  response.touchedSection != null) {
+                                final touchedIndex = response
+                                    .touchedSection!.touchedSectionIndex;
+                                _selectedIndexNotifier.value =
+                                    touchedIndex >= 0 ? touchedIndex : null;
                               } else {
                                 _selectedIndexNotifier.value = null;
                               }
                             },
                           ),
                         ),
-                        swapAnimationDuration: const Duration(milliseconds: 300),
+                        swapAnimationDuration:
+                            const Duration(milliseconds: 300),
                         swapAnimationCurve: Curves.easeInOutCubic,
                       ),
                       _buildCenterText(selectedIndex),
@@ -145,7 +152,8 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
     }
 
     // Calculer le total des loyers
-    final double totalRent = walletRentTotals.values.fold(0.0, (sum, value) => sum + value);
+    final double totalRent =
+        walletRentTotals.values.fold(0.0, (sum, value) => sum + value);
 
     // Vérifier si le total est valide
     if (totalRent <= 0) {
@@ -153,43 +161,52 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
     }
 
     // Trier les entrées par montant décroissant
-    final sortedEntries = walletRentTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = walletRentTotals.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     // Créer les sections du donut chart avec des vérifications de sécurité
-    return sortedEntries.asMap().entries.map((entry) {
-      final index = entry.key;
-      final data = entry.value;
-      
-      // Vérifier si la valeur est valide
-      if (data.value <= 0) {
-        return null;
-      }
+    return sortedEntries
+        .asMap()
+        .entries
+        .map((entry) {
+          final index = entry.key;
+          final data = entry.value;
 
-      final percentage = (data.value / totalRent) * 100;
-      final bool isSelected = selectedIndex == index;
-      final double opacity = selectedIndex != null && !isSelected ? 0.5 : 1.0;
+          // Vérifier si la valeur est valide
+          if (data.value <= 0) {
+            return null;
+          }
 
-      return PieChartSectionData(
-        value: data.value,
-        title: '${percentage.toInt()}%',
-        color: _generateColor(index).withOpacity(opacity),
-        radius: isSelected ? 52 : 45,
-        titleStyle: TextStyle(
-          fontSize: isSelected ? 14 + Provider.of<AppState>(context).getTextSizeOffset() : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-          shadows: [
-            Shadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 3,
-              offset: const Offset(1, 1),
+          final percentage = (data.value / totalRent) * 100;
+          final bool isSelected = selectedIndex == index;
+          final double opacity =
+              selectedIndex != null && !isSelected ? 0.5 : 1.0;
+
+          return PieChartSectionData(
+            value: data.value,
+            title: '${percentage.toInt()}%',
+            color: _generateColor(index).withValues(alpha: opacity),
+            radius: isSelected ? 52 : 45,
+            titleStyle: TextStyle(
+              fontSize: isSelected
+                  ? 14 + Provider.of<AppState>(context).getTextSizeOffset()
+                  : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  blurRadius: 3,
+                  offset: const Offset(1, 1),
+                ),
+              ],
             ),
-          ],
-        ),
-        badgeWidget: isSelected ? _buildSelectedIndicator() : null,
-        badgePositionPercentageOffset: 1.1,
-      );
-    }).whereType<PieChartSectionData>().toList();
+            badgeWidget: isSelected ? _buildSelectedIndicator() : null,
+            badgePositionPercentageOffset: 1.1,
+          );
+        })
+        .whereType<PieChartSectionData>()
+        .toList();
   }
 
   Widget _buildSelectedIndicator() {
@@ -205,7 +222,7 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -216,7 +233,8 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
 
   Widget _buildCenterText(int? selectedIndex) {
     final Map<String, double> walletRentTotals = _calculateWalletRentTotals();
-    final double totalRent = walletRentTotals.values.fold(0.0, (sum, value) => sum + value);
+    final double totalRent =
+        walletRentTotals.values.fold(0.0, (sum, value) => sum + value);
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
 
     if (selectedIndex == null) {
@@ -247,7 +265,8 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
       );
     }
 
-    final sortedEntries = walletRentTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = walletRentTotals.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
     final selectedEntry = sortedEntries[selectedIndex];
 
     // Raccourcir l'adresse du wallet pour l'affichage
@@ -284,7 +303,8 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
     final Map<String, double> walletRentTotals = _calculateWalletRentTotals();
     final appState = Provider.of<AppState>(context);
 
-    final sortedEntries = walletRentTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries = walletRentTotals.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     return Wrap(
       spacing: 8.0,
@@ -305,10 +325,14 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifier.value == index ? color.withOpacity(0.1) : Colors.transparent,
+              color: _selectedIndexNotifier.value == index
+                  ? color.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: _selectedIndexNotifier.value == index ? color : Colors.transparent,
+                color: _selectedIndexNotifier.value == index
+                    ? color
+                    : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -323,7 +347,7 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 2,
                         offset: const Offset(1, 1),
                       ),
@@ -335,8 +359,12 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
                   displayWallet,
                   style: TextStyle(
                     fontSize: 12 + appState.getTextSizeOffset(),
-                    color: _selectedIndexNotifier.value == index ? color : Theme.of(context).textTheme.bodyMedium?.color,
-                    fontWeight: _selectedIndexNotifier.value == index ? FontWeight.w600 : FontWeight.normal,
+                    color: _selectedIndexNotifier.value == index
+                        ? color
+                        : Theme.of(context).textTheme.bodyMedium?.color,
+                    fontWeight: _selectedIndexNotifier.value == index
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
               ],
@@ -352,7 +380,8 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
     Map<String, double> result = {};
 
     // Obtenir les données de loyers par wallet depuis le DataManager
-    Map<String, Map<String, double>> rentsByWallet = widget.dataManager.getRentsByWallet();
+    Map<String, Map<String, double>> rentsByWallet =
+        widget.dataManager.getRentsByWallet();
 
     // Calculer le total des loyers pour chaque wallet
     for (var walletEntry in rentsByWallet.entries) {
@@ -360,7 +389,8 @@ class _RentDistributionByWalletChartState extends State<RentDistributionByWallet
       Map<String, double> tokenRents = walletEntry.value;
 
       // Somme des loyers pour tous les tokens de ce wallet
-      double totalForWallet = tokenRents.values.fold(0.0, (sum, rent) => sum + rent);
+      double totalForWallet =
+          tokenRents.values.fold(0.0, (sum, rent) => sum + rent);
       result[wallet] = totalForWallet;
     }
 

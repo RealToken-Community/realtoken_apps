@@ -32,7 +32,8 @@ ThemeData getDarkTheme(Color primaryColor) {
     primaryColor: primaryColor,
     scaffoldBackgroundColor: Colors.black,
     cardColor: Colors.grey[900],
-    secondaryHeaderColor: Color.fromARGB(255, 78, 78, 78).withOpacity(0.4),
+    secondaryHeaderColor:
+        Color.fromARGB(255, 78, 78, 78).withValues(alpha: 0.4),
     textTheme: TextTheme(
       bodyLarge: TextStyle(color: Colors.white),
       bodyMedium: TextStyle(color: Colors.grey[400]),

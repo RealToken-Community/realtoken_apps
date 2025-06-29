@@ -12,7 +12,8 @@ class TransactionAnalysisChart extends StatefulWidget {
   const TransactionAnalysisChart({super.key, required this.dataManager});
 
   @override
-  _TransactionAnalysisChartState createState() => _TransactionAnalysisChartState();
+  _TransactionAnalysisChartState createState() =>
+      _TransactionAnalysisChartState();
 }
 
 class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
@@ -34,7 +35,7 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -44,7 +45,7 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -66,8 +67,12 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
                 DropdownButton<String>(
                   value: _analysisType,
                   items: [
-                    DropdownMenuItem(value: 'count', child: Text(S.of(context).transactionCount)),
-                    DropdownMenuItem(value: 'volume', child: Text(S.of(context).transactionVolume)),
+                    DropdownMenuItem(
+                        value: 'count',
+                        child: Text(S.of(context).transactionCount)),
+                    DropdownMenuItem(
+                        value: 'volume',
+                        child: Text(S.of(context).transactionVolume)),
                   ],
                   onChanged: (String? value) {
                     setState(() {
@@ -89,22 +94,28 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
                     children: [
                       PieChart(
                         PieChartData(
-                          sections: _buildTransactionDonutChartData(selectedIndex),
+                          sections:
+                              _buildTransactionDonutChartData(selectedIndex),
                           centerSpaceRadius: 65,
                           sectionsSpace: 3,
                           borderData: FlBorderData(show: false),
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
-                              if (response != null && response.touchedSection != null) {
-                                final touchedIndex = response.touchedSection!.touchedSectionIndex;
-                                _selectedIndexNotifier.value = touchedIndex >= 0 ? touchedIndex : null;
+                            touchCallback: (FlTouchEvent event,
+                                PieTouchResponse? response) {
+                              if (response != null &&
+                                  response.touchedSection != null) {
+                                final touchedIndex = response
+                                    .touchedSection!.touchedSectionIndex;
+                                _selectedIndexNotifier.value =
+                                    touchedIndex >= 0 ? touchedIndex : null;
                               } else {
                                 _selectedIndexNotifier.value = null;
                               }
                             },
                           ),
                         ),
-                        swapAnimationDuration: const Duration(milliseconds: 300),
+                        swapAnimationDuration:
+                            const Duration(milliseconds: 300),
                         swapAnimationCurve: Curves.easeInOutCubic,
                       ),
                       _buildCenterText(selectedIndex),
@@ -131,7 +142,7 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
       'transfer': 0,
       'yam': 0,
     };
-    
+
     Map<String, double> transactionVolumes = {
       'purchase': 0.0,
       'transfer': 0.0,
@@ -139,16 +150,20 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
     };
 
     // Parcourir toutes les transactions par token
-    for (var tokenTransactions in widget.dataManager.transactionsByToken.values) {
+    for (var tokenTransactions
+        in widget.dataManager.transactionsByToken.values) {
       for (var transaction in tokenTransactions) {
-        final String transactionType = transaction['transactionType'] ?? 'unknown';
+        final String transactionType =
+            transaction['transactionType'] ?? 'unknown';
         final double amount = (transaction['amount'] ?? 0.0).toDouble();
         final double price = (transaction['price'] ?? 0.0).toDouble();
         final double volume = amount * price;
 
         if (transactionCounts.containsKey(transactionType)) {
-          transactionCounts[transactionType] = transactionCounts[transactionType]! + 1;
-          transactionVolumes[transactionType] = transactionVolumes[transactionType]! + volume;
+          transactionCounts[transactionType] =
+              transactionCounts[transactionType]! + 1;
+          transactionVolumes[transactionType] =
+              transactionVolumes[transactionType]! + volume;
         }
       }
     }
@@ -159,27 +174,29 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
     };
   }
 
-  List<PieChartSectionData> _buildTransactionDonutChartData(int? selectedIndex) {
+  List<PieChartSectionData> _buildTransactionDonutChartData(
+      int? selectedIndex) {
     final Map<String, dynamic> transactionData = _calculateTransactionData();
-    final Map<String, dynamic> dataToUse = _analysisType == 'count' 
-        ? transactionData['counts'] 
+    final Map<String, dynamic> dataToUse = _analysisType == 'count'
+        ? transactionData['counts']
         : transactionData['volumes'];
-    
-    final double total = dataToUse.values.fold(0.0, (sum, value) => sum + value);
+
+    final double total =
+        dataToUse.values.fold(0.0, (sum, value) => sum + value);
 
     if (total <= 0) {
       return [
         PieChartSectionData(
           value: 1,
           title: '',
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
           radius: 40,
         )
       ];
     }
 
-    final List<MapEntry<String, dynamic>> sortedEntries = dataToUse.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final List<MapEntry<String, dynamic>> sortedEntries =
+        dataToUse.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     return sortedEntries.asMap().entries.map((entry) {
       final index = entry.key;
@@ -208,15 +225,17 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
       return PieChartSectionData(
         value: value.toDouble(),
         title: percentage < 5 ? '' : '${percentage.toStringAsFixed(1)}%',
-        color: color.withOpacity(opacity),
+        color: color.withValues(alpha: opacity),
         radius: isSelected ? 52 : 45,
         titleStyle: TextStyle(
-          fontSize: isSelected ? 14 + Provider.of<AppState>(context).getTextSizeOffset() : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
+          fontSize: isSelected
+              ? 14 + Provider.of<AppState>(context).getTextSizeOffset()
+              : 10 + Provider.of<AppState>(context).getTextSizeOffset(),
           color: Colors.white,
           fontWeight: FontWeight.w600,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 3,
               offset: const Offset(1, 1),
             ),
@@ -241,7 +260,7 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -252,11 +271,12 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
 
   Widget _buildCenterText(int? selectedIndex) {
     final Map<String, dynamic> transactionData = _calculateTransactionData();
-    final Map<String, dynamic> dataToUse = _analysisType == 'count' 
-        ? transactionData['counts'] 
+    final Map<String, dynamic> dataToUse = _analysisType == 'count'
+        ? transactionData['counts']
         : transactionData['volumes'];
-    
-    final double total = dataToUse.values.fold(0.0, (sum, value) => sum + value);
+
+    final double total =
+        dataToUse.values.fold(0.0, (sum, value) => sum + value);
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
 
     if (selectedIndex == null) {
@@ -273,9 +293,10 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
           ),
           const SizedBox(height: 4),
           Text(
-            _analysisType == 'count' 
+            _analysisType == 'count'
                 ? total.toStringAsFixed(0)
-                : currencyUtils.getFormattedAmount(currencyUtils.convert(total), currencyUtils.currencySymbol, true),
+                : currencyUtils.getFormattedAmount(currencyUtils.convert(total),
+                    currencyUtils.currencySymbol, true),
             style: TextStyle(
               fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
               color: Colors.grey.shade600,
@@ -286,13 +307,14 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
       );
     }
 
-    final List<MapEntry<String, dynamic>> sortedEntries = dataToUse.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final List<MapEntry<String, dynamic>> sortedEntries =
+        dataToUse.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     if (selectedIndex >= sortedEntries.length) return Container();
 
     final selectedEntry = sortedEntries[selectedIndex];
-    final String transactionTypeName = _getTransactionTypeName(selectedEntry.key);
+    final String transactionTypeName =
+        _getTransactionTypeName(selectedEntry.key);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -308,9 +330,12 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
         ),
         const SizedBox(height: 4),
         Text(
-          _analysisType == 'count' 
+          _analysisType == 'count'
               ? selectedEntry.value.toStringAsFixed(0)
-              : currencyUtils.getFormattedAmount(currencyUtils.convert(selectedEntry.value), currencyUtils.currencySymbol, true),
+              : currencyUtils.getFormattedAmount(
+                  currencyUtils.convert(selectedEntry.value),
+                  currencyUtils.currencySymbol,
+                  true),
           style: TextStyle(
             fontSize: 14 + Provider.of<AppState>(context).getTextSizeOffset(),
             color: Colors.grey.shade600,
@@ -349,15 +374,15 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
 
   Widget _buildTransactionLegend() {
     final Map<String, dynamic> transactionData = _calculateTransactionData();
-    final Map<String, dynamic> dataToUse = _analysisType == 'count' 
-        ? transactionData['counts'] 
+    final Map<String, dynamic> dataToUse = _analysisType == 'count'
+        ? transactionData['counts']
         : transactionData['volumes'];
-    
+
     final appState = Provider.of<AppState>(context);
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
 
-    final List<MapEntry<String, dynamic>> sortedEntries = dataToUse.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final List<MapEntry<String, dynamic>> sortedEntries =
+        dataToUse.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     return Wrap(
       spacing: 8.0,
@@ -372,16 +397,21 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
 
         return InkWell(
           onTap: () {
-            _selectedIndexNotifier.value = (_selectedIndexNotifier.value == index) ? null : index;
+            _selectedIndexNotifier.value =
+                (_selectedIndexNotifier.value == index) ? null : index;
           },
           borderRadius: BorderRadius.circular(8),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
             decoration: BoxDecoration(
-              color: _selectedIndexNotifier.value == index ? color.withOpacity(0.1) : Colors.transparent,
+              color: _selectedIndexNotifier.value == index
+                  ? color.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: _selectedIndexNotifier.value == index ? color : Colors.transparent,
+                color: _selectedIndexNotifier.value == index
+                    ? color
+                    : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -396,7 +426,7 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 2,
                         offset: const Offset(1, 1),
                       ),
@@ -408,8 +438,12 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
                   '$typeName: ${_analysisType == 'count' ? value.toStringAsFixed(0) : currencyUtils.getFormattedAmount(currencyUtils.convert(value), currencyUtils.currencySymbol, true)}',
                   style: TextStyle(
                     fontSize: 12 + appState.getTextSizeOffset(),
-                    color: _selectedIndexNotifier.value == index ? color : Theme.of(context).textTheme.bodyMedium?.color,
-                    fontWeight: _selectedIndexNotifier.value == index ? FontWeight.w600 : FontWeight.normal,
+                    color: _selectedIndexNotifier.value == index
+                        ? color
+                        : Theme.of(context).textTheme.bodyMedium?.color,
+                    fontWeight: _selectedIndexNotifier.value == index
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
               ],
@@ -419,4 +453,4 @@ class _TransactionAnalysisChartState extends State<TransactionAnalysisChart> {
       }).toList(),
     );
   }
-} 
+}

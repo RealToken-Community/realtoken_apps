@@ -20,7 +20,8 @@ class _ChangelogPageState extends State<ChangelogPage> {
   }
 
   Future<void> _fetchMarkdown() async {
-    const url = 'https://raw.githubusercontent.com/RealToken-Community/realtoken_apps/refs/heads/main/CHANGELOG.md';
+    const url =
+        'https://raw.githubusercontent.com/RealToken-Community/realtoken_apps/refs/heads/main/CHANGELOG.md';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -30,7 +31,8 @@ class _ChangelogPageState extends State<ChangelogPage> {
         });
       } else {
         setState(() {
-          _markdownData = 'Erreur lors du chargement du contenu (code: ${response.statusCode})';
+          _markdownData =
+              'Erreur lors du chargement du contenu (code: ${response.statusCode})';
           _isLoading = false;
         });
       }

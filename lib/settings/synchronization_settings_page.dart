@@ -22,10 +22,12 @@ class SynchronizationSettingsPage extends StatefulWidget {
   const SynchronizationSettingsPage({super.key});
 
   @override
-  _SynchronizationSettingsPageState createState() => _SynchronizationSettingsPageState();
+  _SynchronizationSettingsPageState createState() =>
+      _SynchronizationSettingsPageState();
 }
 
-class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPage> {
+class _SynchronizationSettingsPageState
+    extends State<SynchronizationSettingsPage> {
   final GoogleDriveService _googleDriveService = GoogleDriveService();
   bool _isGoogleDriveConnected = false;
   bool _autoSyncEnabled = false;
@@ -100,22 +102,28 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
         padding: EdgeInsets.zero,
         children: [
           const SizedBox(height: 12),
-          _buildSectionHeader(context, S.of(context).googleDriveTitle, CupertinoIcons.cloud),
+          _buildSectionHeader(
+              context, S.of(context).googleDriveTitle, CupertinoIcons.cloud),
           _buildSettingsSection(
             context,
             children: [
               _buildSettingsItem(
                 context,
                 title: S.of(context).googleDriveConnection,
-                subtitle: _isGoogleDriveConnected ? S.of(context).connected : S.of(context).notConnected,
-                leadingIcon: _isGoogleDriveConnected ? CupertinoIcons.cloud_upload_fill : CupertinoIcons.cloud,
-                leadingIconColor: _isGoogleDriveConnected ? Colors.green : Colors.grey,
+                subtitle: _isGoogleDriveConnected
+                    ? S.of(context).connected
+                    : S.of(context).notConnected,
+                leadingIcon: _isGoogleDriveConnected
+                    ? CupertinoIcons.cloud_upload_fill
+                    : CupertinoIcons.cloud,
+                leadingIconColor:
+                    _isGoogleDriveConnected ? Colors.green : Colors.grey,
                 trailing: Transform.scale(
                   scale: 0.8,
                   child: CupertinoSwitch(
                     value: _isGoogleDriveConnected,
                     onChanged: _toggleGoogleDriveConnection,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeTrackColor: Theme.of(context).primaryColor,
                   ),
                 ),
                 isFirst: true,
@@ -128,7 +136,7 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
                   child: CupertinoSwitch(
                     value: _autoSyncEnabled,
                     onChanged: _saveAutoSyncPreference,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeTrackColor: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -138,14 +146,16 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
                 trailing: CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: _syncWithGoogleDrive,
-                  child: const Icon(CupertinoIcons.arrow_2_circlepath, color: Colors.blue, size: 20),
+                  child: const Icon(CupertinoIcons.arrow_2_circlepath,
+                      color: Colors.blue, size: 20),
                 ),
                 isLast: true,
               ),
             ],
           ),
           const SizedBox(height: 12),
-          _buildSectionHeader(context, S.of(context).localStorage, CupertinoIcons.folder),
+          _buildSectionHeader(
+              context, S.of(context).localStorage, CupertinoIcons.folder),
           _buildSettingsSection(
             context,
             children: [
@@ -160,20 +170,25 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
                         Text(
                           S.of(context).dataBackup,
                           style: TextStyle(
-                            fontSize: 15 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                            fontSize: 15 +
+                                Provider.of<AppState>(context, listen: false)
+                                    .getTextSizeOffset(),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         CupertinoButton(
                           padding: EdgeInsets.zero,
-                          child: const Icon(CupertinoIcons.info_circle, size: 20, color: Colors.grey),
+                          child: const Icon(CupertinoIcons.info_circle,
+                              size: 20, color: Colors.grey),
                           onPressed: () {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return CupertinoAlertDialog(
-                                  title: Text(S.of(context).aboutImportExportTitle),
-                                  content: Text(S.of(context).aboutImportExport),
+                                  title: Text(
+                                      S.of(context).aboutImportExportTitle),
+                                  content:
+                                      Text(S.of(context).aboutImportExport),
                                   actions: [
                                     CupertinoDialogAction(
                                       isDefaultAction: true,
@@ -195,7 +210,8 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CupertinoButton(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(8),
                           onPressed: () => shareZippedHiveData(),
@@ -208,7 +224,8 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
                           ),
                         ),
                         CupertinoButton(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(8),
                           onPressed: () => importZippedHiveData(),
@@ -232,7 +249,8 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 2),
       child: Row(
@@ -264,7 +282,7 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -303,7 +321,8 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
           child: Row(
             children: [
               if (leadingIcon != null) ...[
-                Icon(leadingIcon, color: leadingIconColor ?? Colors.blue, size: 20),
+                Icon(leadingIcon,
+                    color: leadingIconColor ?? Colors.blue, size: 20),
                 const SizedBox(width: 12),
               ],
               Expanded(
@@ -338,7 +357,10 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 12),
-            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withOpacity(0.3)),
+            child: Divider(
+                height: 1,
+                thickness: 0.5,
+                color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );
@@ -354,17 +376,22 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
       var customRoiBox = await Hive.openBox('roiValueArchive');
       var customApyBox = await Hive.openBox('apyValueArchive');
       var customYamBox = await Hive.openBox('YamMarket');
-      var customHealthAndLtvBox = await Hive.openBox('HealthAndLtvValueArchive');
+      var customHealthAndLtvBox =
+          await Hive.openBox('HealthAndLtvValueArchive');
       debugPrint("Hive boxes ouverts.");
       debugPrint("Contenu de balanceHistoryBox: ${balanceHistoryBox.toMap()}");
-      debugPrint("Contenu de walletValueArchiveBox: ${walletValueArchiveBox.toMap()}");
-      debugPrint("Contenu de customInitPricesBox: ${customInitPricesBox.toMap()}");
+      debugPrint(
+          "Contenu de walletValueArchiveBox: ${walletValueArchiveBox.toMap()}");
+      debugPrint(
+          "Contenu de customInitPricesBox: ${customInitPricesBox.toMap()}");
       debugPrint("Contenu de customRoiBox: ${customRoiBox.toMap()}");
       debugPrint("Contenu de customApyBox: ${customApyBox.toMap()}");
       debugPrint("Contenu de customYamBox: ${customYamBox.toMap()}");
-      debugPrint("Contenu de customHealthAndLtvBox : ${customHealthAndLtvBox.toMap()}");
+      debugPrint(
+          "Contenu de customHealthAndLtvBox : ${customHealthAndLtvBox.toMap()}");
 
-      debugPrint("=== Étape 2: Récupération et sanitisation des données Hive ===");
+      debugPrint(
+          "=== Étape 2: Récupération et sanitisation des données Hive ===");
       Map balanceHistoryData = sanitizeValue(balanceHistoryBox.toMap());
       Map walletValueArchiveData = sanitizeValue(walletValueArchiveBox.toMap());
       Map customInitPricesData = sanitizeValue(customInitPricesBox.toMap());
@@ -396,7 +423,8 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
       List<String> ethAddresses = prefs.getStringList('evmAddresses') ?? [];
       String? userIdToAddresses = prefs.getString('userIdToAddresses');
       String? selectedCurrency = prefs.getString('selectedCurrency');
-      bool convertToSquareMeters = prefs.getBool('convertToSquareMeters') ?? false;
+      bool convertToSquareMeters =
+          prefs.getBool('convertToSquareMeters') ?? false;
       Map<String, dynamic> preferencesData = {
         'ethAddresses': ethAddresses,
         'userIdToAddresses': userIdToAddresses,
@@ -409,14 +437,22 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
       debugPrint("=== Étape 4: Création et écriture des fichiers JSON ===");
       // Obtenir le répertoire de documents
       Directory directory = await getApplicationDocumentsDirectory();
-      String balanceHistoryFilePath = path.join(directory.path, 'balanceHistoryBackup.json');
-      String walletValueArchiveFilePath = path.join(directory.path, 'walletValueArchiveBackup.json');
-      String customInitPricesFilePath = path.join(directory.path, 'customInitPricesBackup.json');
-      String customRoiFilePath = path.join(directory.path, 'customRoiBackup.json');
-      String customApyFilePath = path.join(directory.path, 'customApyBackup.json');
-      String customYamFilePath = path.join(directory.path, 'customYamBackup.json');
-      String customHealthAndLtvFilePath = path.join(directory.path, 'customHealthAndLtvBackup.json');
-      String preferencesFilePath = path.join(directory.path, 'preferencesBackup.json');
+      String balanceHistoryFilePath =
+          path.join(directory.path, 'balanceHistoryBackup.json');
+      String walletValueArchiveFilePath =
+          path.join(directory.path, 'walletValueArchiveBackup.json');
+      String customInitPricesFilePath =
+          path.join(directory.path, 'customInitPricesBackup.json');
+      String customRoiFilePath =
+          path.join(directory.path, 'customRoiBackup.json');
+      String customApyFilePath =
+          path.join(directory.path, 'customApyBackup.json');
+      String customYamFilePath =
+          path.join(directory.path, 'customYamBackup.json');
+      String customHealthAndLtvFilePath =
+          path.join(directory.path, 'customHealthAndLtvBackup.json');
+      String preferencesFilePath =
+          path.join(directory.path, 'preferencesBackup.json');
 
       File balanceHistoryFile = File(balanceHistoryFilePath);
       File walletValueArchiveFile = File(walletValueArchiveFilePath);
@@ -437,14 +473,22 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
       await preferencesFile.writeAsString(preferencesJson);
 
       debugPrint("Fichiers JSON écrits:");
-      debugPrint("balanceHistory: $balanceHistoryFilePath (taille: ${balanceHistoryFile.lengthSync()} octets)");
-      debugPrint("walletValueArchive: $walletValueArchiveFilePath (taille: ${walletValueArchiveFile.lengthSync()} octets)");
-      debugPrint("customInitPrices: $customInitPricesFilePath (taille: ${customInitPricesFile.lengthSync()} octets)");
-      debugPrint("customRoi: $customRoiFilePath (taille: ${customRoiFile.lengthSync()} octets)");
-      debugPrint("customApy: $customApyFilePath (taille: ${customApyFile.lengthSync()} octets)");
-      debugPrint("customYam: $customYamFilePath (taille: ${customYamFile.lengthSync()} octets)");
-      debugPrint("customHealthAndLtv: $customHealthAndLtvFilePath (taille: ${customHealthAndLtvFile.lengthSync()} octets)");
-      debugPrint("preferences: $preferencesFilePath (taille: ${preferencesFile.lengthSync()} octets)");
+      debugPrint(
+          "balanceHistory: $balanceHistoryFilePath (taille: ${balanceHistoryFile.lengthSync()} octets)");
+      debugPrint(
+          "walletValueArchive: $walletValueArchiveFilePath (taille: ${walletValueArchiveFile.lengthSync()} octets)");
+      debugPrint(
+          "customInitPrices: $customInitPricesFilePath (taille: ${customInitPricesFile.lengthSync()} octets)");
+      debugPrint(
+          "customRoi: $customRoiFilePath (taille: ${customRoiFile.lengthSync()} octets)");
+      debugPrint(
+          "customApy: $customApyFilePath (taille: ${customApyFile.lengthSync()} octets)");
+      debugPrint(
+          "customYam: $customYamFilePath (taille: ${customYamFile.lengthSync()} octets)");
+      debugPrint(
+          "customHealthAndLtv: $customHealthAndLtvFilePath (taille: ${customHealthAndLtvFile.lengthSync()} octets)");
+      debugPrint(
+          "preferences: $preferencesFilePath (taille: ${preferencesFile.lengthSync()} octets)");
 
       debugPrint("=== Étape 5: Construction de l'archive ZIP ===");
       final archive = Archive();
@@ -488,13 +532,15 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
         preferencesFile.lengthSync(),
         preferencesFile.readAsBytesSync(),
       ));
-      debugPrint("Archive construite avec succès. Nombre de fichiers ajoutés: ${archive.length}");
+      debugPrint(
+          "Archive construite avec succès. Nombre de fichiers ajoutés: ${archive.length}");
 
       debugPrint("=== Étape 6: Encodage de l'archive en ZIP ===");
       String zipFilePath = path.join(directory.path, 'realToken_Backup.zip');
       final zipData = ZipEncoder().encode(archive);
       File(zipFilePath).writeAsBytesSync(zipData);
-      debugPrint("Fichier ZIP créé: $zipFilePath (taille: ${File(zipFilePath).lengthSync()} octets)");
+      debugPrint(
+          "Fichier ZIP créé: $zipFilePath (taille: ${File(zipFilePath).lengthSync()} octets)");
 
       debugPrint("=== Étape 7: Partage du fichier ZIP ===");
       XFile xfile = XFile(zipFilePath);
@@ -549,15 +595,17 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
             await balanceHistoryBox.putAll(balanceHistoryData);
           } else if (file.name == 'walletValueArchiveBackup.json') {
             try {
-              debugPrint("📥 Début de l'importation de walletValueArchiveBackup.json");
+              debugPrint(
+                  "📥 Début de l'importation de walletValueArchiveBackup.json");
 
               // Ouvrir les deux boîtes Hive
-              var walletValueArchiveBox = await Hive.box('walletValueArchive');
-              var balanceHistoryBox = await Hive.box('balanceHistory');
+              var walletValueArchiveBox = Hive.box('walletValueArchive');
+              var balanceHistoryBox = Hive.box('balanceHistory');
 
               // Décoder le contenu JSON
               dynamic decodedData = jsonDecode(jsonContent);
-              debugPrint("📊 Type de données décodées: ${decodedData.runtimeType}");
+              debugPrint(
+                  "📊 Type de données décodées: ${decodedData.runtimeType}");
 
               // Préparer les données pour la sauvegarde
               List<dynamic> recordsToSave;
@@ -566,33 +614,48 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
                 debugPrint("🗺️ Données reçues sous forme de Map");
 
                 // Si les données sont une Map, chercher la clé balanceHistory_totalWalletValue
-                if (decodedData.containsKey('balanceHistory_totalWalletValue')) {
-                  recordsToSave = decodedData['balanceHistory_totalWalletValue'];
-                  debugPrint("✅ Clé 'balanceHistory_totalWalletValue' trouvée avec ${recordsToSave.length} enregistrements");
+                if (decodedData
+                    .containsKey('balanceHistory_totalWalletValue')) {
+                  recordsToSave =
+                      decodedData['balanceHistory_totalWalletValue'];
+                  debugPrint(
+                      "✅ Clé 'balanceHistory_totalWalletValue' trouvée avec ${recordsToSave.length} enregistrements");
                 } else {
                   // Si la clé n'existe pas, utiliser toutes les valeurs de la Map
-                  recordsToSave = decodedData.values.expand((v) => v is List ? v : [v]).toList();
-                  debugPrint("⚠️ Clé 'balanceHistory_totalWalletValue' non trouvée, utilisation de l'ensemble des valeurs: ${recordsToSave.length} enregistrements");
+                  recordsToSave = decodedData.values
+                      .expand((v) => v is List ? v : [v])
+                      .toList();
+                  debugPrint(
+                      "⚠️ Clé 'balanceHistory_totalWalletValue' non trouvée, utilisation de l'ensemble des valeurs: ${recordsToSave.length} enregistrements");
                 }
               } else if (decodedData is List) {
-                debugPrint("📋 Données reçues sous forme de Liste avec ${decodedData.length} éléments");
+                debugPrint(
+                    "📋 Données reçues sous forme de Liste avec ${decodedData.length} éléments");
                 recordsToSave = decodedData;
               } else {
-                debugPrint("⚠️ Format de données non reconnu: ${decodedData.runtimeType}");
+                debugPrint(
+                    "⚠️ Format de données non reconnu: ${decodedData.runtimeType}");
                 throw Exception("Format de données non supporté");
               }
 
               // Convertir les enregistrements en objets BalanceRecord
-              List<BalanceRecord> balanceRecords = recordsToSave.map((recordJson) => BalanceRecord.fromJson(Map<String, dynamic>.from(recordJson))).toList();
+              List<BalanceRecord> balanceRecords = recordsToSave
+                  .map((recordJson) => BalanceRecord.fromJson(
+                      Map<String, dynamic>.from(recordJson)))
+                  .toList();
 
-              debugPrint("✅ Conversion effectuée: ${balanceRecords.length} objets BalanceRecord créés");
+              debugPrint(
+                  "✅ Conversion effectuée: ${balanceRecords.length} objets BalanceRecord créés");
 
               // Convertir en JSON pour la sauvegarde
-              List<Map<String, dynamic>> balanceHistoryJsonToSave = balanceRecords.map((record) => record.toJson()).toList();
+              List<Map<String, dynamic>> balanceHistoryJsonToSave =
+                  balanceRecords.map((record) => record.toJson()).toList();
 
               // Sauvegarder dans les deux boîtes
-              await walletValueArchiveBox.put('balanceHistory_totalWalletValue', balanceHistoryJsonToSave);
-              await balanceHistoryBox.put('balanceHistory_totalWalletValue', balanceHistoryJsonToSave);
+              await walletValueArchiveBox.put(
+                  'balanceHistory_totalWalletValue', balanceHistoryJsonToSave);
+              await balanceHistoryBox.put(
+                  'balanceHistory_totalWalletValue', balanceHistoryJsonToSave);
 
               debugPrint("✅ Sauvegarde terminée dans les deux boîtes Hive");
 
@@ -600,12 +663,15 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
               final appState = Provider.of<AppState>(context, listen: false);
               if (appState.dataManager != null) {
                 appState.dataManager!.walletBalanceHistory = balanceRecords;
-                appState.dataManager!.balanceHistory = List.from(balanceRecords);
+                appState.dataManager!.balanceHistory =
+                    List.from(balanceRecords);
                 appState.dataManager!.notifyListeners();
-                debugPrint("✅ DataManager mis à jour avec ${balanceRecords.length} enregistrements");
+                debugPrint(
+                    "✅ DataManager mis à jour avec ${balanceRecords.length} enregistrements");
               }
             } catch (e) {
-              debugPrint("❌ Erreur lors de l'importation de walletValueArchiveBackup.json: $e");
+              debugPrint(
+                  "❌ Erreur lors de l'importation de walletValueArchiveBackup.json: $e");
               rethrow;
             }
           } else if (file.name == 'customInitPricesBackup.json') {
@@ -630,8 +696,10 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
             await customYamBox.putAll(customYamData);
           } else if (file.name == 'customHealthAndLtvBackup.json') {
             // Décoder et insérer les données dans la boîte 'HealthAndLtvValueArchive'
-            Map<String, dynamic> customHealthAndLtvData = jsonDecode(jsonContent);
-            var customHealthAndLtvBox = await Hive.openBox('HealthAndLtvValueArchive');
+            Map<String, dynamic> customHealthAndLtvData =
+                jsonDecode(jsonContent);
+            var customHealthAndLtvBox =
+                await Hive.openBox('HealthAndLtvValueArchive');
             await customHealthAndLtvBox.putAll(customHealthAndLtvData);
           } else if (file.name == 'preferencesBackup.json') {
             // Décoder et insérer les préférences dans SharedPreferences
@@ -639,15 +707,19 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
             final prefs = await SharedPreferences.getInstance();
 
             // Restaurer les préférences sauvegardées
-            List<String> ethAddresses = List<String>.from(preferencesData['ethAddresses'] ?? []);
+            List<String> ethAddresses =
+                List<String>.from(preferencesData['ethAddresses'] ?? []);
             String? userIdToAddresses = preferencesData['userIdToAddresses'];
             String? selectedCurrency = preferencesData['selectedCurrency'];
-            bool convertToSquareMeters = preferencesData['convertToSquareMeters'] ?? false;
+            bool convertToSquareMeters =
+                preferencesData['convertToSquareMeters'] ?? false;
 
             // Sauvegarder les préférences restaurées
             await prefs.setStringList('evmAddresses', ethAddresses);
-            if (userIdToAddresses != null) await prefs.setString('userIdToAddresses', userIdToAddresses);
-            if (selectedCurrency != null) await prefs.setString('selectedCurrency', selectedCurrency);
+            if (userIdToAddresses != null)
+              await prefs.setString('userIdToAddresses', userIdToAddresses);
+            if (selectedCurrency != null)
+              await prefs.setString('selectedCurrency', selectedCurrency);
             await prefs.setBool('convertToSquareMeters', convertToSquareMeters);
           }
         }
@@ -662,7 +734,8 @@ class _SynchronizationSettingsPageState extends State<SynchronizationSettingsPag
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error during importation')),
       );
-      print('Erreur lors de l\'importation des données Hive depuis le fichier ZIP : $e');
+      print(
+          'Erreur lors de l\'importation des données Hive depuis le fichier ZIP : $e');
     }
     DataFetchUtils.refreshData(context);
   }

@@ -14,10 +14,12 @@ class RentDistributionByProductTypeChart extends StatefulWidget {
   });
 
   @override
-  State<RentDistributionByProductTypeChart> createState() => _RentDistributionByProductTypeChartState();
+  State<RentDistributionByProductTypeChart> createState() =>
+      _RentDistributionByProductTypeChartState();
 }
 
-class _RentDistributionByProductTypeChartState extends State<RentDistributionByProductTypeChart> {
+class _RentDistributionByProductTypeChartState
+    extends State<RentDistributionByProductTypeChart> {
   final ValueNotifier<int?> _selectedIndexNotifier = ValueNotifier<int?>(null);
 
   @override
@@ -35,7 +37,7 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -45,7 +47,7 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor.withOpacity(0.8),
+              Theme.of(context).cardColor.withValues(alpha: 0.8),
             ],
           ),
         ),
@@ -85,20 +87,23 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
 
   Map<String, double> _calculateRentByProductType() {
     Map<String, double> rentByProductType = {};
-    
+
     for (var token in widget.dataManager.portfolio) {
       final String productType = token['productType'] ?? 'other';
-      final double totalRentReceived = (token['totalRentReceived'] ?? 0.0).toDouble();
-      
+      final double totalRentReceived =
+          (token['totalRentReceived'] ?? 0.0).toDouble();
+
       if (totalRentReceived > 0) {
-        rentByProductType[productType] = (rentByProductType[productType] ?? 0.0) + totalRentReceived;
+        rentByProductType[productType] =
+            (rentByProductType[productType] ?? 0.0) + totalRentReceived;
       }
     }
-    
+
     return rentByProductType;
   }
 
-  String _getLocalizedProductTypeName(BuildContext context, String productType) {
+  String _getLocalizedProductTypeName(
+      BuildContext context, String productType) {
     switch (productType.toLowerCase()) {
       case 'real_estate_rental':
         return S.of(context).productTypeRealEstateRental;
@@ -128,7 +133,7 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
 
   Widget _buildRentDistributionChart(int? selectedIndex) {
     final Map<String, double> rentByProductType = _calculateRentByProductType();
-    
+
     if (rentByProductType.isEmpty) {
       return Center(
         child: Text(
@@ -142,9 +147,11 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
     }
 
     final List<Color> colors = _getColors();
-    final double total = rentByProductType.values.fold(0.0, (sum, value) => sum + value);
-    
-    List<MapEntry<String, double>> sortedData = rentByProductType.entries.toList()
+    final double total =
+        rentByProductType.values.fold(0.0, (sum, value) => sum + value);
+
+    List<MapEntry<String, double>> sortedData = rentByProductType.entries
+        .toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return PieChart(
@@ -154,7 +161,7 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
           final double value = entry.value.value;
           final double percentage = (value / total) * 100;
           final bool isSelected = selectedIndex == index;
-          
+
           return PieChartSectionData(
             color: colors[index % colors.length],
             value: percentage,
@@ -174,7 +181,8 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
           touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
             if (response != null && response.touchedSection != null) {
               final touchedIndex = response.touchedSection!.touchedSectionIndex;
-              _selectedIndexNotifier.value = touchedIndex >= 0 ? touchedIndex : null;
+              _selectedIndexNotifier.value =
+                  touchedIndex >= 0 ? touchedIndex : null;
             } else {
               _selectedIndexNotifier.value = null;
             }
@@ -187,86 +195,93 @@ class _RentDistributionByProductTypeChartState extends State<RentDistributionByP
   Widget _buildInteractiveLegend() {
     final Map<String, double> rentByProductType = _calculateRentByProductType();
     final appState = Provider.of<AppState>(context);
-    
+
     if (rentByProductType.isEmpty) {
       return const SizedBox.shrink();
     }
 
     final List<Color> colors = _getColors();
-    final double total = rentByProductType.values.fold(0.0, (sum, value) => sum + value);
-    
-    List<MapEntry<String, double>> sortedData = rentByProductType.entries.toList()
+    final double total =
+        rentByProductType.values.fold(0.0, (sum, value) => sum + value);
+
+    List<MapEntry<String, double>> sortedData = rentByProductType.entries
+        .toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-                     ...sortedData.asMap().entries.map((entry) {
-             final int index = entry.key;
-             final String productType = entry.value.key;
-             final double percentage = (entry.value.value / total) * 100;
-            
-            return ValueListenableBuilder<int?>(
-              valueListenable: _selectedIndexNotifier,
-              builder: (context, selectedIndex, child) {
-                final bool isSelected = selectedIndex == index;
-                
-                return GestureDetector(
-                  onTap: () {
-                    _selectedIndexNotifier.value = isSelected ? null : index;
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 1),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: isSelected 
-                          ? Theme.of(context).primaryColor.withOpacity(0.1)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 16,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: colors[index % colors.length],
-                            borderRadius: BorderRadius.circular(4),
-                            border: isSelected 
-                                ? Border.all(color: Theme.of(context).primaryColor, width: 2)
-                                : null,
-                          ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ...sortedData.asMap().entries.map((entry) {
+          final int index = entry.key;
+          final String productType = entry.value.key;
+          final double percentage = (entry.value.value / total) * 100;
+
+          return ValueListenableBuilder<int?>(
+            valueListenable: _selectedIndexNotifier,
+            builder: (context, selectedIndex, child) {
+              final bool isSelected = selectedIndex == index;
+
+              return GestureDetector(
+                onTap: () {
+                  _selectedIndexNotifier.value = isSelected ? null : index;
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 1),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: colors[index % colors.length],
+                          borderRadius: BorderRadius.circular(4),
+                          border: isSelected
+                              ? Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 2)
+                              : null,
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            _getLocalizedProductTypeName(context, productType),
-                            style: TextStyle(
-                              fontSize: 13 + appState.getTextSizeOffset(),
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Text(
-                          '${percentage.toStringAsFixed(1)}%',
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          _getLocalizedProductTypeName(context, productType),
                           style: TextStyle(
                             fontSize: 13 + appState.getTextSizeOffset(),
-                            fontWeight: FontWeight.w600,
-                            color: isSelected 
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).textTheme.bodyLarge?.color,
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                      ),
+                      Text(
+                        '${percentage.toStringAsFixed(1)}%',
+                        style: TextStyle(
+                          fontSize: 13 + appState.getTextSizeOffset(),
+                          fontWeight: FontWeight.w600,
+                          color: isSelected
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).textTheme.bodyLarge?.color,
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              },
-            );
-          }).toList(),
-        ],
-      );
+                ),
+              );
+            },
+          );
+        }),
+      ],
+    );
   }
-} 
+}

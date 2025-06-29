@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/models/balance_record.dart';
-import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
-import 'package:realtoken_asset_tracker/utils/date_utils.dart';
 import 'package:realtoken_asset_tracker/components/charts/generic_chart_widget.dart';
 
 /// Classe représentant un groupe d'emprunts agrégé selon la période.
@@ -81,7 +79,7 @@ class _BorrowChartState extends State<BorrowChart> {
   /// Convertit les historiques de balance en liste de BorrowRecord
   void _updateBorrowRecords() {
     final Map<DateTime, BorrowRecord> recordsMap = {};
-    
+
     // Traiter les emprunts USDC
     if (widget.allHistories['usdcBorrow'] != null) {
       for (final record in widget.allHistories['usdcBorrow']!) {
@@ -101,7 +99,7 @@ class _BorrowChartState extends State<BorrowChart> {
         }
       }
     }
-    
+
     // Traiter les emprunts xDai
     if (widget.allHistories['xdaiBorrow'] != null) {
       for (final record in widget.allHistories['xdaiBorrow']!) {
@@ -121,7 +119,7 @@ class _BorrowChartState extends State<BorrowChart> {
         }
       }
     }
-    
+
     // Convertir la Map en List et trier par date
     _borrowRecords = recordsMap.values.toList()
       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
@@ -146,11 +144,11 @@ class _BorrowChartState extends State<BorrowChart> {
   @override
   Widget build(BuildContext context) {
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
-    
+
     // Deux couleurs pour les données empilées
     final Color primaryColor = const Color(0xFFFF9500); // Orange iOS pour USDC
     final Color secondaryColor = const Color(0xFFFF3B30); // Rouge iOS pour xDai
-    
+
     return GenericChartWidget<BorrowRecord>(
       title: S.of(context).borrowBalance,
       chartColor: primaryColor,

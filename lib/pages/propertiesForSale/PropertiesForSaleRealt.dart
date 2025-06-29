@@ -91,13 +91,16 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
               child: Text(
                 S.of(context).noPropertiesForSale,
                 style: TextStyle(
-                  fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 16 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   fontWeight: FontWeight.w500,
                 ),
               ),
             )
           : AlignedGridView.count(
-              padding: const EdgeInsets.only(top: 16, bottom: 80, left: 16, right: 16),
+              padding: const EdgeInsets.only(
+                  top: 16, bottom: 80, left: 16, right: 16),
               crossAxisCount: MediaQuery.of(context).size.width > 700 ? 2 : 1,
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
@@ -105,20 +108,31 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
               itemBuilder: (context, index) {
                 final property = propertiesForSale[index];
 
-                final imageUrl = (property['imageLink'] != null && property['imageLink'] is List && property['imageLink'].isNotEmpty) ? property['imageLink'][0] : '';
-                final title = property['shortName'] ?? S.of(context).nameUnavailable;
-                final double stock = (property['stock'] as num?)?.toDouble() ?? 0.0;
+                final imageUrl = (property['imageLink'] != null &&
+                        property['imageLink'] is List &&
+                        property['imageLink'].isNotEmpty)
+                    ? property['imageLink'][0]
+                    : '';
+                final title =
+                    property['shortName'] ?? S.of(context).nameUnavailable;
+                final double stock =
+                    (property['stock'] as num?)?.toDouble() ?? 0.0;
 
-                final double tokenPrice = (property['tokenPrice'] as num?)?.toDouble() ?? 0.0;
-                final double annualPercentageYield = (property['annualPercentageYield'] as num?)?.toDouble() ?? 0.0;
+                final double tokenPrice =
+                    (property['tokenPrice'] as num?)?.toDouble() ?? 0.0;
+                final double annualPercentageYield =
+                    (property['annualPercentageYield'] as num?)?.toDouble() ??
+                        0.0;
 
-                final double totalTokens = (property['totalTokens'] as num?)?.toDouble() ?? 0.0;
+                final double totalTokens =
+                    (property['totalTokens'] as num?)?.toDouble() ?? 0.0;
 
                 final country = property['country'] ?? 'unknown';
 
                 final city = property['city'] ?? 'unknown';
                 final status = property['status'] ?? 'Unknown';
-                final sellPercentage = (totalTokens - stock) / totalTokens * 100;
+                final sellPercentage =
+                    (totalTokens - stock) / totalTokens * 100;
 
                 return GestureDetector(
                   onTap: () {
@@ -130,7 +144,9 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withOpacity(0.2) : Colors.black.withOpacity(0.05),
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.black.withValues(alpha: 0.2)
+                              : Colors.black.withValues(alpha: 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -153,16 +169,22 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                     : CachedNetworkImage(
                                         imageUrl: imageUrl,
                                         fit: BoxFit.cover,
-                                        errorWidget: (context, url, error) => const Icon(CupertinoIcons.photo, color: CupertinoColors.systemGrey),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(CupertinoIcons.photo,
+                                                color:
+                                                    CupertinoColors.systemGrey),
                                       ),
                               ),
                               Positioned(
                                 top: 12,
                                 right: 12,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: status == 'Available' ? CupertinoColors.activeGreen : CupertinoColors.systemRed,
+                                    color: status == 'Available'
+                                        ? CupertinoColors.activeGreen
+                                        : CupertinoColors.systemRed,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
@@ -186,26 +208,41 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                   children: [
                                     if (country != 'unknown')
                                       Padding(
-                                        padding: const EdgeInsets.only(right: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(right: 8.0),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(4),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withOpacity(0.2) : Colors.black.withOpacity(0.05),
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.dark
+                                                    ? Colors.black
+                                                        .withValues(alpha: 0.2)
+                                                    : Colors.black.withValues(
+                                                        alpha: 0.05),
                                                 blurRadius: 2,
                                                 offset: const Offset(0, 1),
                                               ),
                                             ],
                                           ),
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(4),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
                                             child: Image.asset(
                                               'assets/country/${Parameters.getCountryFileName(country)}.png',
                                               width: 24,
                                               height: 24,
-                                              errorBuilder: (context, error, stackTrace) {
-                                                return Icon(CupertinoIcons.flag, size: 24, color: Theme.of(context).textTheme.bodyMedium?.color);
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return Icon(CupertinoIcons.flag,
+                                                    size: 24,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.color);
                                               },
                                             ),
                                           ),
@@ -217,7 +254,10 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w600,
-                                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.color,
                                           letterSpacing: -0.5,
                                         ),
                                         maxLines: 1,
@@ -232,14 +272,20 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                     Icon(
                                       CupertinoIcons.location_solid,
                                       size: 14,
-                                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color,
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
                                       city,
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -249,17 +295,22 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                 _buildGaugeForRent(sellPercentage, context),
                                 const SizedBox(height: 12),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'Stock',
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Theme.of(context).textTheme.bodyMedium?.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -268,7 +319,10 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                             '${stock.toInt()} / ${totalTokens.toInt()}',
                                             style: TextStyle(
                                               fontSize: 14,
-                                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.color,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -277,22 +331,31 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                     ),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'Prix',
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Theme.of(context).textTheme.bodyMedium?.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                           const SizedBox(height: 2),
                                           Text(
-                                            currencyUtils.formatCurrency(tokenPrice, currencyUtils.currencySymbol),
+                                            currencyUtils.formatCurrency(
+                                                tokenPrice,
+                                                currencyUtils.currencySymbol),
                                             style: TextStyle(
                                               fontSize: 14,
-                                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.color,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -301,13 +364,17 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                     ),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'Rendement',
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Theme.of(context).textTheme.bodyMedium?.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -316,7 +383,8 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                             '${annualPercentageYield.toStringAsFixed(2)}%',
                                             style: TextStyle(
                                               fontSize: 14,
-                                              color: CupertinoColors.activeGreen,
+                                              color:
+                                                  CupertinoColors.activeGreen,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -328,10 +396,12 @@ class _PropertiesForSaleRealtState extends State<PropertiesForSaleRealt> {
                                 const SizedBox(height: 16),
                                 CupertinoButton(
                                   padding: EdgeInsets.zero,
-                                  onPressed: () => UrlUtils.launchURL(property['marketplaceLink']),
+                                  onPressed: () => UrlUtils.launchURL(
+                                      property['marketplaceLink']),
                                   child: Container(
                                     width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
                                     decoration: BoxDecoration(
                                       color: CupertinoColors.activeBlue,
                                       borderRadius: BorderRadius.circular(10),

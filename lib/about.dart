@@ -17,7 +17,8 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-    final textSizeOffset = Provider.of<AppState>(context, listen: false).getTextSizeOffset();
+    final textSizeOffset =
+        Provider.of<AppState>(context, listen: false).getTextSizeOffset();
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +28,9 @@ class AboutPage extends StatelessWidget {
           S.of(context).about,
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: 17 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+            fontSize: 17 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset(),
           ),
         ),
       ),
@@ -42,7 +45,7 @@ class AboutPage extends StatelessWidget {
                 S.of(context).application,
                 textSizeOffset,
               ),
-              
+
               InfoCardWidgets.buildInfoCard(
                 context,
                 icon: CupertinoIcons.info_circle,
@@ -50,7 +53,7 @@ class AboutPage extends StatelessWidget {
                 subtitle: S.of(context).appName,
                 textSizeOffset: textSizeOffset,
               ),
-              
+
               FutureBuilder<String>(
                 future: _getAppVersion(),
                 builder: (context, snapshot) {
@@ -63,7 +66,7 @@ class AboutPage extends StatelessWidget {
                   );
                 },
               ),
-              
+
               InfoCardWidgets.buildInfoCard(
                 context,
                 icon: CupertinoIcons.person,
@@ -72,7 +75,7 @@ class AboutPage extends StatelessWidget {
                 textSizeOffset: textSizeOffset,
                 linkUrl: 'https://linktr.ee/byackee',
               ),
-              
+
               InfoCardWidgets.buildLinkCard(
                 context,
                 title: 'Linktree',
@@ -89,7 +92,7 @@ class AboutPage extends StatelessWidget {
                 S.of(context).thanks,
                 textSizeOffset,
               ),
-              
+
               InfoCardWidgets.buildThanksCard(
                 context,
                 title: S.of(context).thankYouMessage,

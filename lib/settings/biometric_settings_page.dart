@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
-import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/services/biometric_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_settings/app_settings.dart';
@@ -40,7 +39,8 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
     try {
       final isAvailable = await _biometricService.isBiometricAvailable();
       final isEnabled = await _biometricService.isBiometricEnabled();
-      final availableBiometrics = await _biometricService.getAvailableBiometrics();
+      final availableBiometrics =
+          await _biometricService.getAvailableBiometrics();
       final biometricType = await _biometricService.getBiometricTypeName();
 
       setState(() {
@@ -48,7 +48,9 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
         _isBiometricEnabled = isEnabled;
         _availableBiometrics = availableBiometrics;
         _biometricType = biometricType;
-        _statusMessage = isAvailable ? 'Votre appareil prend en charge $_biometricType' : 'Votre appareil ne prend pas en charge l\'authentification biométrique';
+        _statusMessage = isAvailable
+            ? 'Votre appareil prend en charge $_biometricType'
+            : 'Votre appareil ne prend pas en charge l\'authentification biométrique';
         _isLoading = false;
       });
     } catch (e) {
@@ -74,10 +76,13 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
     });
 
     try {
-      final authenticated = await _biometricService.authenticate(reason: 'Ceci est un test d\'authentification biométrique');
+      final authenticated = await _biometricService.authenticate(
+          reason: 'Ceci est un test d\'authentification biométrique');
 
       setState(() {
-        _statusMessage = authenticated ? 'Test réussi! L\'authentification biométrique fonctionne correctement.' : 'Échec du test. Veuillez réessayer.';
+        _statusMessage = authenticated
+            ? 'Test réussi! L\'authentification biométrique fonctionne correctement.'
+            : 'Échec du test. Veuillez réessayer.';
         _isTesting = false;
       });
     } catch (e) {
@@ -121,9 +126,13 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
               children: [
                 const SizedBox(height: 12),
                 _buildSectionHeader(context, "Sécurité", CupertinoIcons.lock),
-                if (!_isBiometricAvailable) _buildErrorCard() else _buildSettingsCard(),
+                if (!_isBiometricAvailable)
+                  _buildErrorCard()
+                else
+                  _buildSettingsCard(),
                 const SizedBox(height: 24),
-                if (_isBiometricAvailable && _isBiometricEnabled) _buildTestSection(),
+                if (_isBiometricAvailable && _isBiometricEnabled)
+                  _buildTestSection(),
               ],
             ),
     );
@@ -134,9 +143,9 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.1),
+        color: Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +179,9 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
                 AppSettings.openAppSettings(type: AppSettingsType.security);
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Impossible d\'ouvrir les paramètres. Veuillez les configurer manuellement.')),
+                  SnackBar(
+                      content: Text(
+                          'Impossible d\'ouvrir les paramètres. Veuillez les configurer manuellement.')),
                 );
               }
             },
@@ -229,14 +240,15 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
                   ),
                   CupertinoSwitch(
                     value: _isBiometricEnabled,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeTrackColor: Theme.of(context).primaryColor,
                     onChanged: (bool value) async {
                       if (value) {
                         await _authenticateWithBiometrics();
                       } else {
                         await _saveSetting(false);
                         setState(() {
-                          _statusMessage = 'Authentification biométrique désactivée';
+                          _statusMessage =
+                              'Authentification biométrique désactivée';
                         });
                       }
                     },
@@ -259,7 +271,7 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -292,7 +304,8 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
                     icon: Icon(_getBiometricIcon()),
                     label: Text('Tester maintenant'),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     ),
                   ),
           ),
@@ -306,7 +319,8 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
       _statusMessage = 'Authentification en cours...';
     });
 
-    final authenticated = await _biometricService.authenticate(reason: 'Authentifiez-vous pour activer la biométrie');
+    final authenticated = await _biometricService.authenticate(
+        reason: 'Authentifiez-vous pour activer la biométrie');
 
     if (authenticated) {
       await _saveSetting(true);
@@ -333,7 +347,8 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
     }
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 2),
       child: Row(
@@ -354,7 +369,8 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
     );
   }
 
-  Widget _buildSettingsSection(BuildContext context, {required List<Widget> children}) {
+  Widget _buildSettingsSection(BuildContext context,
+      {required List<Widget> children}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -362,7 +378,7 @@ class _BiometricSettingsPageState extends State<BiometricSettingsPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),

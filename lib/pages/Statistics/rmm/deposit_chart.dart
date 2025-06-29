@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/models/balance_record.dart';
-import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
-import 'package:realtoken_asset_tracker/utils/date_utils.dart';
 import 'package:realtoken_asset_tracker/components/charts/generic_chart_widget.dart';
 
 /// Classe représentant un groupe de dépôts agrégé selon la période.
@@ -81,7 +79,7 @@ class _DepositChartState extends State<DepositChart> {
   /// Convertit les historiques de balance en liste de DepositRecord
   void _updateDepositRecords() {
     final Map<DateTime, DepositRecord> recordsMap = {};
-    
+
     // Traiter les dépôts USDC
     if (widget.allHistories['usdcDeposit'] != null) {
       for (final record in widget.allHistories['usdcDeposit']!) {
@@ -101,7 +99,7 @@ class _DepositChartState extends State<DepositChart> {
         }
       }
     }
-    
+
     // Traiter les dépôts xDai
     if (widget.allHistories['xdaiDeposit'] != null) {
       for (final record in widget.allHistories['xdaiDeposit']!) {
@@ -121,7 +119,7 @@ class _DepositChartState extends State<DepositChart> {
         }
       }
     }
-    
+
     // Convertir la Map en List et trier par date
     _depositRecords = recordsMap.values.toList()
       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
@@ -146,11 +144,11 @@ class _DepositChartState extends State<DepositChart> {
   @override
   Widget build(BuildContext context) {
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
-    
+
     // Deux couleurs pour les données empilées
     final Color primaryColor = const Color(0xFF34C759); // Vert iOS pour USDC
     final Color secondaryColor = const Color(0xFF007AFF); // Bleu iOS pour xDai
-    
+
     return GenericChartWidget<DepositRecord>(
       title: S.of(context).depositBalance,
       chartColor: primaryColor,

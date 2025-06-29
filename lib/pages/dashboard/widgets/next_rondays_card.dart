@@ -7,13 +7,13 @@ import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:shimmer/shimmer.dart';
 
 class NextRondaysCard extends StatelessWidget {
   final bool showAmounts;
   final bool isLoading;
 
-  const NextRondaysCard({super.key, required this.showAmounts, required this.isLoading});
+  const NextRondaysCard(
+      {super.key, required this.showAmounts, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,8 @@ class NextRondaysCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCumulativeRentHeader(BuildContext context, DataManager dataManager) {
+  Widget _buildCumulativeRentHeader(
+      BuildContext context, DataManager dataManager) {
     final theme = Theme.of(context);
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
 
@@ -51,7 +52,9 @@ class NextRondaysCard extends StatelessWidget {
         child: Text(
           S.of(context).noScheduledRonday,
           style: TextStyle(
-            fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+            fontSize: 14 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset(),
             fontWeight: FontWeight.w500,
             letterSpacing: -0.3,
             color: theme.textTheme.bodyLarge?.color,
@@ -85,7 +88,9 @@ class NextRondaysCard extends StatelessWidget {
               Text(
                 S.of(context).nextRondayInDays(daysRemaining),
                 style: TextStyle(
-                  fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 14 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   fontWeight: FontWeight.w600,
                   letterSpacing: -0.3,
                   color: theme.textTheme.bodyLarge?.color,
@@ -95,10 +100,14 @@ class NextRondaysCard extends StatelessWidget {
               Text(
                 "${DateFormat('dd MMM yyyy').format(nextDate)} · ${currencyUtils.getFormattedAmount(currencyUtils.convert(nextAmount), currencyUtils.currencySymbol, showAmounts)}",
                 style: TextStyle(
-                  fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 13 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   fontWeight: FontWeight.w400,
                   letterSpacing: -0.3,
-                  color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+                  color: theme.brightness == Brightness.light
+                      ? Colors.black54
+                      : Colors.white70,
                 ),
               ),
             ],
@@ -108,7 +117,8 @@ class NextRondaysCard extends StatelessWidget {
     );
   }
 
-  Widget _buildMiniGraphForNextRondays(DataManager dataManager, BuildContext context) {
+  Widget _buildMiniGraphForNextRondays(
+      DataManager dataManager, BuildContext context) {
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
     final theme = Theme.of(context);
     final cumulativeRentEvolution = dataManager.getCumulativeRentEvolution();
@@ -147,14 +157,16 @@ class NextRondaysCard extends StatelessWidget {
 
     // Si aucune donnée, afficher un placeholder
     if (graphData.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 100,
         width: 120,
         child: Center(
           child: Icon(
             Icons.event_busy_rounded,
             size: 40,
-            color: theme.brightness == Brightness.light ? Colors.black12 : Colors.white10,
+            color: theme.brightness == Brightness.light
+                ? Colors.black12
+                : Colors.white10,
           ),
         ),
       );
@@ -172,12 +184,14 @@ class NextRondaysCard extends StatelessWidget {
             titlesData: FlTitlesData(
               show: true,
               topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              rightTitles:
+                  AxisTitles(sideTitles: SideTitles(showTitles: false)),
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (value, meta) {
-                    if (value.toInt() >= graphData.length || value.toInt() < 0) {
+                    if (value.toInt() >= graphData.length ||
+                        value.toInt() < 0) {
                       return const SizedBox.shrink();
                     }
                     return Padding(
@@ -185,8 +199,12 @@ class NextRondaysCard extends StatelessWidget {
                       child: Text(
                         graphData[value.toInt()]['date'],
                         style: TextStyle(
-                          fontSize: 9 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
-                          color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+                          fontSize: 9 +
+                              Provider.of<AppState>(context, listen: false)
+                                  .getTextSizeOffset(),
+                          color: theme.brightness == Brightness.light
+                              ? Colors.black54
+                              : Colors.white70,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -204,7 +222,8 @@ class NextRondaysCard extends StatelessWidget {
                 x: index,
                 barRods: [
                   BarChartRodData(
-                    toY: 40.0 + (index * 5), // Hauteur fixe pour éviter les erreurs
+                    toY: 40.0 +
+                        (index * 5), // Hauteur fixe pour éviter les erreurs
                     color: theme.primaryColor,
                     width: 10,
                     borderRadius: BorderRadius.circular(5),
@@ -217,17 +236,21 @@ class NextRondaysCard extends StatelessWidget {
               enabled: true,
               touchTooltipData: BarTouchTooltipData(
                 getTooltipColor: (group) => Colors.black87,
-                tooltipPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                tooltipPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 tooltipRoundedRadius: 8,
                 getTooltipItem: (group, groupIndex, rod, rodIndex) {
                   if (groupIndex >= 0 && groupIndex < graphData.length) {
-                    double amount = currencyUtils.convert(graphData[groupIndex]['amount']);
+                    double amount =
+                        currencyUtils.convert(graphData[groupIndex]['amount']);
                     return BarTooltipItem(
                       '${amount.toStringAsFixed(2)} ${currencyUtils.currencySymbol}',
                       TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                        fontSize: 10 +
+                            Provider.of<AppState>(context, listen: false)
+                                .getTextSizeOffset(),
                       ),
                     );
                   }
@@ -287,7 +310,9 @@ class NextRondaysCard extends StatelessWidget {
             Text(
               S.of(context).calendar,
               style: TextStyle(
-                fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                fontSize: 13 +
+                    Provider.of<AppState>(context, listen: false)
+                        .getTextSizeOffset(),
                 fontWeight: FontWeight.w600,
                 letterSpacing: -0.3,
                 color: theme.textTheme.titleMedium?.color,
@@ -308,7 +333,9 @@ class NextRondaysCard extends StatelessWidget {
 
       displayedDates.add(rentStartDate);
 
-      String displayDate = rentStartDate == DateTime(3000, 1, 1) ? S.of(context).dateNotCommunicated : DateFormat('dd MMM yyyy').format(rentStartDate);
+      String displayDate = rentStartDate == DateTime(3000, 1, 1)
+          ? S.of(context).dateNotCommunicated
+          : DateFormat('dd MMM yyyy').format(rentStartDate);
 
       // Calculer le nombre de jours restants
       int daysRemaining = rentStartDate.difference(today).inDays;
@@ -318,7 +345,9 @@ class NextRondaysCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 2),
           padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-            color: theme.brightness == Brightness.light ? Color(0xFFF2F2F7) : Colors.black26,
+            color: theme.brightness == Brightness.light
+                ? Color(0xFFF2F2F7)
+                : Colors.black26,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
@@ -338,7 +367,9 @@ class NextRondaysCard extends StatelessWidget {
                   Text(
                     displayDate,
                     style: TextStyle(
-                      fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                      fontSize: 13 +
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset(),
                       letterSpacing: -0.3,
                       color: theme.textTheme.bodyMedium?.color,
                       fontWeight: FontWeight.w500,
@@ -348,17 +379,26 @@ class NextRondaysCard extends StatelessWidget {
                   Text(
                     S.of(context).daysShort(daysRemaining),
                     style: TextStyle(
-                      fontSize: 11 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                      fontSize: 11 +
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset(),
                       letterSpacing: -0.3,
-                      color: theme.brightness == Brightness.light ? Colors.black38 : Colors.white54,
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black38
+                          : Colors.white54,
                     ),
                   ),
                 ],
               ),
               Text(
-                currencyUtils.getFormattedAmount(currencyUtils.convert(entry['cumulativeRent']), currencyUtils.currencySymbol, showAmounts),
+                currencyUtils.getFormattedAmount(
+                    currencyUtils.convert(entry['cumulativeRent']),
+                    currencyUtils.currencySymbol,
+                    showAmounts),
                 style: TextStyle(
-                  fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 13 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   fontWeight: FontWeight.w600,
                   letterSpacing: -0.3,
                   color: theme.textTheme.bodyLarge?.color,

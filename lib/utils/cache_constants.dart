@@ -7,7 +7,7 @@ class CacheConstants {
   static const Duration mediumCache = Duration(hours: 1);
   static const Duration longCache = Duration(hours: 6);
   static const Duration veryLongCache = Duration(hours: 24);
-  
+
   // Caches spécifiques par type de données
   static const Duration balancesCache = Duration(minutes: 15);
   static const Duration rentDataCache = Duration(hours: 1);
@@ -19,17 +19,17 @@ class CacheConstants {
   static const Duration transactionsCache = Duration(hours: 3);
   static const Duration whitelistCache = Duration(hours: 2);
   static const Duration detailedRentCache = Duration(hours: 2);
-  
+
   // Caches UI
   static const Duration versionCache = Duration(hours: 6);
   static const Duration donationAmountCache = Duration(hours: 1);
   static const Duration apiStatusCache = Duration(minutes: 30);
-  
+
   // Délais pour éviter les requêtes répétitives
   static const Duration rateLimitDelay = Duration(minutes: 5);
   static const Duration retryDelay = Duration(seconds: 30);
-  
+
   // Limites de mémoire
   static const int maxCacheEntries = 1000;
   static const int maxImageCacheSize = 100 * 1024 * 1024; // 100MB
-} 
+}

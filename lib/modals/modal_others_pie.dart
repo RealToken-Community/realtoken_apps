@@ -5,7 +5,8 @@ import 'package:realtoken_asset_tracker/generated/l10n.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:provider/provider.dart';
 
-void showOtherDetailsModal(BuildContext context, dataManager, List<Map<String, dynamic>> othersDetails, String key) {
+void showOtherDetailsModal(BuildContext context, dataManager,
+    List<Map<String, dynamic>> othersDetails, String key) {
   // S'assurer que la liste n'est pas vide pour éviter les erreurs de rendu
   if (othersDetails.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -49,7 +50,9 @@ void showOtherDetailsModal(BuildContext context, dataManager, List<Map<String, d
                       Text(
                         S.of(context).othersTitle,
                         style: TextStyle(
-                          fontSize: 22 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                          fontSize: 22 +
+                              Provider.of<AppState>(context, listen: false)
+                                  .getTextSizeOffset(),
                           fontWeight: FontWeight.bold,
                           color: CupertinoColors.label,
                         ),
@@ -67,15 +70,24 @@ void showOtherDetailsModal(BuildContext context, dataManager, List<Map<String, d
                                 children: [
                                   PieChart(
                                     PieChartData(
-                                      sections: _buildOtherDetailsDonutData(othersDetails, key, selectedIndex),
+                                      sections: _buildOtherDetailsDonutData(
+                                          othersDetails, key, selectedIndex),
                                       centerSpaceRadius: 55,
                                       sectionsSpace: 3,
                                       pieTouchData: PieTouchData(
-                                        touchCallback: (FlTouchEvent event, PieTouchResponse? touchResponse) {
-                                          if (touchResponse != null && touchResponse.touchedSection != null) {
-                                            final touchedIndex = touchResponse.touchedSection!.touchedSectionIndex;
+                                        touchCallback: (FlTouchEvent event,
+                                            PieTouchResponse? touchResponse) {
+                                          if (touchResponse != null &&
+                                              touchResponse.touchedSection !=
+                                                  null) {
+                                            final touchedIndex = touchResponse
+                                                .touchedSection!
+                                                .touchedSectionIndex;
                                             if (event is FlTapUpEvent) {
-                                              selectedIndexNotifier.value = selectedIndex == touchedIndex ? null : touchedIndex;
+                                              selectedIndexNotifier.value =
+                                                  selectedIndex == touchedIndex
+                                                      ? null
+                                                      : touchedIndex;
                                             }
                                           }
                                         },
@@ -83,7 +95,8 @@ void showOtherDetailsModal(BuildContext context, dataManager, List<Map<String, d
                                       borderData: FlBorderData(show: false),
                                     ),
                                   ),
-                                  _buildCenterText(context, othersDetails, key, selectedIndex),
+                                  _buildCenterText(context, othersDetails, key,
+                                      selectedIndex),
                                 ],
                               );
                             }),
@@ -95,7 +108,9 @@ void showOtherDetailsModal(BuildContext context, dataManager, List<Map<String, d
                       Text(
                         S.of(context).legend,
                         style: TextStyle(
-                          fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                          fontSize: 16 +
+                              Provider.of<AppState>(context, listen: false)
+                                  .getTextSizeOffset(),
                           fontWeight: FontWeight.w600,
                           color: CupertinoColors.secondaryLabel,
                         ),
@@ -113,8 +128,10 @@ void showOtherDetailsModal(BuildContext context, dataManager, List<Map<String, d
                           child: ValueListenableBuilder<int?>(
                               valueListenable: selectedIndexNotifier,
                               builder: (context, selectedIndex, _) {
-                                return _buildLegendGrid(othersDetails, key, selectedIndex, (index) {
-                                  selectedIndexNotifier.value = selectedIndex == index ? null : index;
+                                return _buildLegendGrid(
+                                    othersDetails, key, selectedIndex, (index) {
+                                  selectedIndexNotifier.value =
+                                      selectedIndex == index ? null : index;
                                 });
                               }),
                         ),
@@ -132,11 +149,14 @@ void showOtherDetailsModal(BuildContext context, dataManager, List<Map<String, d
 }
 
 // Widget pour afficher le texte au centre du donut
-Widget _buildCenterText(BuildContext context, List<Map<String, dynamic>> othersDetails, String key, int? selectedIndex) {
+Widget _buildCenterText(BuildContext context,
+    List<Map<String, dynamic>> othersDetails, String key, int? selectedIndex) {
   if (selectedIndex == null) {
     // Afficher le total quand rien n'est sélectionné
     final int totalCount = othersDetails.fold(0, (sum, item) {
-      final count = item['count'] is int ? item['count'] as int : (item['count'] as double).round();
+      final count = item['count'] is int
+          ? item['count'] as int
+          : (item['count'] as double).round();
       return sum + count;
     });
 
@@ -146,7 +166,9 @@ Widget _buildCenterText(BuildContext context, List<Map<String, dynamic>> othersD
         Text(
           S.of(context).total,
           style: TextStyle(
-            fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+            fontSize: 16 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset(),
             fontWeight: FontWeight.bold,
             color: CupertinoColors.label,
           ),
@@ -155,7 +177,9 @@ Widget _buildCenterText(BuildContext context, List<Map<String, dynamic>> othersD
         Text(
           '$totalCount',
           style: TextStyle(
-            fontSize: 22 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+            fontSize: 22 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset(),
             fontWeight: FontWeight.w600,
             color: CupertinoColors.systemGrey,
           ),
@@ -167,7 +191,9 @@ Widget _buildCenterText(BuildContext context, List<Map<String, dynamic>> othersD
     if (selectedIndex < othersDetails.length) {
       final selectedItem = othersDetails[selectedIndex];
       final String name = selectedItem[key] ?? S.of(context).unknown;
-      final count = selectedItem['count'] is int ? selectedItem['count'] as int : (selectedItem['count'] as double).round();
+      final count = selectedItem['count'] is int
+          ? selectedItem['count'] as int
+          : (selectedItem['count'] as double).round();
 
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -176,7 +202,9 @@ Widget _buildCenterText(BuildContext context, List<Map<String, dynamic>> othersD
             name,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+              fontSize: 16 +
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset(),
               fontWeight: FontWeight.bold,
               color: _getColorForIndex(selectedIndex),
             ),
@@ -187,7 +215,9 @@ Widget _buildCenterText(BuildContext context, List<Map<String, dynamic>> othersD
           Text(
             '$count',
             style: TextStyle(
-              fontSize: 20 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+              fontSize: 20 +
+                  Provider.of<AppState>(context, listen: false)
+                      .getTextSizeOffset(),
               fontWeight: FontWeight.w600,
               color: CupertinoColors.systemGrey,
             ),
@@ -201,7 +231,8 @@ Widget _buildCenterText(BuildContext context, List<Map<String, dynamic>> othersD
   }
 }
 
-List<PieChartSectionData> _buildOtherDetailsDonutData(List<Map<String, dynamic>> othersDetails, String key, int? selectedIndex) {
+List<PieChartSectionData> _buildOtherDetailsDonutData(
+    List<Map<String, dynamic>> othersDetails, String key, int? selectedIndex) {
   // Couleurs iOS
   final List<Color> sectionColors = [
     CupertinoColors.systemBlue,
@@ -221,7 +252,9 @@ List<PieChartSectionData> _buildOtherDetailsDonutData(List<Map<String, dynamic>>
   // Calculer la valeur totale
   double totalValue = 0;
   for (var item in othersDetails) {
-    double itemValue = (item['count'] is int) ? (item['count'] as int).toDouble() : (item['count'] as double);
+    double itemValue = (item['count'] is int)
+        ? (item['count'] as int).toDouble()
+        : (item['count'] as double);
     totalValue += itemValue;
   }
 
@@ -230,7 +263,9 @@ List<PieChartSectionData> _buildOtherDetailsDonutData(List<Map<String, dynamic>>
 
   for (int i = 0; i < othersDetails.length; i++) {
     final item = othersDetails[i];
-    final double value = (item['count'] is int) ? (item['count'] as int).toDouble() : (item['count'] as double);
+    final double value = (item['count'] is int)
+        ? (item['count'] as int).toDouble()
+        : (item['count'] as double);
 
     final double percentage = (value / totalValue) * 100;
     final bool isSelected = selectedIndex == i;
@@ -240,7 +275,8 @@ List<PieChartSectionData> _buildOtherDetailsDonutData(List<Map<String, dynamic>>
     sections.add(PieChartSectionData(
       value: value,
       title: '${percentage.toStringAsFixed(1)}%',
-      color: color.withOpacity(selectedIndex != null && !isSelected ? 0.5 : 1.0),
+      color: color.withValues(
+          alpha: selectedIndex != null && !isSelected ? 0.5 : 1.0),
       radius: radius,
       titleStyle: TextStyle(
         fontSize: isSelected ? 14 : 12,
@@ -256,7 +292,8 @@ List<PieChartSectionData> _buildOtherDetailsDonutData(List<Map<String, dynamic>>
   return sections;
 }
 
-Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key, int? selectedIndex, Function(int) onTap) {
+Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key,
+    int? selectedIndex, Function(int) onTap) {
   // Couleurs iOS
   final List<Color> sectionColors = [
     CupertinoColors.systemBlue,
@@ -286,7 +323,9 @@ Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key, in
     itemBuilder: (context, index) {
       final item = othersDetails[index];
       final String name = item[key] ?? 'Inconnu';
-      final double value = (item['count'] is int) ? (item['count'] as int).toDouble() : (item['count'] as double);
+      final double value = (item['count'] is int)
+          ? (item['count'] as int).toDouble()
+          : (item['count'] as double);
       final Color color = sectionColors[index % sectionColors.length];
       final bool isSelected = selectedIndex == index;
 
@@ -294,7 +333,9 @@ Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key, in
         onTap: () => onTap(index),
         child: Container(
           decoration: BoxDecoration(
-            color: isSelected ? color.withOpacity(0.1) : CupertinoColors.white,
+            color: isSelected
+                ? color.withValues(alpha: 0.1)
+                : CupertinoColors.white,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: isSelected ? color : Colors.transparent,
@@ -302,7 +343,7 @@ Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key, in
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.03),
+                color: Colors.black.withValues(alpha: 0.03),
                 spreadRadius: 0,
                 blurRadius: 2,
                 offset: Offset(0, 1),
@@ -325,7 +366,9 @@ Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key, in
                 child: Text(
                   name,
                   style: TextStyle(
-                    fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                    fontSize: 12 +
+                        Provider.of<AppState>(context, listen: false)
+                            .getTextSizeOffset(),
                     color: isSelected ? color : CupertinoColors.label,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   ),
@@ -336,7 +379,9 @@ Widget _buildLegendGrid(List<Map<String, dynamic>> othersDetails, String key, in
               Text(
                 value.toStringAsFixed(0),
                 style: TextStyle(
-                  fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 12 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   fontWeight: FontWeight.w600,
                   color: isSelected ? color : CupertinoColors.secondaryLabel,
                 ),
@@ -362,7 +407,7 @@ Widget _buildSelectedIndicator(Color color) {
       ),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.2),
+          color: Colors.black.withValues(alpha: 0.2),
           blurRadius: 2,
           offset: const Offset(0, 1),
         ),

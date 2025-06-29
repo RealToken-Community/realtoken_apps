@@ -7,7 +7,6 @@ import 'package:realtoken_asset_tracker/generated/l10n.dart';
 /// Factory pour construire les éléments de graphiques en secteurs de manière standardisée
 /// Réduit la duplication dans les cartes de distribution de tokens
 class PieChartBuilders {
-  
   /// Construit un graphique en secteurs standardisé avec gestion du touch
   static Widget buildStandardPieChart({
     required BuildContext context,
@@ -18,7 +17,7 @@ class PieChartBuilders {
     double sectionsSpace = 3,
   }) {
     final appState = Provider.of<AppState>(context, listen: false);
-    
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -30,7 +29,7 @@ class PieChartBuilders {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -64,23 +63,30 @@ class PieChartBuilders {
                           sectionsSpace: sectionsSpace,
                           borderData: FlBorderData(show: false),
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, PieTouchResponse? response) {
-                              if (response != null && response.touchedSection != null) {
-                                final touchedIndex = response.touchedSection!.touchedSectionIndex;
-                                selectedIndexNotifier.value = touchedIndex >= 0 ? touchedIndex : null;
+                            touchCallback: (FlTouchEvent event,
+                                PieTouchResponse? response) {
+                              if (response != null &&
+                                  response.touchedSection != null) {
+                                final touchedIndex = response
+                                    .touchedSection!.touchedSectionIndex;
+                                selectedIndexNotifier.value =
+                                    touchedIndex >= 0 ? touchedIndex : null;
                               } else {
                                 selectedIndexNotifier.value = null;
                               }
                             },
                           ),
                         ),
-                        swapAnimationDuration: const Duration(milliseconds: 300),
+                        swapAnimationDuration:
+                            const Duration(milliseconds: 300),
                         swapAnimationCurve: Curves.easeInOutCubic,
                       ),
-                      if (selectedIndex != null && selectedIndex < sections.length)
+                      if (selectedIndex != null &&
+                          selectedIndex < sections.length)
                         buildCenterText(
                           context: context,
-                          title: _extractTitleFromSection(sections[selectedIndex]),
+                          title:
+                              _extractTitleFromSection(sections[selectedIndex]),
                           value: sections[selectedIndex].value,
                           appState: appState,
                         ),
@@ -113,11 +119,11 @@ class PieChartBuilders {
     final opacity = selectedIndex != null && !isSelected ? 0.5 : 1.0;
     final radius = isSelected ? selectedRadius : normalRadius;
     final fontSize = isSelected ? selectedFontSize : normalFontSize;
-    
+
     return PieChartSectionData(
       value: value,
       title: title,
-      color: color.withOpacity(opacity),
+      color: color.withValues(alpha: opacity),
       radius: radius,
       titleStyle: TextStyle(
         fontSize: fontSize + appState.getTextSizeOffset(),
@@ -125,13 +131,14 @@ class PieChartBuilders {
         fontWeight: FontWeight.w600,
         shadows: [
           Shadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 3,
             offset: const Offset(1, 1),
           ),
         ],
       ),
-      badgeWidget: isSelected && showBadge ? buildSelectedIndicator(context) : null,
+      badgeWidget:
+          isSelected && showBadge ? buildSelectedIndicator(context) : null,
       badgePositionPercentageOffset: 1.1,
     );
   }
@@ -150,7 +157,7 @@ class PieChartBuilders {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -208,7 +215,7 @@ class PieChartBuilders {
   }) {
     final double othersPercentage = (othersValue / totalCount) * 100;
     final bool isOthersSelected = selectedIndex == sectionIndex;
-    
+
     return buildStandardSection(
       value: othersValue,
       title: '${S.of(context).others} ${othersPercentage.toStringAsFixed(1)}%',
@@ -245,9 +252,10 @@ class PieChartBuilders {
   /// Extrait le titre d'une section pour l'affichage central
   static String _extractTitleFromSection(PieChartSectionData section) {
     // Extraire le nom avant le pourcentage
-    final title = section.title ?? '';
+    final title = section.title;
     final percentageIndex = title.lastIndexOf(' ');
-    if (percentageIndex > 0 && title.substring(percentageIndex + 1).contains('%')) {
+    if (percentageIndex > 0 &&
+        title.substring(percentageIndex + 1).contains('%')) {
       return title.substring(0, percentageIndex);
     }
     return title;
@@ -262,11 +270,13 @@ class PieChartBuilders {
     return Wrap(
       spacing: 16,
       runSpacing: 8,
-      children: items.map((item) => buildLegendItem(
-        label: item.label,
-        color: item.color,
-        appState: appState,
-      )).toList(),
+      children: items
+          .map((item) => buildLegendItem(
+                label: item.label,
+                color: item.color,
+                appState: appState,
+              ))
+          .toList(),
     );
   }
 
@@ -309,4 +319,4 @@ class LegendItem {
     required this.label,
     required this.color,
   });
-} 
+}

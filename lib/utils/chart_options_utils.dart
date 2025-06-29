@@ -14,7 +14,7 @@ class ChartOptionsUtils {
   }) {
     final appState = Provider.of<AppState>(context, listen: false);
     final primaryColor = Theme.of(context).primaryColor;
-    
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +38,7 @@ class ChartOptionsUtils {
             visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
             leading: Icon(
               CupertinoIcons.chart_bar,
-              color: primaryColor.withOpacity(0.8),
+              color: primaryColor.withValues(alpha: 0.8),
               size: 22,
             ),
             title: Text(
@@ -70,7 +70,7 @@ class ChartOptionsUtils {
             visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
             leading: Icon(
               CupertinoIcons.chart_bar_alt_fill,
-              color: primaryColor.withOpacity(0.8),
+              color: primaryColor.withValues(alpha: 0.8),
               size: 22,
             ),
             title: Text(
@@ -98,7 +98,7 @@ class ChartOptionsUtils {
       ],
     );
   }
-  
+
   /// Construit le sélecteur de plage temporelle
   static Widget buildTimeRangeSelector({
     required BuildContext context,
@@ -109,7 +109,7 @@ class ChartOptionsUtils {
     final appState = Provider.of<AppState>(context, listen: false);
     final primaryColor = Theme.of(context).primaryColor;
     final textColor = Theme.of(context).textTheme.bodyLarge?.color;
-    
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +136,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -168,7 +168,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -200,7 +200,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -232,7 +232,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -262,7 +262,7 @@ class ChartOptionsUtils {
       ],
     );
   }
-  
+
   /// Construit le sélecteur de période d'affichage
   static Widget buildPeriodSelector({
     required BuildContext context,
@@ -273,7 +273,7 @@ class ChartOptionsUtils {
     final appState = Provider.of<AppState>(context, listen: false);
     final primaryColor = Theme.of(context).primaryColor;
     final textColor = Theme.of(context).textTheme.bodyLarge?.color;
-    
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,7 +300,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar_today,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -332,7 +332,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar_badge_plus,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -364,7 +364,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar_circle,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -396,7 +396,7 @@ class ChartOptionsUtils {
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
                 leading: Icon(
                   CupertinoIcons.calendar_circle_fill,
-                  color: primaryColor.withOpacity(0.8),
+                  color: primaryColor.withValues(alpha: 0.8),
                   size: 22,
                 ),
                 title: Text(
@@ -439,7 +439,7 @@ class ChartOptionsUtils {
     VoidCallback? onEditPressed,
   }) {
     final appState = Provider.of<AppState>(context, listen: false);
-    
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -453,7 +453,7 @@ class ChartOptionsUtils {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),
@@ -472,13 +472,13 @@ class ChartOptionsUtils {
                       width: 36,
                       height: 5,
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: Colors.grey.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(3),
                       ),
                     ),
                   ),
                 ),
-                
+
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 24.0,
@@ -495,12 +495,13 @@ class ChartOptionsUtils {
                         onChartTypeChanged: onChartTypeChanged,
                         onClose: () => Navigator.of(context).pop(),
                       ),
-                      
+
                       const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                         child: Divider(height: 1, thickness: 0.5),
                       ),
-                      
+
                       // Sélecteur de plage de temps
                       buildTimeRangeSelector(
                         context: context,
@@ -508,12 +509,13 @@ class ChartOptionsUtils {
                         onTimeRangeChanged: onTimeRangeChanged,
                         onClose: () => Navigator.of(context).pop(),
                       ),
-                      
+
                       const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                         child: Divider(height: 1, thickness: 0.5),
                       ),
-                      
+
                       // Sélecteur de période
                       buildPeriodSelector(
                         context: context,
@@ -521,20 +523,24 @@ class ChartOptionsUtils {
                         onPeriodChanged: onPeriodChanged,
                         onClose: () => Navigator.of(context).pop(),
                       ),
-                      
+
                       if (onEditPressed != null) ...[
                         const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 8.0),
                           child: Divider(height: 1, thickness: 0.5),
                         ),
                         SizedBox(
                           height: 44,
                           child: ListTile(
                             dense: true,
-                            visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
+                            visualDensity: const VisualDensity(
+                                horizontal: 0, vertical: -2),
                             leading: Icon(
                               CupertinoIcons.pencil,
-                              color: Theme.of(context).primaryColor.withOpacity(0.8),
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withValues(alpha: 0.8),
                               size: 22,
                             ),
                             title: Text(
@@ -543,7 +549,10 @@ class ChartOptionsUtils {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15 + appState.getTextSizeOffset(),
                                 letterSpacing: -0.4,
-                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color,
                               ),
                             ),
                             onTap: () {
@@ -563,4 +572,4 @@ class ChartOptionsUtils {
       },
     );
   }
-} 
+}

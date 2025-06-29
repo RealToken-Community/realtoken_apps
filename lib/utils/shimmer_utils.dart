@@ -14,23 +14,23 @@ class ShimmerUtils {
       children: [
         // Le widget original sans modification
         child,
-        
+
         // L'effet shimmer par-dessus avec un mode de fusion qui préserve les couleurs
         Positioned.fill(
           child: Shimmer.fromColors(
             baseColor: Colors.transparent,
-            highlightColor: color != null 
-                ? color.withOpacity(0.6) 
-                : Colors.white.withOpacity(0.7),
+            highlightColor: color != null
+                ? color.withValues(alpha: 0.6)
+                : Colors.white.withValues(alpha: 0.7),
             period: duration,
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     Colors.transparent,
-                    color != null 
-                        ? color.withOpacity(0.5) 
-                        : Colors.white.withOpacity(0.6),
+                    color != null
+                        ? color.withValues(alpha: 0.5)
+                        : Colors.white.withValues(alpha: 0.6),
                     Colors.transparent,
                   ],
                   stops: const [0.0, 0.5, 1.0],
@@ -44,7 +44,7 @@ class ShimmerUtils {
       ],
     );
   }
-  
+
   /// Crée un shimmer standard avec des couleurs personnalisées
   static Widget standardShimmer({
     required Widget child,
@@ -59,4 +59,4 @@ class ShimmerUtils {
       child: child,
     );
   }
-} 
+}

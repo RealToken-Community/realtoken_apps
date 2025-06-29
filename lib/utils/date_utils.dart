@@ -31,7 +31,8 @@ class CustomDateUtils {
       DateTime localDate = parsedDate.toLocal();
 
       // Formate la date avec l'heure dans un format lisible: 1 Dec 2024 14:30:45
-      String formattedDate = DateFormat('d MMM yyyy HH:mm:ss').format(localDate);
+      String formattedDate =
+          DateFormat('d MMM yyyy HH:mm:ss').format(localDate);
 
       return formattedDate;
     } catch (e) {

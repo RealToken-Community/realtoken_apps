@@ -128,7 +128,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                               : null,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 1,
                               offset: const Offset(0, 1),
                             ),
@@ -237,7 +237,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
               decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(
-                        color: Colors.grey.withOpacity(0.3), width: 0.5)),
+                        color: Colors.grey.withValues(alpha: 0.3), width: 0.5)),
                 color: isDarkMode(context)
                     ? const Color(0xFF2C2C2E)
                     : Colors.white,
@@ -247,16 +247,12 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                 children: [
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    child: Text("Annuler",
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text("Annuler", style: TextStyle(fontSize: 14)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    child: Text("OK",
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text("OK", style: TextStyle(fontSize: 14)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -304,7 +300,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
               decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(
-                        color: Colors.grey.withOpacity(0.3), width: 0.5)),
+                        color: Colors.grey.withValues(alpha: 0.3), width: 0.5)),
                 color: isDarkMode(context)
                     ? const Color(0xFF2C2C2E)
                     : Colors.white,
@@ -314,16 +310,12 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                 children: [
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    child: Text("Annuler",
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text("Annuler", style: TextStyle(fontSize: 14)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    child: Text("OK",
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text("OK", style: TextStyle(fontSize: 14)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -396,7 +388,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -456,7 +448,9 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Divider(
-                height: 1, thickness: 0.5, color: Colors.grey.withOpacity(0.3)),
+                height: 1,
+                thickness: 0.5,
+                color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );
@@ -471,12 +465,12 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: isDark
-            ? Colors.grey.shade800.withOpacity(0.3)
-            : Colors.grey.shade200.withOpacity(0.7),
+            ? Colors.grey.shade800.withValues(alpha: 0.3)
+            : Colors.grey.shade200.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -501,7 +495,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                 borderRadius: BorderRadius.circular(26),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 2,
                     offset: const Offset(0, 1),
                   ),
@@ -566,7 +560,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
       required VoidCallback onTap}) {
     final textColor = isSelected
         ? Theme.of(context).primaryColor
-        : Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6);
+        : Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.6);
 
     return GestureDetector(
       onTap: onTap,

@@ -25,7 +25,8 @@ class HealthAndLtvHistoryGraph extends StatefulWidget {
   });
 
   @override
-  _HealthAndLtvHistoryGraphState createState() => _HealthAndLtvHistoryGraphState();
+  _HealthAndLtvHistoryGraphState createState() =>
+      _HealthAndLtvHistoryGraphState();
 }
 
 class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
@@ -72,7 +73,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
 
     return Card(
       elevation: 4,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -85,7 +86,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               end: Alignment.bottomRight,
               colors: [
                 Theme.of(context).cardColor,
-                Theme.of(context).cardColor.withOpacity(0.95),
+                Theme.of(context).cardColor.withValues(alpha: 0.95),
               ],
             ),
           ),
@@ -107,9 +108,12 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                     ),
                     const SizedBox(width: 16),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 0),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.black.withOpacity(0.05),
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black12
+                            : Colors.black.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -119,8 +123,11 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                             S.of(context).ltv,
                             style: TextStyle(
                               fontSize: 14 + appState.getTextSizeOffset(),
-                              color: showHealthFactor ? Colors.grey : Colors.black,
-                              fontWeight: showHealthFactor ? FontWeight.normal : FontWeight.w600,
+                              color:
+                                  showHealthFactor ? Colors.grey : Colors.black,
+                              fontWeight: showHealthFactor
+                                  ? FontWeight.normal
+                                  : FontWeight.w600,
                             ),
                           ),
                           Transform.scale(
@@ -134,8 +141,11 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                                 });
                               },
                               activeColor: const Color(0xFF007AFF), // Bleu iOS
-                              trackColor: MaterialStateProperty.resolveWith(
-                                (states) => states.contains(MaterialState.selected) ? Theme.of(context).primaryColor : Colors.grey.withOpacity(0.3),
+                              trackColor: WidgetStateProperty.resolveWith(
+                                (states) =>
+                                    states.contains(WidgetState.selected)
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.grey.withValues(alpha: 0.3),
                               ),
                             ),
                           ),
@@ -143,8 +153,11 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                             S.of(context).hf,
                             style: TextStyle(
                               fontSize: 14 + appState.getTextSizeOffset(),
-                              color: showHealthFactor ? Colors.black : Colors.grey,
-                              fontWeight: showHealthFactor ? FontWeight.w600 : FontWeight.normal,
+                              color:
+                                  showHealthFactor ? Colors.black : Colors.grey,
+                              fontWeight: showHealthFactor
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                             ),
                           ),
                         ],
@@ -154,22 +167,29 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                     // Bouton pour changer de type de graphique
                     Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.black.withOpacity(0.05),
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black12
+                            : Colors.black.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: IconButton(
                         icon: Icon(
-                          widget.healthAndLtvIsBarChart ? Icons.show_chart : Icons.bar_chart,
+                          widget.healthAndLtvIsBarChart
+                              ? Icons.show_chart
+                              : Icons.bar_chart,
                           size: 20.0,
                           color: const Color(0xFF007AFF),
                         ),
                         onPressed: () {
-                          widget.onChartTypeChanged(!widget.healthAndLtvIsBarChart);
+                          widget.onChartTypeChanged(
+                              !widget.healthAndLtvIsBarChart);
                           setState(() {
                             _selectedSpotIndex = null;
                           });
                         },
-                        tooltip: widget.healthAndLtvIsBarChart ? S.of(context).lineChart : S.of(context).barChart,
+                        tooltip: widget.healthAndLtvIsBarChart
+                            ? S.of(context).lineChart
+                            : S.of(context).barChart,
                       ),
                     ),
                   ],
@@ -190,22 +210,33 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                 // Affichage du graphique (barres ou lignes)
                 Expanded(
                   child: widget.healthAndLtvIsBarChart
-                      ? _buildBarChart(context, appState, groupedData, _buildDateLabelsForHealthAndLtv(context, widget.dataManager, widget.selectedPeriod))
-                      : _buildLineChart(context, appState, groupedData, spots, maxY),
+                      ? _buildBarChart(
+                          context,
+                          appState,
+                          groupedData,
+                          _buildDateLabelsForHealthAndLtv(context,
+                              widget.dataManager, widget.selectedPeriod))
+                      : _buildLineChart(
+                          context, appState, groupedData, spots, maxY),
                 ),
                 // Indicateur de la métrique actuelle
                 const SizedBox(height: 16),
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: showHealthFactor
-                          ? const Color(0xFF34C759).withOpacity(0.1) // Vert iOS
-                          : const Color(0xFFFF9500).withOpacity(0.1), // Orange iOS
+                          ? const Color(0xFF34C759)
+                              .withValues(alpha: 0.1) // Vert iOS
+                          : const Color(0xFFFF9500)
+                              .withValues(alpha: 0.1), // Orange iOS
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      showHealthFactor ? S.of(context).healthFactorSafer : S.of(context).ltvSafer,
+                      showHealthFactor
+                          ? S.of(context).healthFactorSafer
+                          : S.of(context).ltvSafer,
                       style: TextStyle(
                         fontSize: 12 + appState.getTextSizeOffset(),
                         color: showHealthFactor
@@ -237,7 +268,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
           drawVerticalLine: false,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey.withOpacity(0.15),
+              color: Colors.grey.withValues(alpha: 0.15),
               strokeWidth: 1,
               dashArray: [5, 5],
             );
@@ -255,7 +286,9 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               final date = labels[groupIndex];
 
               // Récupérer la valeur réelle pour l'affichage dans le tooltip
-              final realValue = showHealthFactor ? groupedData[date]!['healtFactor']! : groupedData[date]!['ltv']!;
+              final realValue = showHealthFactor
+                  ? groupedData[date]!['healtFactor']!
+                  : groupedData[date]!['ltv']!;
 
               return BarTooltipItem(
                 '$date\n${showHealthFactor ? 'Health Factor' : 'LTV'}: ${showHealthFactor ? realValue.toInt() : realValue.toInt()}${showHealthFactor ? '' : '%'}',
@@ -321,7 +354,9 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                 return Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    showHealthFactor ? value.toInt().toString() : '${value.toInt()}%',
+                    showHealthFactor
+                        ? value.toInt().toString()
+                        : '${value.toInt()}%',
                     style: TextStyle(
                       fontSize: 10 + appState.getTextSizeOffset(),
                       color: Colors.grey.shade600,
@@ -342,7 +377,8 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
             final values = groupedData[date];
             if (values == null) return BarChartGroupData(x: index);
 
-            double metricValue = showHealthFactor ? values['healtFactor']! : values['ltv']!;
+            double metricValue =
+                showHealthFactor ? values['healtFactor']! : values['ltv']!;
 
             // Assurer que la valeur de la barre est au moins 1.0 pour le graphique,
             // tout en conservant la valeur réelle pour l'affichage dans le tooltip
@@ -355,16 +391,17 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               x: index,
               barRods: [
                 BarChartRodData(
-                  toY: barValue, // Utiliser la valeur ajustée qui est au moins 1.0
+                  toY:
+                      barValue, // Utiliser la valeur ajustée qui est au moins 1.0
                   gradient: LinearGradient(
                     colors: showHealthFactor
                         ? [
                             const Color(0xFF34C759), // Vert iOS
-                            const Color(0xFF34C759).withOpacity(0.7),
+                            const Color(0xFF34C759).withValues(alpha: 0.7),
                           ]
                         : [
                             const Color(0xFFFF9500), // Orange iOS
-                            const Color(0xFFFF9500).withOpacity(0.7),
+                            const Color(0xFFFF9500).withValues(alpha: 0.7),
                           ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -377,7 +414,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
                     toY: showHealthFactor ? 3.0 : 100,
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                   ),
                 ),
               ],
@@ -441,7 +478,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
           drawVerticalLine: false,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey.withOpacity(0.15),
+              color: Colors.grey.withValues(alpha: 0.15),
               strokeWidth: 1,
               dashArray: [5, 5],
             );
@@ -490,7 +527,9 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                 return Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    showHealthFactor ? value.toInt().toString() : '${value.toInt()}%',
+                    showHealthFactor
+                        ? value.toInt().toString()
+                        : '${value.toInt()}%',
                     style: TextStyle(
                       fontSize: 10 + appState.getTextSizeOffset(),
                       color: Colors.grey.shade600,
@@ -529,7 +568,10 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               },
               checkToShowDot: (spot, barData) {
                 // Afficher les points aux extrémités et quelques points intermédiaires
-                return spot.x == 0 || spot.x == barData.spots.length - 1 || spot.x % (barData.spots.length > 8 ? 4 : 2) == 0 || _selectedSpotIndex == spot.x.toInt();
+                return spot.x == 0 ||
+                    spot.x == barData.spots.length - 1 ||
+                    spot.x % (barData.spots.length > 8 ? 4 : 2) == 0 ||
+                    _selectedSpotIndex == spot.x.toInt();
               },
             ),
             belowBarData: BarAreaData(
@@ -537,12 +579,14 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               gradient: LinearGradient(
                 colors: showHealthFactor
                     ? [
-                        const Color(0xFF34C759).withOpacity(0.3), // Vert iOS
-                        const Color(0xFF34C759).withOpacity(0.0),
+                        const Color(0xFF34C759)
+                            .withValues(alpha: 0.3), // Vert iOS
+                        const Color(0xFF34C759).withValues(alpha: 0.0),
                       ]
                     : [
-                        const Color(0xFFFF9500).withOpacity(0.3), // Orange iOS
-                        const Color(0xFFFF9500).withOpacity(0.0),
+                        const Color(0xFFFF9500)
+                            .withValues(alpha: 0.3), // Orange iOS
+                        const Color(0xFFFF9500).withValues(alpha: 0.0),
                       ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -568,7 +612,9 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               final date = dates[spotIndex];
 
               // Récupérer la valeur réelle pour l'affichage
-              final realValue = showHealthFactor ? groupedData[date]!['healtFactor']! : groupedData[date]!['ltv']!;
+              final realValue = showHealthFactor
+                  ? groupedData[date]!['healtFactor']!
+                  : groupedData[date]!['ltv']!;
 
               return [
                 LineTooltipItem(
@@ -591,11 +637,14 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
           ),
           handleBuiltInTouches: true,
           touchSpotThreshold: 20,
-          touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
+          touchCallback:
+              (FlTouchEvent event, LineTouchResponse? touchResponse) {
             setState(() {
               if (event is FlTapUpEvent || event is FlPanDownEvent) {
-                if (touchResponse?.lineBarSpots != null && touchResponse!.lineBarSpots!.isNotEmpty) {
-                  _selectedSpotIndex = touchResponse.lineBarSpots!.first.spotIndex;
+                if (touchResponse?.lineBarSpots != null &&
+                    touchResponse!.lineBarSpots!.isNotEmpty) {
+                  _selectedSpotIndex =
+                      touchResponse.lineBarSpots!.first.spotIndex;
                 }
               } else if (event is FlPanEndEvent || event is FlLongPressEnd) {
                 _selectedSpotIndex = null;
@@ -622,7 +671,8 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
       if (selectedPeriod == S.of(context).day) {
         periodKey = DateFormat('yyyy/MM/dd').format(date);
       } else if (selectedPeriod == S.of(context).week) {
-        periodKey = "${date.year}-S${CustomDateUtils.weekNumber(date).toString().padLeft(2, '0')}";
+        periodKey =
+            "${date.year}-S${CustomDateUtils.weekNumber(date).toString().padLeft(2, '0')}";
       } else if (selectedPeriod == S.of(context).month) {
         periodKey = DateFormat('yyyy/MM').format(date);
       } else {
@@ -649,7 +699,8 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
     DataManager dataManager,
     String selectedPeriod,
   ) {
-    final groupedData = _groupHealthAndLtvByDate(context, dataManager, selectedPeriod);
+    final groupedData =
+        _groupHealthAndLtvByDate(context, dataManager, selectedPeriod);
     return groupedData.keys.toList();
   }
 }

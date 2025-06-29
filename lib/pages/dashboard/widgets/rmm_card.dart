@@ -7,14 +7,14 @@ import 'package:realtoken_asset_tracker/utils/widget_factory.dart';
 import 'package:realtoken_asset_tracker/pages/dashboard/detailsPages/rmm_details_page.dart';
 import 'package:realtoken_asset_tracker/utils/currency_utils.dart';
 import 'package:realtoken_asset_tracker/utils/ui_utils.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:realtoken_asset_tracker/utils/shimmer_utils.dart';
 
 class RmmCard extends StatelessWidget {
   final bool showAmounts;
   final bool isLoading;
 
-  const RmmCard({Key? key, required this.showAmounts, required this.isLoading}) : super(key: key);
+  const RmmCard(
+      {super.key, required this.showAmounts, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,8 @@ class RmmCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     // Récupérer la liste des wallets depuis perWalletBalances
-    final List<Map<String, dynamic>> walletDetails = dataManager.perWalletBalances;
+    final List<Map<String, dynamic>> walletDetails =
+        dataManager.perWalletBalances;
 
     // Calcul des montants globaux (somme de tous les wallets)
     double totalUsdcDeposit = 0;
@@ -54,10 +55,13 @@ class RmmCard extends StatelessWidget {
       final double totalBorrow = usdcBorrow + xdaiBorrow;
 
       // Utilise la même valeur RMM que dans l'autre page
-      final double walletRmmValue = dataManager.perWalletRmmValues[address] ?? 0;
+      final double walletRmmValue =
+          dataManager.perWalletRmmValues[address] ?? 0;
 
       // Calcul du Health Factor basé sur walletRmmValue
-      final double hf = totalBorrow > 0 ? (walletRmmValue * 0.7) / totalBorrow : double.infinity;
+      final double hf = totalBorrow > 0
+          ? (walletRmmValue * 0.7) / totalBorrow
+          : double.infinity;
 
       if (hf < lowestHF) {
         lowestHF = hf;
@@ -67,25 +71,35 @@ class RmmCard extends StatelessWidget {
 
 // Récupération des valeurs du wallet avec le HF le plus bas pour l'affichage des jauges
     final String selectedAddress = walletWithLowestHF?['address'] ?? '';
-    final double worstWalletUsdcBorrow = walletWithLowestHF?['usdcBorrow'] as double? ?? 0;
-    final double worstWalletXdaiBorrow = walletWithLowestHF?['xdaiBorrow'] as double? ?? 0;
-    final double worstWalletBorrow = worstWalletUsdcBorrow + worstWalletXdaiBorrow;
+    final double worstWalletUsdcBorrow =
+        walletWithLowestHF?['usdcBorrow'] as double? ?? 0;
+    final double worstWalletXdaiBorrow =
+        walletWithLowestHF?['xdaiBorrow'] as double? ?? 0;
+    final double worstWalletBorrow =
+        worstWalletUsdcBorrow + worstWalletXdaiBorrow;
 
 // Récupération correcte du walletRmmValue pour le wallet avec le HF le plus bas
-    final double worstWalletRmmValue = dataManager.perWalletRmmValues[selectedAddress] ?? 0;
+    final double worstWalletRmmValue =
+        dataManager.perWalletRmmValues[selectedAddress] ?? 0;
 
 // Récupération des taux APY
-    final double usdcDepositApy = dataManager.usdcDepositApy ?? 0.0;
-    final double xdaiDepositApy = dataManager.xdaiDepositApy ?? 0.0;
-    final double usdcBorrowApy = dataManager.usdcBorrowApy ?? 0.0;
-    final double xdaiBorrowApy = dataManager.xdaiBorrowApy ?? 0.0;
+    final double usdcDepositApy = dataManager.usdcDepositApy;
+    final double xdaiDepositApy = dataManager.xdaiDepositApy;
+    final double usdcBorrowApy = dataManager.usdcBorrowApy;
+    final double xdaiBorrowApy = dataManager.xdaiBorrowApy;
 
 // Calcul final du Health Factor et du LTV pour le wallet le plus défavorable
-    double healthFactor = worstWalletBorrow > 0 ? (worstWalletRmmValue * 0.7) / worstWalletBorrow : double.infinity;
-    double currentLTV = worstWalletRmmValue > 0 ? (worstWalletBorrow / worstWalletRmmValue * 100) : 0;
+    double healthFactor = worstWalletBorrow > 0
+        ? (worstWalletRmmValue * 0.7) / worstWalletBorrow
+        : double.infinity;
+    double currentLTV = worstWalletRmmValue > 0
+        ? (worstWalletBorrow / worstWalletRmmValue * 100)
+        : 0;
 
 // Gestion des cas particuliers pour l'affichage
-    if (healthFactor.isInfinite || healthFactor.isNaN || worstWalletBorrow == 0) {
+    if (healthFactor.isInfinite ||
+        healthFactor.isNaN ||
+        worstWalletBorrow == 0) {
       healthFactor = 5.0; // Valeur par défaut pour un HF sûr
     }
 
@@ -99,19 +113,22 @@ class RmmCard extends StatelessWidget {
         worstWalletRmmValue,
         worstWalletUsdcBorrow,
         worstWalletXdaiBorrow,
-        dataManager.usdcBorrowApy ?? 0.0,
-        dataManager.xdaiBorrowApy ?? 0.0,
+        dataManager.usdcBorrowApy,
+        dataManager.xdaiBorrowApy,
         isLoading,
       ),
       [
         const SizedBox(height: 4),
 
         // Section Dépôts avec titre
-                  WidgetFactory.buildSectionHeader(context, S.of(context).depositBalance),
+        WidgetFactory.buildSectionHeader(context, S.of(context).depositBalance),
 
         _buildBalanceRowWithIcon(
           context,
-          currencyUtils.getFormattedAmount(currencyUtils.convert(totalXdaiDeposit), currencyUtils.currencySymbol, showAmounts),
+          currencyUtils.getFormattedAmount(
+              currencyUtils.convert(totalXdaiDeposit),
+              currencyUtils.currencySymbol,
+              showAmounts),
           S.of(context).depositBalance,
           'xdai', // Type pour l'icône
           xdaiDepositApy,
@@ -121,7 +138,10 @@ class RmmCard extends StatelessWidget {
 
         _buildBalanceRowWithIcon(
           context,
-          currencyUtils.getFormattedAmount(currencyUtils.convert(totalUsdcDeposit), currencyUtils.currencySymbol, showAmounts),
+          currencyUtils.getFormattedAmount(
+              currencyUtils.convert(totalUsdcDeposit),
+              currencyUtils.currencySymbol,
+              showAmounts),
           S.of(context).depositBalance,
           'usdc', // Type pour l'icône
           usdcDepositApy,
@@ -132,11 +152,14 @@ class RmmCard extends StatelessWidget {
         const SizedBox(height: 6),
 
         // Section Emprunts avec titre
-                  WidgetFactory.buildSectionHeader(context, S.of(context).borrowBalance),
+        WidgetFactory.buildSectionHeader(context, S.of(context).borrowBalance),
 
         _buildBalanceRowWithIcon(
           context,
-          currencyUtils.getFormattedAmount(currencyUtils.convert(totalUsdcBorrow), currencyUtils.currencySymbol, showAmounts),
+          currencyUtils.getFormattedAmount(
+              currencyUtils.convert(totalUsdcBorrow),
+              currencyUtils.currencySymbol,
+              showAmounts),
           S.of(context).borrowBalance,
           'usdc', // Type pour l'icône
           usdcBorrowApy,
@@ -146,7 +169,10 @@ class RmmCard extends StatelessWidget {
 
         _buildBalanceRowWithIcon(
           context,
-          currencyUtils.getFormattedAmount(currencyUtils.convert(totalXdaiBorrow), currencyUtils.currencySymbol, showAmounts),
+          currencyUtils.getFormattedAmount(
+              currencyUtils.convert(totalXdaiBorrow),
+              currencyUtils.currencySymbol,
+              showAmounts),
           S.of(context).borrowBalance,
           'xdai', // Type pour l'icône
           xdaiBorrowApy,
@@ -158,7 +184,7 @@ class RmmCard extends StatelessWidget {
       context,
       hasGraph: true,
       // Flèche de navigation dans l'en-tête
-      headerRightWidget: Container(
+      headerRightWidget: SizedBox(
         height: 36,
         width: 36,
         child: Material(
@@ -171,7 +197,9 @@ class RmmCard extends StatelessWidget {
               child: Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 16,
-                color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+                color: theme.brightness == Brightness.light
+                    ? Colors.black54
+                    : Colors.white70,
               ),
             ),
             onTap: () {
@@ -193,7 +221,8 @@ class RmmCard extends StatelessWidget {
             builder: (context) {
               double factor = healthFactor;
               factor = factor.isNaN || factor < 0 ? 0 : factor.clamp(0.0, 5.0);
-              return _buildVerticalGauges(factor, worstWalletRmmValue, worstWalletBorrow, context);
+              return _buildVerticalGauges(
+                  factor, worstWalletRmmValue, worstWalletBorrow, context);
             },
           ),
         ],
@@ -225,11 +254,15 @@ class RmmCard extends StatelessWidget {
             height: 22,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: tokenType.toLowerCase() == 'usdc' ? Color(0xFF2775CA).withOpacity(0.15) : Color(0xFFEDB047).withOpacity(0.15),
+              color: tokenType.toLowerCase() == 'usdc'
+                  ? Color(0xFF2775CA).withValues(alpha: 0.15)
+                  : Color(0xFFEDB047).withValues(alpha: 0.15),
             ),
             child: Center(
               child: Image.asset(
-                tokenType.toLowerCase() == 'usdc' ? 'assets/icons/usdc.png' : 'assets/icons/xdai.png',
+                tokenType.toLowerCase() == 'usdc'
+                    ? 'assets/icons/usdc.png'
+                    : 'assets/icons/xdai.png',
                 width: 16,
                 height: 16,
               ),
@@ -248,7 +281,9 @@ class RmmCard extends StatelessWidget {
                         child: Text(
                           amount,
                           style: TextStyle(
-                            fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                            fontSize: 14 +
+                                Provider.of<AppState>(context, listen: false)
+                                    .getTextSizeOffset(),
                             fontWeight: FontWeight.w500,
                             letterSpacing: -0.3,
                             color: theme.textTheme.bodyLarge?.color,
@@ -259,7 +294,9 @@ class RmmCard extends StatelessWidget {
                     : Text(
                         amount,
                         style: TextStyle(
-                          fontSize: 14 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                          fontSize: 14 +
+                              Provider.of<AppState>(context, listen: false)
+                                  .getTextSizeOffset(),
                           fontWeight: FontWeight.w500,
                           letterSpacing: -0.3,
                           color: theme.textTheme.bodyLarge?.color,
@@ -271,17 +308,25 @@ class RmmCard extends StatelessWidget {
                 isLoading
                     ? ShimmerUtils.originalColorShimmer(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: (apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30)).withOpacity(0.15),
+                            color: (apy >= 0
+                                    ? Color(0xFF34C759)
+                                    : Color(0xFFFF3B30))
+                                .withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             '${apy.toStringAsFixed(1)}%',
                             style: TextStyle(
-                              color: apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30),
+                              color: apy >= 0
+                                  ? Color(0xFF34C759)
+                                  : Color(0xFFFF3B30),
                               fontWeight: FontWeight.w500,
-                              fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                              fontSize: 12 +
+                                  Provider.of<AppState>(context, listen: false)
+                                      .getTextSizeOffset(),
                               letterSpacing: -0.3,
                             ),
                           ),
@@ -289,17 +334,24 @@ class RmmCard extends StatelessWidget {
                         color: apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30),
                       )
                     : Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: (apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30)).withOpacity(0.15),
+                          color:
+                              (apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30))
+                                  .withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           '${apy.toStringAsFixed(1)}%',
                           style: TextStyle(
-                            color: apy >= 0 ? Color(0xFF34C759) : Color(0xFFFF3B30),
+                            color: apy >= 0
+                                ? Color(0xFF34C759)
+                                : Color(0xFFFF3B30),
                             fontWeight: FontWeight.w500,
-                            fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                            fontSize: 12 +
+                                Provider.of<AppState>(context, listen: false)
+                                    .getTextSizeOffset(),
                             letterSpacing: -0.3,
                           ),
                         ),
@@ -312,7 +364,8 @@ class RmmCard extends StatelessWidget {
     );
   }
 
-  Widget _buildVerticalGauges(double factor, double walletDeposit, double walletBorrow, BuildContext context) {
+  Widget _buildVerticalGauges(double factor, double walletDeposit,
+      double walletBorrow, BuildContext context) {
     // Obtenir le wallet avec le HF le plus bas depuis le contexte
     final dataManager = Provider.of<DataManager>(context, listen: false);
     final theme = Theme.of(context);
@@ -330,7 +383,9 @@ class RmmCard extends StatelessWidget {
 
       final walletRmmValue = dataManager.perWalletRmmValues[address] ?? 0;
 
-      final hf = totalBorrow > 0 ? (walletRmmValue * 0.7) / totalBorrow : double.infinity;
+      final hf = totalBorrow > 0
+          ? (walletRmmValue * 0.7) / totalBorrow
+          : double.infinity;
 
       if (hf < lowestHF) {
         lowestHF = hf;
@@ -339,15 +394,20 @@ class RmmCard extends StatelessWidget {
     }
 
     // Adresse abrégée pour affichage (6 premiers et 4 derniers caractères)
-    String shortAddress = walletAddress.length > 10 ? "${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}" : walletAddress;
+    String shortAddress = walletAddress.length > 10
+        ? "${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}"
+        : walletAddress;
 
     double progressHF = (factor / 5).clamp(0.0, 1.0);
-    double progressLTV = walletDeposit > 0 ? ((walletBorrow / walletDeposit * 100).clamp(0.0, 100.0)) / 100 : 0;
+    double progressLTV = walletDeposit > 0
+        ? ((walletBorrow / walletDeposit * 100).clamp(0.0, 100.0)) / 100
+        : 0;
 
     // Définition des couleurs pour la jauge HF en fonction du facteur
     Color getHFColor(double hfValue) {
       if (hfValue <= 1.1) {
-        return Color(0xFFFF3B30); // Rouge pour valeurs dangereuses (HF proche de 1)
+        return Color(
+            0xFFFF3B30); // Rouge pour valeurs dangereuses (HF proche de 1)
       } else if (hfValue <= 1.5) {
         return Color(0xFFFF9500); // Orange pour valeurs à risque modéré
       } else if (hfValue <= 2.5) {
@@ -360,7 +420,8 @@ class RmmCard extends StatelessWidget {
     // Fonction pour déterminer la couleur de la jauge LTV en fonction de sa valeur
     Color getLTVColor(double ltvPercent) {
       if (ltvPercent >= 65) {
-        return Color(0xFFFF3B30); // Rouge pour valeurs dangereuses (LTV proche de 70%)
+        return Color(
+            0xFFFF3B30); // Rouge pour valeurs dangereuses (LTV proche de 70%)
       } else if (ltvPercent >= 55) {
         return Color(0xFFFF9500); // Orange pour valeurs à risque modéré
       } else if (ltvPercent >= 40) {
@@ -394,7 +455,9 @@ class RmmCard extends StatelessWidget {
                   Text(
                     'HF',
                     style: TextStyle(
-                      fontSize: 15 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                      fontSize: 15 +
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset(),
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.3,
                       color: theme.textTheme.bodyMedium?.color,
@@ -406,7 +469,9 @@ class RmmCard extends StatelessWidget {
                     width: 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black.withValues(alpha: 0.05)
+                          : Colors.white.withValues(alpha: 0.1),
                     ),
                     child: Stack(
                       children: [
@@ -417,8 +482,12 @@ class RmmCard extends StatelessWidget {
                             width: 20,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
-                                topLeft: progressHF > 0.95 ? Radius.circular(13) : Radius.zero,
-                                topRight: progressHF > 0.95 ? Radius.circular(13) : Radius.zero,
+                                topLeft: progressHF > 0.95
+                                    ? Radius.circular(13)
+                                    : Radius.zero,
+                                topRight: progressHF > 0.95
+                                    ? Radius.circular(13)
+                                    : Radius.zero,
                                 bottomLeft: Radius.circular(13),
                                 bottomRight: Radius.circular(13),
                               ),
@@ -428,17 +497,20 @@ class RmmCard extends StatelessWidget {
                         ),
                         // Ligne de seuil critique pour HF à 1
                         Positioned(
-                          bottom: (1 / 5) * 80, // La position 1 sur l'échelle 0-5
+                          bottom:
+                              (1 / 5) * 80, // La position 1 sur l'échelle 0-5
                           left: -2,
                           right: -2,
                           child: Container(
                             height: 1.5,
                             decoration: BoxDecoration(
-                              color: Color(0xFFFF3B30), // Rouge pour la ligne critique
+                              color: Color(
+                                  0xFFFF3B30), // Rouge pour la ligne critique
                               borderRadius: BorderRadius.circular(1),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color(0xFFFF3B30).withOpacity(0.5),
+                                  color:
+                                      Color(0xFFFF3B30).withValues(alpha: 0.5),
                                   blurRadius: 2,
                                   spreadRadius: 0,
                                 ),
@@ -453,13 +525,15 @@ class RmmCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: hfGaugeColor.withOpacity(0.15),
+                      color: hfGaugeColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       (progressHF * 5).toStringAsFixed(1),
                       style: TextStyle(
-                        fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                        fontSize: 12 +
+                            Provider.of<AppState>(context, listen: false)
+                                .getTextSizeOffset(),
                         fontWeight: FontWeight.bold,
                         color: hfGaugeColor,
                       ),
@@ -474,7 +548,9 @@ class RmmCard extends StatelessWidget {
                   Text(
                     'LTV',
                     style: TextStyle(
-                      fontSize: 15 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                      fontSize: 15 +
+                          Provider.of<AppState>(context, listen: false)
+                              .getTextSizeOffset(),
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.3,
                       color: theme.textTheme.bodyMedium?.color,
@@ -486,7 +562,9 @@ class RmmCard extends StatelessWidget {
                     width: 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black.withValues(alpha: 0.05)
+                          : Colors.white.withValues(alpha: 0.1),
                     ),
                     child: Stack(
                       children: [
@@ -498,7 +576,8 @@ class RmmCard extends StatelessWidget {
                           child: Container(
                             height: 1.5,
                             decoration: BoxDecoration(
-                              color: Color(0xFFFF3B30), // Rouge pour la ligne critique
+                              color: Color(
+                                  0xFFFF3B30), // Rouge pour la ligne critique
                               borderRadius: BorderRadius.circular(1),
                             ),
                           ),
@@ -510,8 +589,12 @@ class RmmCard extends StatelessWidget {
                             width: 20,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
-                                topLeft: progressLTV > 0.95 ? Radius.circular(13) : Radius.zero,
-                                topRight: progressLTV > 0.95 ? Radius.circular(13) : Radius.zero,
+                                topLeft: progressLTV > 0.95
+                                    ? Radius.circular(13)
+                                    : Radius.zero,
+                                topRight: progressLTV > 0.95
+                                    ? Radius.circular(13)
+                                    : Radius.zero,
                                 bottomLeft: Radius.circular(13),
                                 bottomRight: Radius.circular(13),
                               ),
@@ -526,13 +609,15 @@ class RmmCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: ltvGaugeColor.withOpacity(0.15),
+                      color: ltvGaugeColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       '${(progressLTV * 100).toStringAsFixed(0)}%',
                       style: TextStyle(
-                        fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                        fontSize: 12 +
+                            Provider.of<AppState>(context, listen: false)
+                                .getTextSizeOffset(),
                         fontWeight: FontWeight.bold,
                         color: ltvGaugeColor,
                       ),
@@ -550,15 +635,21 @@ class RmmCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+                color: theme.brightness == Brightness.light
+                    ? Colors.black.withValues(alpha: 0.05)
+                    : Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 shortAddress,
                 style: TextStyle(
-                  fontSize: 10 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                  fontSize: 10 +
+                      Provider.of<AppState>(context, listen: false)
+                          .getTextSizeOffset(),
                   letterSpacing: -0.3,
-                  color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white70,
+                  color: theme.brightness == Brightness.light
+                      ? Colors.black54
+                      : Colors.white70,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -583,9 +674,11 @@ class RmmCard extends StatelessWidget {
     if (isLoading) {
       return ShimmerUtils.originalColorShimmer(
         child: Text(
-          "${S.of(context).timeBeforeLiquidation}",
+          S.of(context).timeBeforeLiquidation,
           style: TextStyle(
-            fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+            fontSize: 13 +
+                Provider.of<AppState>(context, listen: false)
+                    .getTextSizeOffset(),
             fontWeight: FontWeight.w500,
             color: theme.textTheme.bodyMedium?.color,
             letterSpacing: -0.3,
@@ -621,15 +714,15 @@ class RmmCard extends StatelessWidget {
     if (timeStatus == "danger") {
       iconData = Icons.error_rounded;
       iconColor = Color(0xFFFF3B30);
-      bgColor = Color(0xFFFF3B30).withOpacity(0.15);
+      bgColor = Color(0xFFFF3B30).withValues(alpha: 0.15);
     } else if (timeStatus == "warning") {
       iconData = Icons.warning_rounded;
       iconColor = Color(0xFFFF9500);
-      bgColor = Color(0xFFFF9500).withOpacity(0.15);
+      bgColor = Color(0xFFFF9500).withValues(alpha: 0.15);
     } else {
       iconData = Icons.check_circle_rounded;
       iconColor = Color(0xFF34C759);
-      bgColor = Color(0xFF34C759).withOpacity(0.15);
+      bgColor = Color(0xFF34C759).withValues(alpha: 0.15);
     }
 
     return Container(
@@ -651,7 +744,9 @@ class RmmCard extends StatelessWidget {
             child: Text(
               "${realTime.isNotEmpty ? "$realTime " : ""}${S.of(context).timeBeforeLiquidation}",
               style: TextStyle(
-                fontSize: 13 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                fontSize: 13 +
+                    Provider.of<AppState>(context, listen: false)
+                        .getTextSizeOffset(),
                 fontWeight: FontWeight.w500,
                 color: theme.textTheme.bodyMedium?.color,
                 letterSpacing: -0.3,
@@ -663,8 +758,6 @@ class RmmCard extends StatelessWidget {
       ),
     );
   }
-
-
 
   // Déterminer le statut de temps avant liquidation
   String _calculateTimeBeforeLiquidationStatus(
@@ -740,10 +833,12 @@ class RmmCard extends StatelessWidget {
     double xdaiBorrowApy,
   ) {
     // Récupérer les valeurs depuis le widget parent
-    final DataManager dataManager = Provider.of<DataManager>(context, listen: false);
+    final DataManager dataManager =
+        Provider.of<DataManager>(context, listen: false);
 
     // Récupérer la liste des wallets depuis perWalletBalances
-    final List<Map<String, dynamic>> walletDetails = dataManager.perWalletBalances;
+    final List<Map<String, dynamic>> walletDetails =
+        dataManager.perWalletBalances;
 
     // Sélection du wallet ayant le HF le plus bas
     Map<String, dynamic>? walletWithLowestHF;
@@ -756,10 +851,13 @@ class RmmCard extends StatelessWidget {
       final double totalBorrow = usdcBorrow + xdaiBorrow;
 
       // Utilise la même valeur RMM que dans l'autre page
-      final double walletRmmValue = dataManager.perWalletRmmValues[address] ?? 0;
+      final double walletRmmValue =
+          dataManager.perWalletRmmValues[address] ?? 0;
 
       // Calcul du Health Factor basé sur walletRmmValue
-      final double hf = totalBorrow > 0 ? (walletRmmValue * 0.7) / totalBorrow : double.infinity;
+      final double hf = totalBorrow > 0
+          ? (walletRmmValue * 0.7) / totalBorrow
+          : double.infinity;
 
       if (hf < lowestHF) {
         lowestHF = hf;
@@ -772,7 +870,8 @@ class RmmCard extends StatelessWidget {
     final double usdcBorrow = walletWithLowestHF?['usdcBorrow'] as double? ?? 0;
     final double xdaiBorrow = walletWithLowestHF?['xdaiBorrow'] as double? ?? 0;
     final double totalBorrow = usdcBorrow + xdaiBorrow;
-    final double walletRmmValue = dataManager.perWalletRmmValues[selectedAddress] ?? 0;
+    final double walletRmmValue =
+        dataManager.perWalletRmmValues[selectedAddress] ?? 0;
 
     // Si pas d'emprunt, pas de risque de liquidation
     if (totalBorrow == 0) {
@@ -788,8 +887,8 @@ class RmmCard extends StatelessWidget {
     }
 
     // Taux d'emprunt
-    final double usdcBorrowApy = dataManager.usdcBorrowApy ?? 0.0;
-    final double xdaiBorrowApy = dataManager.xdaiBorrowApy ?? 0.0;
+    final double usdcBorrowApy = dataManager.usdcBorrowApy;
+    final double xdaiBorrowApy = dataManager.xdaiBorrowApy;
 
     // Calcul des taux d'intérêt journaliers
     final double usdcDailyRate = usdcBorrowApy / 365 / 100;

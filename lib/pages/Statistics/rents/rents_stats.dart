@@ -21,15 +21,15 @@ class RentsStats extends StatefulWidget {
 class _RentsStatsState extends State<RentsStats> {
   late String _selectedPeriod;
   late String _selectedRentPeriod;
-  
+
   String _selectedRentTimeRange = 'all';
-  
+
   bool _rentedIsBarChart = true;
   bool rentIsBarChart = false;
   bool showCumulativeRent = false;
-  
+
   late SharedPreferences prefs;
-  
+
   int _rentTimeOffset = 0;
 
   @override
@@ -43,22 +43,25 @@ class _RentsStatsState extends State<RentsStats> {
         rentIsBarChart = prefs.getBool('rentIsBarChart') ?? false;
         showCumulativeRent = prefs.getBool('showCumulativeRent') ?? false;
         _rentedIsBarChart = prefs.getBool('rentedIsBarChart') ?? true;
-        
+
         // Charger les périodes sélectionnées
-        _selectedRentPeriod = prefs.getString('rentPeriod') ?? S.of(context).week;
-        
+        _selectedRentPeriod =
+            prefs.getString('rentPeriod') ?? S.of(context).week;
+
         // Charger les plages de temps
         _selectedRentTimeRange = prefs.getString('rentTimeRange') ?? 'all';
-        
+
         // Charger les offsets
         _rentTimeOffset = prefs.getInt('rentTimeOffset') ?? 0;
       });
 
       try {
         final dataManager = Provider.of<DataManager>(context, listen: false);
-        
-        if (!dataManager.isLoadingMain && dataManager.evmAddresses.isNotEmpty && 
-            dataManager.portfolio.isNotEmpty && dataManager.rentHistory.isNotEmpty) {
+
+        if (!dataManager.isLoadingMain &&
+            dataManager.evmAddresses.isNotEmpty &&
+            dataManager.portfolio.isNotEmpty &&
+            dataManager.rentHistory.isNotEmpty) {
           debugPrint("📊 RentsStats: données déjà chargées, skip chargement");
         } else {
           debugPrint("📊 RentsStats: chargement des données nécessaire");
@@ -81,10 +84,6 @@ class _RentsStatsState extends State<RentsStats> {
   Widget build(BuildContext context) {
     return Consumer<DataManager>(
       builder: (context, dataManager, child) {
-        if (dataManager == null) {
-          return const Center(child: Text("Error loading data"));
-        }
-
         final screenWidth = MediaQuery.of(context).size.width;
         final isWideScreen = screenWidth > 700;
         final double fixedCardHeight = 380;
@@ -96,7 +95,9 @@ class _RentsStatsState extends State<RentsStats> {
               end: Alignment.bottomCenter,
               colors: [
                 Theme.of(context).scaffoldBackgroundColor,
-                Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+                Theme.of(context)
+                    .scaffoldBackgroundColor
+                    .withValues(alpha: 0.9),
               ],
             ),
           ),
@@ -104,7 +105,8 @@ class _RentsStatsState extends State<RentsStats> {
             physics: const BouncingScrollPhysics(),
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 80.0, left: 8.0, right: 8.0),
+                padding: const EdgeInsets.only(
+                    top: 8.0, bottom: 80.0, left: 8.0, right: 8.0),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: isWideScreen ? 2 : 1,
@@ -115,7 +117,7 @@ class _RentsStatsState extends State<RentsStats> {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       if (!mounted) return const SizedBox.shrink();
-                      
+
                       return _buildChartWidget(context, index, dataManager);
                     },
                     childCount: 4,
@@ -129,7 +131,8 @@ class _RentsStatsState extends State<RentsStats> {
     );
   }
 
-  Widget _buildChartWidget(BuildContext context, int index, DataManager dataManager) {
+  Widget _buildChartWidget(
+      BuildContext context, int index, DataManager dataManager) {
     try {
       switch (index) {
         case 0:
@@ -211,7 +214,7 @@ class _RentsStatsState extends State<RentsStats> {
       }
     } catch (e) {
       debugPrint("Error building chart widget at index $index: $e");
-      return Container(
+      return SizedBox(
         height: 380,
         child: const Center(
           child: Text("Erreur de chargement du graphique"),
@@ -235,4 +238,4 @@ class _RentsStatsState extends State<RentsStats> {
   void _saveTimeOffsetPreference(String key, int value) {
     prefs.setInt(key, value);
   }
-} 
+}

@@ -13,13 +13,16 @@ class PersonalizationSettingsPage extends StatefulWidget {
   const PersonalizationSettingsPage({super.key});
 
   @override
-  _PersonalizationSettingsPageState createState() => _PersonalizationSettingsPageState();
+  _PersonalizationSettingsPageState createState() =>
+      _PersonalizationSettingsPageState();
 }
 
-class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPage> {
+class _PersonalizationSettingsPageState
+    extends State<PersonalizationSettingsPage> {
   Map<String, dynamic> _currencies = {};
   final TextEditingController _adjustmentController = TextEditingController();
-  final TextEditingController _initialInvestmentAdjustmentController = TextEditingController();
+  final TextEditingController _initialInvestmentAdjustmentController =
+      TextEditingController();
 
   Future<void> _saveConvertToSquareMeters(bool value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -72,7 +75,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
     _loadSettings();
     _fetchCurrencies();
     _adjustmentController.text = Parameters.manualAdjustment.toString();
-    _initialInvestmentAdjustmentController.text = Parameters.initialInvestmentAdjustment.toString();
+    _initialInvestmentAdjustmentController.text =
+        Parameters.initialInvestmentAdjustment.toString();
   }
 
   @override
@@ -103,7 +107,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
           const SizedBox(height: 12),
 
           // Portfolio Settings
-          _buildSectionHeader(context, S.of(context).portfolio, CupertinoIcons.chart_bar_square),
+          _buildSectionHeader(context, S.of(context).portfolio,
+              CupertinoIcons.chart_bar_square),
           _buildSettingsSection(
             context,
             children: [
@@ -135,7 +140,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
           const SizedBox(height: 12),
 
           // Units Settings
-          _buildSectionHeader(context, S.of(context).units, CupertinoIcons.arrow_right_arrow_left),
+          _buildSectionHeader(context, S.of(context).units,
+              CupertinoIcons.arrow_right_arrow_left),
           _buildSettingsSection(
             context,
             children: [
@@ -153,7 +159,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
           const SizedBox(height: 12),
 
           // Currency Settings
-          _buildSectionHeader(context, S.of(context).currency, CupertinoIcons.money_dollar_circle),
+          _buildSectionHeader(context, S.of(context).currency,
+              CupertinoIcons.money_dollar_circle),
           _buildSettingsSection(
             context,
             children: [
@@ -169,16 +176,22 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  currencyProvider.selectedCurrency.toUpperCase(),
+                                  currencyProvider.selectedCurrency
+                                      .toUpperCase(),
                                   style: TextStyle(
-                                    fontSize: 14.0 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                                    fontSize: 14.0 +
+                                        Provider.of<AppState>(context,
+                                                listen: false)
+                                            .getTextSizeOffset(),
                                     color: Colors.grey,
                                   ),
                                 ),
-                                const Icon(CupertinoIcons.chevron_right, size: 14, color: Colors.grey),
+                                const Icon(CupertinoIcons.chevron_right,
+                                    size: 14, color: Colors.grey),
                               ],
                             ),
-                            onPressed: () => _showCurrencyPicker(context, currencyProvider),
+                            onPressed: () =>
+                                _showCurrencyPicker(context, currencyProvider),
                           );
                         },
                       )
@@ -192,7 +205,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
           const SizedBox(height: 12),
 
           // Adjustments
-          _buildSectionHeader(context, "Ajustements", CupertinoIcons.slider_horizontal_3),
+          _buildSectionHeader(
+              context, "Ajustements", CupertinoIcons.slider_horizontal_3),
           _buildCompactAdjustments(context),
         ],
       ),
@@ -209,7 +223,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -243,17 +257,24 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                     Expanded(
                       child: CupertinoTextField(
                         controller: _adjustmentController,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true, signed: true),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
                         prefix: const Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Icon(CupertinoIcons.money_dollar, color: Colors.grey, size: 16),
+                          child: Icon(CupertinoIcons.money_dollar,
+                              color: Colors.grey, size: 16),
                         ),
                         placeholder: S.of(context).amount,
                         decoration: BoxDecoration(
-                          color: isDarkMode(context) ? const Color(0xFF2C2C2E) : Colors.white,
-                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(6), right: Radius.zero),
-                          border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                          color: isDarkMode(context)
+                              ? const Color(0xFF2C2C2E)
+                              : Colors.white,
+                          borderRadius: const BorderRadius.horizontal(
+                              left: Radius.circular(6), right: Radius.zero),
+                          border: Border.all(
+                              color: Colors.grey.withValues(alpha: 0.3)),
                         ),
                         style: TextStyle(fontSize: 14),
                       ),
@@ -261,7 +282,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       color: Theme.of(context).primaryColor,
-                      borderRadius: const BorderRadius.horizontal(left: Radius.zero, right: Radius.circular(6)),
+                      borderRadius: const BorderRadius.horizontal(
+                          left: Radius.zero, right: Radius.circular(6)),
                       minSize: 0,
                       onPressed: () {
                         final String text = _adjustmentController.text;
@@ -269,11 +291,13 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                         if (value != null) {
                           _saveManualAdjustment(value);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(S.of(context).adjustmentSaved)),
+                            SnackBar(
+                                content: Text(S.of(context).adjustmentSaved)),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(S.of(context).enterValidNumber)),
+                            SnackBar(
+                                content: Text(S.of(context).enterValidNumber)),
                           );
                         }
                       },
@@ -330,17 +354,24 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                     Expanded(
                       child: CupertinoTextField(
                         controller: _initialInvestmentAdjustmentController,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true, signed: true),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
                         prefix: const Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Icon(CupertinoIcons.money_dollar, color: Colors.grey, size: 16),
+                          child: Icon(CupertinoIcons.money_dollar,
+                              color: Colors.grey, size: 16),
                         ),
                         placeholder: S.of(context).amount,
                         decoration: BoxDecoration(
-                          color: isDarkMode(context) ? const Color(0xFF2C2C2E) : Colors.white,
-                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(6), right: Radius.zero),
-                          border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                          color: isDarkMode(context)
+                              ? const Color(0xFF2C2C2E)
+                              : Colors.white,
+                          borderRadius: const BorderRadius.horizontal(
+                              left: Radius.circular(6), right: Radius.zero),
+                          border: Border.all(
+                              color: Colors.grey.withValues(alpha: 0.3)),
                         ),
                         style: TextStyle(fontSize: 14),
                       ),
@@ -348,10 +379,12 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       color: Theme.of(context).primaryColor,
-                      borderRadius: const BorderRadius.horizontal(left: Radius.zero, right: Radius.circular(6)),
+                      borderRadius: const BorderRadius.horizontal(
+                          left: Radius.zero, right: Radius.circular(6)),
                       minSize: 0,
                       onPressed: () {
-                        final String text = _initialInvestmentAdjustmentController.text;
+                        final String text =
+                            _initialInvestmentAdjustmentController.text;
                         double? value = double.tryParse(text);
                         if (value != null) {
                           _saveInitialInvestmentAdjustment(value);
@@ -360,7 +393,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(S.of(context).enterValidNumber)),
+                            SnackBar(
+                                content: Text(S.of(context).enterValidNumber)),
                           );
                         }
                       },
@@ -390,7 +424,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
+  Widget _buildSectionHeader(
+      BuildContext context, String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 2),
       child: Row(
@@ -422,7 +457,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -490,7 +525,10 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
         if (!isLast)
           Padding(
             padding: const EdgeInsets.only(left: 12),
-            child: Divider(height: 1, thickness: 0.5, color: Colors.grey.withOpacity(0.3)),
+            child: Divider(
+                height: 1,
+                thickness: 0.5,
+                color: Colors.grey.withValues(alpha: 0.3)),
           ),
       ],
     );
@@ -514,7 +552,7 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
         child: CupertinoSwitch(
           value: value,
           onChanged: onChanged,
-          activeColor: Theme.of(context).primaryColor,
+          activeTrackColor: Theme.of(context).primaryColor,
         ),
       ),
       isFirst: isFirst,
@@ -522,7 +560,8 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
     );
   }
 
-  void _showCurrencyPicker(BuildContext context, CurrencyProvider currencyProvider) {
+  void _showCurrencyPicker(
+      BuildContext context, CurrencyProvider currencyProvider) {
     final appState = Provider.of<AppState>(context, listen: false);
 
     showCupertinoModalPopup(
@@ -536,8 +575,12 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
               height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.5)),
-                color: isDarkMode(context) ? const Color(0xFF2C2C2E) : Colors.white,
+                border: Border(
+                    bottom: BorderSide(
+                        color: Colors.grey.withValues(alpha: 0.3), width: 0.5)),
+                color: isDarkMode(context)
+                    ? const Color(0xFF2C2C2E)
+                    : Colors.white,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -560,10 +603,13 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
                 itemExtent: 30,
                 onSelectedItemChanged: (index) {
                   final String currencyKey = _currencies.keys.elementAt(index);
-                  currencyProvider.updateConversionRate(currencyKey, _currencies);
+                  currencyProvider.updateConversionRate(
+                      currencyKey, _currencies);
                 },
                 scrollController: FixedExtentScrollController(
-                  initialItem: _currencies.keys.toList().indexOf(currencyProvider.selectedCurrency),
+                  initialItem: _currencies.keys
+                      .toList()
+                      .indexOf(currencyProvider.selectedCurrency),
                 ),
                 children: _currencies.keys
                     .map((key) => Center(
@@ -605,11 +651,14 @@ class _PersonalizationSettingsPageState extends State<PersonalizationSettingsPag
     if (!mounted) return;
 
     setState(() {
-      Parameters.convertToSquareMeters = prefs.getBool('convertToSquareMeters') ?? false;
-      Parameters.selectedCurrency = prefs.getString('selectedCurrency') ?? 'usd';
+      Parameters.convertToSquareMeters =
+          prefs.getBool('convertToSquareMeters') ?? false;
+      Parameters.selectedCurrency =
+          prefs.getString('selectedCurrency') ?? 'usd';
 
       _adjustmentController.text = Parameters.manualAdjustment.toString();
-      _initialInvestmentAdjustmentController.text = Parameters.initialInvestmentAdjustment.toString();
+      _initialInvestmentAdjustmentController.text =
+          Parameters.initialInvestmentAdjustment.toString();
     });
   }
 }
