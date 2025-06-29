@@ -64,3 +64,6 @@ test/**/build/
 *.pem
 
 env_config.txt
+
+# FVM Version Cache
+.fvm/
