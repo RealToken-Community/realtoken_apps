@@ -35,7 +35,7 @@ target 'Runner' do
   # Utilisez l'une des deux directives ci-dessous en fonction de vos dépendances
 
   # Option 1: Si vous avez des pods nécessitant 'use_frameworks!'
-  use_frameworks!
+  use_frameworks! :linkage => :dynamic
 
   # Option 2: Si vous rencontrez des problèmes avec 'use_frameworks!', commentez la ligne ci-dessus et décommentez la suivante
    #use_modular_headers!
@@ -56,6 +56,66 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.6'
+      
+      # Assure que les frameworks sont construits pour Release lors de l'archive
+      if config.name == 'Release'
+        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      end
     end
+  end
+  
+  # Fix pour les modules avec @import qui ne fonctionnent pas lors de l'archive
+  # Supprime tous les @import et utilise uniquement #if __has_include
+  generated_plugin_file = File.join(File.dirname(__FILE__), 'Runner', 'GeneratedPluginRegistrant.m')
+  if File.exist?(generated_plugin_file)
+    content = File.read(generated_plugin_file)
+    
+    # Supprime tous les patterns "#else @import xxx;" ou "#elif ... @import xxx;"
+    # et les remplace par une version sans fallback @import
+    content.gsub!(/#if __has_include\(<([^>]+)>\)\r?\n#import <[^>]+>\r?\n#else\r?\n@import ([^;]+);\r?\n#endif/) do |match|
+      header = $1
+      module_name = $2
+      "#if __has_include(<#{header}>)\n#import <#{header}>\n#endif"
+    end
+    
+    content.gsub!(/#if __has_include\(<([^>]+)>\)\r?\n#import <[^>]+>\r?\n#elif[^\n]*\r?\n@import ([^;]+);\r?\n#endif/) do |match|
+      header = $1
+      module_name = $2
+      "#if __has_include(<#{header}>)\n#import <#{header}>\n#endif"
+    end
+    
+    # Protège tous les appels dans registerWithRegistry qui dépendent d'imports conditionnels
+    # Extrait toutes les informations des imports pour protéger les appels correspondants
+    protected_plugins = []
+    
+    # Trouve tous les imports conditionnels et leurs classes associées
+    content.scan(/#if __has_include\(<([^>]+)>\)\r?\n#import <[^>]+>\r?\n#endif/) do |header|
+      header_path = header[0]
+      # Extrait le nom du module du chemin du header
+      module_name = header_path.split('/').first
+      # Extrait le nom de la classe du nom du header
+      class_name = File.basename(header_path, '.h')
+      protected_plugins << { 
+        header: header_path, 
+        class: class_name, 
+        method: class_name.gsub(/Plugin$/, '') 
+      }
+    end
+    
+    # Protège chaque appel dans registerWithRegistry
+    protected_plugins.each do |plugin|
+      # Cherche la ligne d'enregistrement et la protège si nécessaire
+      plugin_pattern = /(\+ \(void\)registerWithRegistry:\(NSObject<FlutterPluginRegistry>\*\)registry \{[^}]*)  \[#{plugin[:class]} registerWithRegistrar:\[registry registrarForPlugin:@"[^"]+"\]\];/
+      
+      if content =~ plugin_pattern
+        before = $1
+        # Vérifie si la ligne est déjà protégée
+        if !before.include?("#if __has_include(<#{plugin[:header]}>")
+          content.gsub!(plugin_pattern, "\\1\n#if __has_include(<#{plugin[:header]}>)\n  [#{plugin[:class]} registerWithRegistrar:[registry registrarForPlugin:@\"#{plugin[:method]}\"]];\n#endif")
+        end
+      end
+    end
+    
+    File.write(generated_plugin_file, content)
   end
 end

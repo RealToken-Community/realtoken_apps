@@ -11,6 +11,253 @@ import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Gestionnaire de santé des wallets avec circuit breaker pattern
+class WalletHealthManager {
+  static final WalletHealthManager _instance = WalletHealthManager._internal();
+  factory WalletHealthManager() => _instance;
+  WalletHealthManager._internal();
+
+  // État de santé des wallets
+  final Map<String, WalletHealthStatus> _walletHealth = {};
+  
+  // Configuration du circuit breaker
+  static const int maxConsecutiveErrors = 3;
+  static const Duration circuitBreakerDuration = Duration(minutes: 15);
+  static const Duration backoffBase = Duration(seconds: 2);
+  static const Duration maxBackoff = Duration(minutes: 5);
+
+  /// Obtient le statut de santé d'un wallet
+  WalletHealthStatus getWalletHealth(String wallet) {
+    return _walletHealth[wallet] ?? WalletHealthStatus(wallet);
+  }
+
+  /// Met à jour le statut après une tentative
+  void recordAttempt(String wallet, bool success, {String? errorType, Duration? responseTime}) {
+    final status = getWalletHealth(wallet);
+    final now = DateTime.now();
+    
+    if (success) {
+      status.lastSuccess = now;
+      status.consecutiveErrors = 0;
+      status.totalSuccesses++;
+      status.isInCircuitBreaker = false;
+      if (responseTime != null) {
+        status.averageResponseTime = status.averageResponseTime == null 
+          ? responseTime 
+          : Duration(milliseconds: (status.averageResponseTime!.inMilliseconds * 0.7 + responseTime.inMilliseconds * 0.3).round());
+      }
+      debugPrint("✅ Wallet $wallet: Succès (${status.totalSuccesses} succès, temps moyen: ${status.averageResponseTime?.inMilliseconds}ms)");
+    } else {
+      status.lastError = now;
+      status.consecutiveErrors++;
+      status.totalErrors++;
+      status.lastErrorType = errorType ?? 'unknown';
+      
+      // Activer le circuit breaker si trop d'erreurs consécutives
+      if (status.consecutiveErrors >= maxConsecutiveErrors) {
+        status.isInCircuitBreaker = true;
+        status.circuitBreakerUntil = now.add(circuitBreakerDuration);
+        debugPrint("🚨 Circuit breaker activé pour wallet $wallet (${status.consecutiveErrors} erreurs consécutives)");
+      }
+      
+      debugPrint("❌ Wallet $wallet: Erreur $errorType (${status.consecutiveErrors} consécutives, ${status.totalErrors} total)");
+    }
+    
+    status.lastAttempt = now;
+    _walletHealth[wallet] = status;
+  }
+
+  /// Vérifie si un wallet peut être traité (circuit breaker)
+  bool canProcessWallet(String wallet) {
+    final status = getWalletHealth(wallet);
+    final now = DateTime.now();
+    
+    if (status.isInCircuitBreaker) {
+      if (status.circuitBreakerUntil != null && now.isAfter(status.circuitBreakerUntil!)) {
+        // Réinitialiser le circuit breaker
+        status.isInCircuitBreaker = false;
+        status.circuitBreakerUntil = null;
+        status.consecutiveErrors = 0;
+        debugPrint("🔄 Circuit breaker réinitialisé pour wallet $wallet");
+        return true;
+      }
+      debugPrint("🚫 Wallet $wallet en circuit breaker jusqu'à ${status.circuitBreakerUntil}");
+      return false;
+    }
+    
+    return true;
+  }
+
+  /// Calcule le délai de backoff adaptatif
+  Duration getBackoffDelay(String wallet) {
+    final status = getWalletHealth(wallet);
+    if (status.consecutiveErrors == 0) return Duration.zero;
+    
+    // Backoff exponentiel avec jitter
+    final baseDelay = backoffBase.inMilliseconds * (1 << (status.consecutiveErrors - 1));
+    final jitter = (baseDelay * 0.1).round(); // 10% de jitter
+    final finalDelay = baseDelay + (DateTime.now().millisecondsSinceEpoch % jitter);
+    
+    return Duration(milliseconds: finalDelay.clamp(0, maxBackoff.inMilliseconds));
+  }
+
+  /// Trie les wallets par priorité (succès rate, temps de réponse, etc.)
+  List<String> prioritizeWallets(List<String> wallets) {
+    final List<MapEntry<String, double>> walletScores = [];
+    
+    for (String wallet in wallets) {
+      final status = getWalletHealth(wallet);
+      double score = 0.0;
+      
+      // Score basé sur le taux de succès
+      final totalAttempts = status.totalSuccesses + status.totalErrors;
+      if (totalAttempts > 0) {
+        score += (status.totalSuccesses / totalAttempts) * 50; // 0-50 points
+      } else {
+        score += 25; // Score neutre pour les nouveaux wallets
+      }
+      
+      // Bonus pour les temps de réponse rapides
+      if (status.averageResponseTime != null) {
+        final responseTimeScore = (5000 - status.averageResponseTime!.inMilliseconds).clamp(0, 2500) / 50;
+        score += responseTimeScore; // 0-50 points
+      }
+      
+      // Pénalité pour les erreurs récentes
+      if (status.lastError != null) {
+        final hoursSinceLastError = DateTime.now().difference(status.lastError!).inHours;
+        if (hoursSinceLastError < 24) {
+          score -= (24 - hoursSinceLastError) * 2; // Pénalité décroissante
+        }
+      }
+      
+      // Pénalité pour le circuit breaker
+      if (status.isInCircuitBreaker) {
+        score -= 100;
+      }
+      
+      walletScores.add(MapEntry(wallet, score));
+    }
+    
+    // Trier par score décroissant
+    walletScores.sort((a, b) => b.value.compareTo(a.value));
+    final prioritizedWallets = walletScores.map((e) => e.key).toList();
+    
+    debugPrint("📊 Priorisation des wallets : ${prioritizedWallets.take(3).join(', ')} (top 3)");
+    return prioritizedWallets;
+  }
+
+  /// Obtient les statistiques globales
+  Map<String, dynamic> getHealthStats() {
+    if (_walletHealth.isEmpty) return {};
+    
+    final stats = <String, dynamic>{};
+    final statuses = _walletHealth.values.toList();
+    
+    stats['totalWallets'] = statuses.length;
+    stats['healthyWallets'] = statuses.where((s) => !s.isInCircuitBreaker && s.consecutiveErrors == 0).length;
+    stats['inCircuitBreaker'] = statuses.where((s) => s.isInCircuitBreaker).length;
+    stats['withErrors'] = statuses.where((s) => s.consecutiveErrors > 0).length;
+    
+    final totalSuccesses = statuses.fold<int>(0, (sum, s) => sum + s.totalSuccesses);
+    final totalErrors = statuses.fold<int>(0, (sum, s) => sum + s.totalErrors);
+    final totalAttempts = totalSuccesses + totalErrors;
+    
+    if (totalAttempts > 0) {
+      stats['globalSuccessRate'] = (totalSuccesses / totalAttempts * 100).toStringAsFixed(1);
+    }
+    
+    return stats;
+  }
+}
+
+/// Status de santé d'un wallet individuel
+class WalletHealthStatus {
+  final String wallet;
+  
+  // Statistiques temporelles
+  DateTime? lastAttempt;
+  DateTime? lastSuccess;
+  DateTime? lastError;
+  
+  // Compteurs
+  int consecutiveErrors = 0;
+  int totalSuccesses = 0;
+  int totalErrors = 0;
+  
+  // Performance
+  Duration? averageResponseTime;
+  
+  // Circuit breaker
+  bool isInCircuitBreaker = false;
+  DateTime? circuitBreakerUntil;
+  
+  // Diagnostic
+  String? lastErrorType;
+  
+  WalletHealthStatus(this.wallet);
+}
+
+/// Classification des erreurs pour un traitement adapté
+enum ErrorType {
+  temporary, // 429, timeout, network issues
+  permanent, // 404, invalid wallet
+  server,    // 500, 502, 503
+  unknown
+}
+
+class ErrorClassifier {
+  static ErrorType classifyError(dynamic error, int? statusCode) {
+    if (statusCode != null) {
+      switch (statusCode) {
+        case 429: // Rate limit
+        case 503: // Service unavailable
+        case 502: // Bad gateway
+          return ErrorType.temporary;
+        case 404: // Not found
+        case 400: // Bad request
+          return ErrorType.permanent;
+        case 500: // Internal server error
+          return ErrorType.server;
+        default:
+          if (statusCode >= 500) return ErrorType.server;
+          if (statusCode >= 400) return ErrorType.permanent;
+      }
+    }
+    
+    if (error is TimeoutException) return ErrorType.temporary;
+    if (error is SocketException) return ErrorType.temporary;
+    if (error is HttpException) return ErrorType.temporary;
+    if (error is FormatException) return ErrorType.permanent;
+    
+    return ErrorType.unknown;
+  }
+  
+  static bool shouldRetry(ErrorType errorType) {
+    switch (errorType) {
+      case ErrorType.temporary:
+      case ErrorType.server:
+      case ErrorType.unknown:
+        return true;
+      case ErrorType.permanent:
+        return false;
+    }
+  }
+  
+  static Duration getRetryDelay(ErrorType errorType, int attemptNumber) {
+    switch (errorType) {
+      case ErrorType.temporary:
+        return Duration(seconds: [1, 3, 8, 20][attemptNumber.clamp(0, 3)]);
+      case ErrorType.server:
+        return Duration(seconds: [2, 5, 15, 45][attemptNumber.clamp(0, 3)]);
+      case ErrorType.unknown:
+        return Duration(seconds: [1, 2, 5, 10][attemptNumber.clamp(0, 3)]);
+      case ErrorType.permanent:
+        return Duration.zero;
+    }
+  }
+}
+
 class ApiService {
   // Constantes pour les timeouts améliorés
   static const Duration _shortTimeout = Duration(seconds: 15);  // Augmenté de 10 à 15 secondes
@@ -25,56 +272,111 @@ class ApiService {
   // Pool de clients HTTP réutilisables
   static final http.Client _httpClient = http.Client();
 
-  /// Méthode pour effectuer une requête HTTP avec retry automatique
+  /// Méthode pour effectuer une requête HTTP avec retry automatique et gestion intelligente des erreurs
   static Future<http.Response> _httpGetWithRetry(String url, {
     Duration timeout = const Duration(seconds: 15),
     int maxRetries = _maxRetries,
     Duration retryDelay = _retryDelay,
     String? debugContext,
+    String? walletAddress, // Nouveau paramètre pour tracking
   }) async {
     int attempt = 0;
+    final startTime = DateTime.now();
+    final healthManager = WalletHealthManager();
     
     while (attempt <= maxRetries) {
       try {
+        // Appliquer le backoff adaptatif si un wallet est spécifié
         if (attempt > 0) {
-          debugPrint("🔄 Tentative ${attempt + 1}/${maxRetries + 1} pour ${debugContext ?? 'requête'}");
-          await Future.delayed(retryDelay * attempt); // Délai progressif
+          Duration delay = retryDelay * attempt; // Délai de base
+          
+          if (walletAddress != null) {
+            // Utiliser le délai adaptatif basé sur l'historique du wallet
+            final adaptiveDelay = healthManager.getBackoffDelay(walletAddress);
+            delay = adaptiveDelay.inMilliseconds > 0 ? adaptiveDelay : delay;
+          }
+          
+          debugPrint("🔄 Tentative ${attempt + 1}/${maxRetries + 1} pour ${debugContext ?? 'requête'} (délai: ${delay.inSeconds}s)");
+          await Future.delayed(delay);
         }
         
+        final attemptStartTime = DateTime.now();
         final response = await _httpClient.get(Uri.parse(url))
             .timeout(timeout, onTimeout: () {
           throw TimeoutException('Timeout après ${timeout.inSeconds}s pour ${debugContext ?? url}');
         });
         
+        final responseTime = DateTime.now().difference(attemptStartTime);
+        
+        // Enregistrer le succès si wallet spécifié
+        if (walletAddress != null) {
+          healthManager.recordAttempt(walletAddress, true, responseTime: responseTime);
+        }
+        
+        // Log de performance pour surveillance
+        if (responseTime.inMilliseconds > 5000) {
+          debugPrint("⚠️ Réponse lente pour ${debugContext ?? 'requête'}: ${responseTime.inMilliseconds}ms");
+        }
+        
         return response;
+        
       } catch (e) {
         attempt++;
+        final errorType = ErrorClassifier.classifyError(e, null);
         
-        // Si c'est la dernière tentative ou si l'erreur n'est pas récupérable, relancer
-        if (attempt > maxRetries || !_isRetryableError(e)) {
-          debugPrint("❌ Échec définitif ${debugContext ?? 'requête'} après $attempt tentatives: $e");
+        // Enregistrer l'erreur si wallet spécifié
+        if (walletAddress != null) {
+          healthManager.recordAttempt(walletAddress, false, errorType: errorType.toString());
+        }
+        
+        // Déterminer si on doit continuer les tentatives
+        final shouldRetry = attempt <= maxRetries && ErrorClassifier.shouldRetry(errorType);
+        
+        if (!shouldRetry) {
+          final totalTime = DateTime.now().difference(startTime);
+          debugPrint("❌ Échec définitif ${debugContext ?? 'requête'} après $attempt tentatives (${totalTime.inMilliseconds}ms): $e");
           rethrow;
         }
         
-        debugPrint("⚠️ Tentative $attempt échouée pour ${debugContext ?? 'requête'}: $e");
+        debugPrint("⚠️ Tentative $attempt échouée pour ${debugContext ?? 'requête'} (type: $errorType): $e");
       }
     }
     
     throw Exception('Nombre maximum de tentatives atteint');
   }
   
-  /// Détermine si une erreur est récupérable avec un retry
+  /// Détermine si une erreur est récupérable avec un retry (méthode legacy, utiliser ErrorClassifier maintenant)
   static bool _isRetryableError(dynamic error) {
-    if (error is TimeoutException) return true;
-    if (error is SocketException) return true;
-    if (error is HttpException) return true;
-    if (error is FormatException) return false; // Erreur de format, pas de retry
-    if (error is http.ClientException) return true;
-    return true; // Par défaut, on retry
+    final errorType = ErrorClassifier.classifyError(error, null);
+    return ErrorClassifier.shouldRetry(errorType);
+  }
+
+  /// Accès public aux statistiques de santé des wallets
+  static Map<String, dynamic> getWalletHealthStats() {
+    return WalletHealthManager().getHealthStats();
+  }
+
+  /// Accès public pour vérifier si un wallet peut être traité
+  static bool canProcessWallet(String wallet) {
+    return WalletHealthManager().canProcessWallet(wallet);
+  }
+
+  /// Accès public pour obtenir les statistiques d'un wallet spécifique
+  static WalletHealthStatus getWalletStatus(String wallet) {
+    return WalletHealthManager().getWalletHealth(wallet);
+  }
+
+  /// Méthode pour réinitialiser le circuit breaker d'un wallet (utile pour debug/admin)
+  static void resetWalletCircuitBreaker(String wallet) {
+    final healthManager = WalletHealthManager();
+    final status = healthManager.getWalletHealth(wallet);
+    status.isInCircuitBreaker = false;
+    status.circuitBreakerUntil = null;
+    status.consecutiveErrors = 0;
+    debugPrint("🔄 Circuit breaker réinitialisé manuellement pour wallet $wallet");
   }
 
   /// Traite plusieurs wallets en parallèle avec un pool de tâches concurrentes
-  /// Limite le nombre de requêtes simultanées pour éviter de surcharger le serveur
   static Future<List<T>> _processWalletsInParallel<T>({
     required List<String> wallets,
     required Future<T?> Function(String wallet) processWallet,
@@ -480,7 +782,7 @@ class ApiService {
       },
     );
   }
-  // Récupérer les données de loyer pour chaque wallet et les fusionner avec cache
+  // Récupérer les données de loyer pour chaque wallet et les fusionner avec cache et gestion intelligente
 
   static Future<List<Map<String, dynamic>>> fetchRentData({bool forceFetch = false}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -492,6 +794,7 @@ class ApiService {
 
     final box = Hive.box('realTokens');
     final DateTime now = DateTime.now();
+    final healthManager = WalletHealthManager();
     
     // Calculer le début de la semaine actuelle (lundi)
     final DateTime startOfCurrentWeek = now.subtract(Duration(days: now.weekday - 1));
@@ -522,9 +825,19 @@ class ApiService {
       }
     }
 
-    // Vérifier si tous les wallets ont été traités cette semaine ET ont un cache valide
-    bool allWalletsProcessed = true;
-    for (String wallet in wallets) {
+    // Filtrer les wallets selon leur état de santé (circuit breaker)
+    final List<String> healthyWallets = wallets.where((wallet) => 
+      healthManager.canProcessWallet(wallet)
+    ).toList();
+    
+    final int unhealthyCount = wallets.length - healthyWallets.length;
+    if (unhealthyCount > 0) {
+      debugPrint("🚫 $unhealthyCount wallets en circuit breaker, traitement de ${healthyWallets.length} wallets sains");
+    }
+
+    // Vérifier si tous les wallets sains ont été traités cette semaine ET ont un cache valide
+    bool allHealthyWalletsProcessed = true;
+    for (String wallet in healthyWallets) {
       final lastSuccessKey = 'lastRentSuccess_$wallet';
       final lastSuccessTime = box.get(lastSuccessKey);
       final cacheKey = 'cachedRentData_$wallet';
@@ -532,13 +845,13 @@ class ApiService {
       
       if (lastSuccessTime == null || cachedData == null) {
         debugPrint("❌ Wallet $wallet: pas de succès récent ou cache manquant");
-        allWalletsProcessed = false;
+        allHealthyWalletsProcessed = false;
         break;
       } else {
         final DateTime lastSuccess = DateTime.parse(lastSuccessTime);
         if (!lastSuccess.isAfter(startOfCurrentWeekMidnight)) {
           debugPrint("❌ Wallet $wallet: succès trop ancien");
-          allWalletsProcessed = false;
+          allHealthyWalletsProcessed = false;
           break;
         }
         
@@ -547,12 +860,12 @@ class ApiService {
           final List<dynamic> cacheContent = json.decode(cachedData);
           if (cacheContent.isEmpty) {
             debugPrint("❌ Wallet $wallet: cache vide");
-            allWalletsProcessed = false;
+            allHealthyWalletsProcessed = false;
             break;
           }
         } catch (e) {
           debugPrint("❌ Wallet $wallet: cache corrompu - $e");
-          allWalletsProcessed = false;
+          allHealthyWalletsProcessed = false;
           break;
         }
       }
@@ -568,10 +881,17 @@ class ApiService {
       isDataTooOld = true; // Pas de fetch réussi enregistré
     }
     
-    // Si tous les wallets sont traités ET qu'on n'est pas mardi ET pas de forceFetch ET que les données ne sont pas trop anciennes, utiliser le cache
+    // Si tous les wallets sains sont traités ET qu'on n'est pas mardi ET pas de forceFetch ET que les données ne sont pas trop anciennes, utiliser le cache
     final bool isTuesday = now.weekday == DateTime.tuesday;
-    if (allWalletsProcessed && !isTuesday && !forceFetch && !isDataTooOld) {
-      debugPrint("🛑 Tous les wallets traités cette semaine, utilisation des données existantes");
+    if (allHealthyWalletsProcessed && !isTuesday && !forceFetch && !isDataTooOld) {
+      debugPrint("🛑 Tous les wallets sains traités cette semaine, utilisation des données existantes");
+      
+      // Afficher les statistiques de santé
+      final healthStats = healthManager.getHealthStats();
+      if (healthStats.isNotEmpty) {
+        debugPrint("📊 Santé des wallets: ${healthStats['healthyWallets']}/${healthStats['totalWallets']} sains, ${healthStats['globalSuccessRate'] ?? 'N/A'}% succès global");
+      }
+      
       return mergedRentData;
     }
     
@@ -583,15 +903,18 @@ class ApiService {
 
     // Sauvegarder les données existantes comme backup
     final Map<String, List<Map<String, dynamic>>> existingDataByWallet = {};
-    for (String wallet in wallets) {
+    for (String wallet in healthyWallets) {
       existingDataByWallet[wallet] = await _loadRentDataFromCacheForWallet(box, wallet);
     }
 
+    // Prioriser les wallets selon leur historique de performance
+    final List<String> prioritizedWallets = healthManager.prioritizeWallets(healthyWallets);
+    
     List<String> walletsToProcess = [];
     List<String> successfulWallets = [];
 
-    // Identifier les wallets à traiter (ceux qui ne sont pas déjà traités cette semaine OU qui n'ont pas de cache valide)
-    for (String wallet in wallets) {
+    // Identifier les wallets à traiter parmi les wallets priorisés
+    for (String wallet in prioritizedWallets) {
       final lastSuccessKey = 'lastRentSuccess_$wallet';
       final lastSuccessTime = box.get(lastSuccessKey);
       final cacheKey = 'cachedRentData_$wallet';
@@ -620,16 +943,21 @@ class ApiService {
 
     debugPrint("🚀 ${walletsToProcess.length} wallets à traiter, ${successfulWallets.length} déjà traités");
 
-    // Traiter les wallets restants un par un
+    // Traiter les wallets un par un avec gestion intelligente des erreurs
+    int processedCount = 0;
+    int errorCount = 0;
+    
     for (String wallet in walletsToProcess) {
       final url = '${Parameters.rentTrackerUrl}/rent_holder/$wallet';
       
       try {
-        debugPrint("🔄 Traitement du wallet: $wallet");
+        debugPrint("🔄 Traitement du wallet: $wallet (${processedCount + 1}/${walletsToProcess.length})");
+        
         final response = await _httpGetWithRetry(
           url,
           timeout: _mediumTimeout,
           debugContext: "données de loyer wallet $wallet",
+          walletAddress: wallet, // Nouveau paramètre pour tracking
         );
 
         if (response.statusCode == 429) {
@@ -646,7 +974,6 @@ class ApiService {
           );
           
           // Retirer TOUTES les anciennes données de ce wallet du merge global
-          // (on ne peut pas se baser sur les montants car ils peuvent avoir changé)
           Set<String> walletDates = Set<String>();
           if (existingDataByWallet[wallet] != null) {
             for (var existing in existingDataByWallet[wallet]!) {
@@ -706,7 +1033,6 @@ class ApiService {
             await box.put('lastRentSuccess_$wallet', now.toIso8601String());
           } else {
             debugPrint('⚠️ Échec sauvegarde cache pour $wallet, tentative de repli');
-            // Tentative de repli sans utiliser _safeCacheSave
             try {
               await box.put('cachedRentData_$wallet', json.encode(processedData));
               await box.put('lastRentSuccess_$wallet', now.toIso8601String());
@@ -717,12 +1043,21 @@ class ApiService {
           successfulWallets.add(wallet);
           
         } else {
-          debugPrint('❌ Erreur HTTP ${response.statusCode} pour le wallet: $wallet - conservation des données existantes');
-          // Les données existantes sont déjà dans mergedRentData, ne rien faire
+          errorCount++;
+          final errorType = ErrorClassifier.classifyError(null, response.statusCode);
+          debugPrint('❌ Erreur HTTP ${response.statusCode} pour le wallet: $wallet (type: $errorType) - conservation des données existantes');
         }
       } catch (e) {
-        debugPrint('❌ Exception pour le wallet $wallet: $e - conservation des données existantes');
-        // Les données existantes sont déjà dans mergedRentData, ne rien faire
+        errorCount++;
+        final errorType = ErrorClassifier.classifyError(e, null);
+        debugPrint('❌ Exception pour le wallet $wallet (type: $errorType): $e - conservation des données existantes');
+      }
+      
+      processedCount++;
+      
+      // Pause adaptative entre les wallets pour être gentil avec le serveur
+      if (processedCount < walletsToProcess.length) {
+        await Future.delayed(Duration(milliseconds: 300 + (errorCount * 100))); // Plus de délai si plus d'erreurs
       }
     }
 
@@ -733,12 +1068,19 @@ class ApiService {
     await box.put('cachedRentData', json.encode(mergedRentData));
     await box.put('lastRentFetchTime', now.toIso8601String());
     
-    // Marquer comme succès complet seulement si tous les wallets ont été traités
-    if (successfulWallets.length == wallets.length) {
+    // Marquer comme succès complet seulement si tous les wallets traités ont réussi
+    final totalWalletsToProcess = healthyWallets.length;
+    if (successfulWallets.length == totalWalletsToProcess) {
       await box.put('lastSuccessfulRentFetch', now.toIso8601String());
-      debugPrint("✅ Succès complet: ${mergedRentData.length} entrées (${successfulWallets.length}/${wallets.length} wallets)");
+      debugPrint("✅ Succès complet: ${mergedRentData.length} entrées (${successfulWallets.length}/$totalWalletsToProcess wallets)");
     } else {
-      debugPrint("⚠️ Succès partiel: ${mergedRentData.length} entrées (${successfulWallets.length}/${wallets.length} wallets)");
+      debugPrint("⚠️ Succès partiel: ${mergedRentData.length} entrées (${successfulWallets.length}/$totalWalletsToProcess wallets, $errorCount erreurs)");
+    }
+
+    // Afficher les statistiques finales de santé
+    final healthStats = healthManager.getHealthStats();
+    if (healthStats.isNotEmpty) {
+      debugPrint("📊 Statistiques finales: ${healthStats['healthyWallets']}/${healthStats['totalWallets']} wallets sains, ${healthStats['inCircuitBreaker']} en circuit breaker, ${healthStats['globalSuccessRate'] ?? 'N/A'}% succès global");
     }
 
     // Diagnostic final anti-doublons
@@ -1157,7 +1499,7 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
   return null;
 }
 
-  // Nouvelle méthode pour récupérer les détails des loyers
+  // Nouvelle méthode pour récupérer les détails des loyers avec gestion intelligente
   static Future<List<Map<String, dynamic>>> fetchDetailedRentDataForAllWallets({bool forceFetch = false}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> evmAddresses = prefs.getStringList('evmAddresses') ?? [];
@@ -1171,6 +1513,7 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
 
     final box = await Hive.openBox('detailedRentData');
     final DateTime now = DateTime.now();
+    final healthManager = WalletHealthManager();
     
     // Calculer le début de la semaine actuelle (lundi)
     final DateTime startOfCurrentWeek = now.subtract(Duration(days: now.weekday - 1));
@@ -1194,9 +1537,19 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
       }
     }
 
-    // Vérifier si tous les wallets ont été traités cette semaine pour les données détaillées ET ont un cache valide
-    bool allWalletsProcessedDetailed = true;
-    for (String walletAddress in evmAddresses) {
+    // Filtrer les wallets selon leur état de santé (circuit breaker)
+    final List<String> healthyWallets = evmAddresses.where((wallet) => 
+      healthManager.canProcessWallet(wallet)
+    ).toList();
+    
+    final int unhealthyCount = evmAddresses.length - healthyWallets.length;
+    if (unhealthyCount > 0) {
+      debugPrint("🚫 $unhealthyCount wallets en circuit breaker pour données détaillées, traitement de ${healthyWallets.length} wallets sains");
+    }
+
+    // Vérifier si tous les wallets sains ont été traités cette semaine pour les données détaillées ET ont un cache valide
+    bool allHealthyWalletsProcessedDetailed = true;
+    for (String walletAddress in healthyWallets) {
       final lastSuccessKey = 'lastDetailedRentSuccess_$walletAddress';
       final lastSuccessTime = box.get(lastSuccessKey);
       final cacheKey = 'cachedDetailedRentData_$walletAddress';
@@ -1204,13 +1557,13 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
       
       if (lastSuccessTime == null || cachedData == null) {
         debugPrint("❌ Wallet $walletAddress: pas de succès récent ou cache détaillé manquant");
-        allWalletsProcessedDetailed = false;
+        allHealthyWalletsProcessedDetailed = false;
         break;
       } else {
         final DateTime lastSuccess = DateTime.parse(lastSuccessTime);
         if (!lastSuccess.isAfter(startOfCurrentWeekMidnight)) {
           debugPrint("❌ Wallet $walletAddress: succès détaillé trop ancien");
-          allWalletsProcessedDetailed = false;
+          allHealthyWalletsProcessedDetailed = false;
           break;
         }
         
@@ -1219,12 +1572,12 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
           final List<dynamic> cacheContent = json.decode(cachedData);
           if (cacheContent.isEmpty) {
             debugPrint("❌ Wallet $walletAddress: cache détaillé vide");
-            allWalletsProcessedDetailed = false;
+            allHealthyWalletsProcessedDetailed = false;
             break;
           }
         } catch (e) {
           debugPrint("❌ Wallet $walletAddress: cache détaillé corrompu - $e");
-          allWalletsProcessedDetailed = false;
+          allHealthyWalletsProcessedDetailed = false;
           break;
         }
       }
@@ -1240,10 +1593,17 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
       isDetailedDataTooOld = true; // Pas de fetch réussi enregistré
     }
     
-    // Si tous les wallets sont traités ET qu'on n'est pas mardi ET pas de forceFetch ET que les données ne sont pas trop anciennes, utiliser le cache
+    // Si tous les wallets sains sont traités ET qu'on n'est pas mardi ET pas de forceFetch ET que les données ne sont pas trop anciennes, utiliser le cache
     final bool isTuesday = now.weekday == DateTime.tuesday;
-    if (allWalletsProcessedDetailed && !isTuesday && !forceFetch && !isDetailedDataTooOld) {
-      debugPrint("🛑 Tous les wallets traités cette semaine pour les données détaillées, utilisation des données existantes");
+    if (allHealthyWalletsProcessedDetailed && !isTuesday && !forceFetch && !isDetailedDataTooOld) {
+      debugPrint("🛑 Tous les wallets sains traités cette semaine pour les données détaillées, utilisation des données existantes");
+      
+      // Afficher les statistiques de santé
+      final healthStats = healthManager.getHealthStats();
+      if (healthStats.isNotEmpty) {
+        debugPrint("📊 Santé des wallets (détaillées): ${healthStats['healthyWallets']}/${healthStats['totalWallets']} sains, ${healthStats['globalSuccessRate'] ?? 'N/A'}% succès global");
+      }
+      
       return allRentData;
     }
     
@@ -1255,7 +1615,7 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
 
     // Sauvegarder les données existantes comme backup
     final Map<String, List<Map<String, dynamic>>> existingDetailedDataByWallet = {};
-    for (String walletAddress in evmAddresses) {
+    for (String walletAddress in healthyWallets) {
       final cachedData = box.get('cachedDetailedRentData_$walletAddress');
       if (cachedData != null) {
         try {
@@ -1270,11 +1630,14 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
       }
     }
 
+    // Prioriser les wallets selon leur historique de performance
+    final List<String> prioritizedWallets = healthManager.prioritizeWallets(healthyWallets);
+
     List<String> walletsToProcess = [];
     List<String> successfulWallets = [];
 
-    // Identifier les wallets à traiter (ceux qui ne sont pas déjà traités cette semaine OU qui n'ont pas de cache valide)
-    for (String walletAddress in evmAddresses) {
+    // Identifier les wallets à traiter parmi les wallets priorisés
+    for (String walletAddress in prioritizedWallets) {
       final lastSuccessKey = 'lastDetailedRentSuccess_$walletAddress';
       final lastSuccessTime = box.get(lastSuccessKey);
       final cacheKey = 'cachedDetailedRentData_$walletAddress';
@@ -1303,18 +1666,23 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
 
     debugPrint("🚀 ${walletsToProcess.length} wallets à traiter pour les données détaillées, ${successfulWallets.length} déjà traités");
 
-    // Traiter les wallets restants un par un
+    // Traiter les wallets un par un avec gestion intelligente des erreurs
+    int processedCount = 0;
+    int errorCount = 0;
+    
     for (var walletAddress in walletsToProcess) {
-      debugPrint("🔄 Traitement détaillé du wallet: $walletAddress");
+      debugPrint("🔄 Traitement détaillé du wallet: $walletAddress (${processedCount + 1}/${walletsToProcess.length})");
       
       try {
         final url = '${Parameters.rentTrackerUrl}/detailed_rent_holder/$walletAddress';
         debugPrint("🌐 Tentative de requête API détaillée pour $walletAddress");
 
-        final response = await http.get(Uri.parse(url))
-            .timeout(Duration(minutes: 2), onTimeout: () {
-          throw TimeoutException('Timeout après 2 minutes pour le wallet $walletAddress');
-        });
+        final response = await _httpGetWithRetry(
+          url,
+          timeout: Duration(minutes: 2),
+          debugContext: "données détaillées wallet $walletAddress",
+          walletAddress: walletAddress, // Tracking du wallet
+        );
 
         // Si on reçoit un code 429, conserver les données existantes et arrêter
         if (response.statusCode == 429) {
@@ -1343,7 +1711,6 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
             await box.put('lastDetailedRentSuccess_$walletAddress', now.toIso8601String());
           } else {
             debugPrint('⚠️ Échec sauvegarde cache pour $walletAddress, tentative de repli');
-            // Tentative de repli sans utiliser _safeCacheSave
             try {
               await box.put('cachedDetailedRentData_$walletAddress', json.encode(rentData));
               await box.put('lastDetailedRentSuccess_$walletAddress', now.toIso8601String());
@@ -1356,12 +1723,21 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
           allRentData.addAll(rentData);
           successfulWallets.add(walletAddress);
         } else {
-          debugPrint('❌ Échec requête détaillée pour $walletAddress: ${response.statusCode} - conservation des données existantes');
-          // Les données existantes sont déjà dans allRentData, ne rien faire
+          errorCount++;
+          final errorType = ErrorClassifier.classifyError(null, response.statusCode);
+          debugPrint('❌ Échec requête détaillée pour $walletAddress: ${response.statusCode} (type: $errorType) - conservation des données existantes');
         }
       } catch (e) {
-        debugPrint('❌ Erreur requête HTTP détaillée pour $walletAddress: $e - conservation des données existantes');
-        // Les données existantes sont déjà dans allRentData, ne rien faire
+        errorCount++;
+        final errorType = ErrorClassifier.classifyError(e, null);
+        debugPrint('❌ Erreur requête HTTP détaillée pour $walletAddress (type: $errorType): $e - conservation des données existantes');
+      }
+      
+      processedCount++;
+      
+      // Pause adaptative entre les wallets (plus longue pour les données détaillées)
+      if (processedCount < walletsToProcess.length) {
+        await Future.delayed(Duration(milliseconds: 500 + (errorCount * 200))); // Plus de délai si plus d'erreurs
       }
     }
 
@@ -1382,12 +1758,19 @@ static Future<BigInt?> _fetchVaultBalance(String contract, String address, {bool
     // Sauvegarder le cache global TOUJOURS (même en cas d'erreur partielle)
     await box.put('cachedDetailedRentDataAll', json.encode(allRentData));
     
-    // Marquer comme succès complet seulement si tous les wallets ont été traités
-    if (successfulWallets.length == evmAddresses.length) {
+    // Marquer comme succès complet seulement si tous les wallets traités ont réussi
+    final totalWalletsToProcess = healthyWallets.length;
+    if (successfulWallets.length == totalWalletsToProcess) {
       await box.put('lastSuccessfulDetailedRentFetch', now.toIso8601String());
-      debugPrint('✅ Succès complet détaillé: ${allRentData.length} entrées (${successfulWallets.length}/${evmAddresses.length} wallets)');
+      debugPrint('✅ Succès complet détaillé: ${allRentData.length} entrées (${successfulWallets.length}/$totalWalletsToProcess wallets)');
     } else {
-      debugPrint('⚠️ Succès partiel détaillé: ${allRentData.length} entrées (${successfulWallets.length}/${evmAddresses.length} wallets)');
+      debugPrint('⚠️ Succès partiel détaillé: ${allRentData.length} entrées (${successfulWallets.length}/$totalWalletsToProcess wallets, $errorCount erreurs)');
+    }
+
+    // Afficher les statistiques finales de santé
+    final healthStats = healthManager.getHealthStats();
+    if (healthStats.isNotEmpty) {
+      debugPrint("📊 Statistiques finales (détaillées): ${healthStats['healthyWallets']}/${healthStats['totalWallets']} wallets sains, ${healthStats['inCircuitBreaker']} en circuit breaker, ${healthStats['globalSuccessRate'] ?? 'N/A'}% succès global");
     }
 
     // Comptage des entrées par wallet

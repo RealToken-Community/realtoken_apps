@@ -306,8 +306,10 @@ class PortfolioPageState extends State<PortfolioPage> {
 
   // Nouvelle méthode pour filtrer par statut de location
   bool _filterByRentalStatus(Map<String, dynamic> token) {
-    int rentedUnits = token['rentedUnits'] ?? 0;
-    int totalUnits = token['totalUnits'] ?? 1;
+    final dynamic rentedUnitsRaw = token['rentedUnits'] ?? 0;
+    final int rentedUnits = rentedUnitsRaw is int ? rentedUnitsRaw : (rentedUnitsRaw is double ? rentedUnitsRaw.toInt() : 0);
+    final dynamic totalUnitsRaw = token['totalUnits'] ?? 1;
+    final int totalUnits = totalUnitsRaw is int ? totalUnitsRaw : (totalUnitsRaw is double ? totalUnitsRaw.toInt() : 1);
 
     if (_rentalStatusFilter == rentalStatusRented) {
       return rentedUnits == totalUnits;

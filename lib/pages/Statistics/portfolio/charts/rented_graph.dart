@@ -57,6 +57,29 @@ class RentedHistoryGraph extends StatelessWidget {
     List<BarChartGroupData> barChartData = _buildRentedHistoryBarChartData(context, dataManager, selectedPeriod);
     List<String> dateLabels = _buildDateLabelsForRented(context, dataManager, selectedPeriod);
 
+    // Si l'historique est vide, afficher le même placeholder que ci-dessus
+    if (rentedHistoryData.isEmpty || barChartData.isEmpty) {
+      return Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        color: Theme.of(context).cardColor,
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Text(
+              S.of(context).noDataAvailable,
+              style: TextStyle(
+                fontSize: 16 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -461,13 +484,27 @@ class RentedHistoryGraph extends StatelessWidget {
   }
 
   List<FlSpot> _buildRentedHistoryChartData(BuildContext context, DataManager dataManager, String selectedPeriod) {
-    return ChartUtils.buildHistoryChartData<RentedRecord>(
+    List<FlSpot> spots = ChartUtils.buildHistoryChartData<RentedRecord>(
       context,
-      dataManager.rentedHistory,
+      // On ne garde que les enregistrements avec un pourcentage > 0
+      dataManager.rentedHistory.where((e) => e.percentage > 0).toList(),
       selectedPeriod,
-      (record) => record.percentage,
+      // On convertit le ratio (0-1) en pourcentage (0-100) pour éviter l'assertion
+      (record) => record.percentage * 100,
       (record) => record.timestamp,
     );
+
+    // S'assurer que la valeur la plus élevée est >= 1 pour ne pas déclencher l'assertion interne de fl_chart
+    if (spots.isNotEmpty) {
+      final maxY = spots.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+      if (maxY < 1) {
+        // Appliquer un facteur d'échelle pour amener les valeurs dans une plage correcte
+        const double scaleFactor = 100; // facteur supplémentaire
+        spots = spots.map((e) => FlSpot(e.x, e.y * scaleFactor)).toList();
+      }
+    }
+
+    return spots;
   }
 
   List<BarChartGroupData> _buildRentedHistoryBarChartData(BuildContext context, DataManager dataManager, String selectedPeriod) {

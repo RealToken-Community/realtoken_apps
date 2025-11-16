@@ -391,14 +391,14 @@ class PortfolioDisplay1 extends StatelessWidget {
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: UIUtils.getRentalStatusColor(
-                                                    token['rentedUnits'] ?? 0,
-                                                    token['totalUnits'] ?? 1,
+                                                    (token['rentedUnits'] as num?)?.toInt() ?? 0,
+                                                    (token['totalUnits'] as num?)?.toInt() ?? 1,
                                                   ),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       color: UIUtils.getRentalStatusColor(
-                                                        token['rentedUnits'] ?? 0,
-                                                        token['totalUnits'] ?? 1,
+                                                        (token['rentedUnits'] as num?)?.toInt() ?? 0,
+                                                        (token['totalUnits'] as num?)?.toInt() ?? 1,
                                                       ).withOpacity(0.5),
                                                       blurRadius: 6,
                                                       spreadRadius: 0,

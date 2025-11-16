@@ -457,7 +457,7 @@ class RmmCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
-                      (progressHF * 5).toStringAsFixed(1),
+                      (progressHF * 5).toStringAsFixed(2),
                       style: TextStyle(
                         fontSize: 12 + Provider.of<AppState>(context, listen: false).getTextSizeOffset(),
                         fontWeight: FontWeight.bold,

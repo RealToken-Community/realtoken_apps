@@ -195,8 +195,8 @@ Widget _buildDetailRow(BuildContext context, String label, String value, {IconDa
 
 // Méthode spécifique pour la ligne d'état de location
 Widget _buildRentalStatusRow(BuildContext context, {required Map<String, dynamic> token, required AppState appState}) {
-  final rentedUnits = token['rentedUnits'] ?? 0;
-  final totalUnits = token['totalUnits'] ?? 1;
+  final rentedUnits = (token['rentedUnits'] as num?)?.toInt() ?? 0;
+  final totalUnits = (token['totalUnits'] as num?)?.toInt() ?? 1;
   final occupancyRate = (rentedUnits / totalUnits * 100).round();
 
   final statusColor = UIUtils.getRentalStatusColor(rentedUnits, totalUnits);

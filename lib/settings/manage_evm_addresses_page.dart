@@ -149,6 +149,14 @@ class ManageEvmAddressesPageState extends State<ManageEvmAddressesPage> {
       evmAddresses.removeAt(index);
     });
     await prefs.setStringList('evmAddresses', evmAddresses);
+    
+    // Nettoyer les caches des wallets supprimés et forcer un refresh
+    final dataManager = Provider.of<DataManager>(context, listen: false);
+    await dataManager.cleanupRemovedWalletsCache();
+    
+    // Forcer un refresh des données pour recalculer avec les nouveaux wallets uniquement
+    debugPrint("🔄 Refresh forcé après suppression de wallet");
+    DataFetchUtils.refreshData(context);
   }
 
   @override

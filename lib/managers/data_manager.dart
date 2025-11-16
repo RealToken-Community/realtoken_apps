@@ -1205,6 +1205,12 @@ class DataManager extends ChangeNotifier {
             .remove(userId); // Supprimer le userId si plus d'adresses
       }
       saveUserIdToAddresses(); // Sauvegarder après suppression
+      
+      // Nettoyer les caches des wallets supprimés
+      cleanupRemovedWalletsCache().then((_) {
+        debugPrint("🧹 Nettoyage de cache terminé pour l'adresse supprimée: $address");
+      });
+      
       notifyListeners();
     }
   }
@@ -1473,11 +1479,11 @@ debugPrint("🗃️ Début récupération et calcul des données pour le Dashboa
     void updateUnitCounters(
         String tokenAddress, Map<String, dynamic> realToken) {
       if (!uniqueRentedUnitAddresses.contains(tokenAddress)) {
-        rentedUnits += (realToken['rentedUnits'] ?? 0) as int;
+        rentedUnits += (realToken['rentedUnits'] as num?)?.toInt() ?? 0;
         uniqueRentedUnitAddresses.add(tokenAddress);
       }
       if (!uniqueTotalUnitAddresses.contains(tokenAddress)) {
-        totalUnits += (realToken['totalUnits'] ?? 0) as int;
+        totalUnits += (realToken['totalUnits'] as num?)?.toInt() ?? 0;
         uniqueTotalUnitAddresses.add(tokenAddress);
       }
     }
@@ -1833,8 +1839,8 @@ debugPrint("🗃️ Début récupération et calcul des données pour le Dashboa
 
     _portfolio = newPortfolio;
     
-    // Calculer le ROI global
-    double totalRent = getTotalRentReceived();
+    // Calculer le ROI global en utilisant la nouvelle méthode qui prend en compte tous les wallets
+    double totalRent = getTotalRentReceivedFromAllWallets();
     if (initialTotalValue > 0.000001) { // Vérifier si initialTotalValue n'est pas trop proche de 0
       roiGlobalValue = totalRent / initialTotalValue * 100;
       // Limiter le ROI à une valeur maximale raisonnable (par exemple 3650%)
@@ -2496,6 +2502,83 @@ debugPrint("🗃️ Début récupération et calcul des données pour le Dashboa
                 : rentEntry['rent']));
   }
 
+  // Nouvelle méthode pour calculer le total des loyers reçus depuis tous les wallets
+  // en utilisant le système de données détaillées plus complet
+  double getTotalRentReceivedFromAllWallets() {
+    if (cumulativeRentsByToken.isEmpty) {
+      debugPrint("⚠️ cumulativeRentsByToken vide, utilisation du fallback rentData");
+      return getTotalRentReceived(); // Fallback sur l'ancienne méthode
+    }
+    
+    double totalRent = 0.0;
+    for (var rentAmount in cumulativeRentsByToken.values) {
+      totalRent += rentAmount;
+    }
+    
+    debugPrint("💰 Total rent calculé depuis cumulativeRentsByToken: \$${totalRent.toStringAsFixed(2)}");
+    return totalRent;
+  }
+
+  // Nouvelle méthode pour obtenir le dernier loyer reçu en utilisant rentHistory
+  Map<String, dynamic> getLastRentReceivedFromAllWallets() {
+    if (rentHistory.isEmpty) {
+      debugPrint("⚠️ rentHistory vide, utilisation du fallback rentData");
+      return _getLastRentFromRentData();
+    }
+    
+    // Créer un map pour agréger tous les loyers par date (tous wallets confondus)
+    Map<String, double> rentsByDate = {};
+    
+    // Parcourir tout l'historique pour agréger par date
+    for (var entry in rentHistory) {
+      String date = entry['date'];
+      List<dynamic> rents = entry['rents'] ?? [];
+      
+      // Calculer le total des loyers pour cette date et ce wallet
+      double totalRentForDateAndWallet = 0.0;
+      for (var rentEntry in rents) {
+        double rent = (rentEntry['rent'] is num) 
+          ? (rentEntry['rent'] as num).toDouble() 
+          : double.tryParse(rentEntry['rent'].toString()) ?? 0.0;
+        totalRentForDateAndWallet += rent;
+      }
+      
+      // Ajouter au total pour cette date (agrégation de tous les wallets)
+      rentsByDate[date] = (rentsByDate[date] ?? 0.0) + totalRentForDateAndWallet;
+    }
+    
+    if (rentsByDate.isEmpty) {
+      return _getLastRentFromRentData();
+    }
+    
+    // Trier les dates pour trouver la plus récente
+    List<String> sortedDates = rentsByDate.keys.toList();
+    sortedDates.sort((a, b) => DateTime.parse(b).compareTo(DateTime.parse(a)));
+    
+    String mostRecentDate = sortedDates.first;
+    double totalRentForMostRecentDate = rentsByDate[mostRecentDate]!;
+    
+    debugPrint("💰 Last rent aggregated from ${rentHistory.length} entries across all wallets: \$${totalRentForMostRecentDate.toStringAsFixed(2)} for date $mostRecentDate");
+    
+    return {
+      'date': mostRecentDate,
+      'rent': totalRentForMostRecentDate,
+      'wallet': 'aggregated_all',
+    };
+  }
+
+  // Méthode fallback pour obtenir le dernier loyer depuis rentData
+  Map<String, dynamic> _getLastRentFromRentData() {
+    if (rentData.isEmpty) {
+      return {'date': '', 'rent': 0.0, 'wallet': ''};
+    }
+    
+    List<Map<String, dynamic>> sortedRentData = List.from(rentData);
+    sortedRentData.sort((a, b) => DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
+    
+    return sortedRentData.first;
+  }
+
   // Méthode pour charger les valeurs définies manuellement depuis Hive
   Future<void> loadCustomInitPrices() async {
     final savedData = customInitPricesBox.get('customInitPrices') as String?;
@@ -3012,31 +3095,89 @@ debugPrint("🗃️ Début récupération et calcul des données pour le Dashboa
   
   /// Méthode centralisée pour calculer l'APY seulement si toutes les données nécessaires sont disponibles
   /// Cette méthode devrait être appelée après le chargement des données importantes
-  bool safeCalculateApyValues() {
-    // Vérifier que nous avons suffisamment de données pour calculer l'APY
-    if (balanceHistory.length < 2) {
-      debugPrint("⚠️ Historique insuffisant pour calculer l'APY: ${balanceHistory.length} enregistrement(s) (minimum requis: 2)");
-      return false;
-    }
-    
-    // Vérifier que les données financières essentielles sont disponibles
-    if (totalUsdcDepositBalance == 0.0 && totalXdaiDepositBalance == 0.0 && 
-        totalUsdcBorrowBalance == 0.0 && totalXdaiBorrowBalance == 0.0 && 
-        walletValue == 0.0 && rmmValue == 0.0) {
-      debugPrint("⚠️ Données financières insuffisantes pour calculer l'APY");
-      return false;
-    }
-    
+  void safeCalculateApyValues() {
     try {
-      // Calculer l'APY à partir des données disponibles
-      calculateApyValues();
-      debugPrint("✅ APY calculé avec succès: $netGlobalApy%");
-      return true;
+      // Calculer l'APY basé sur les données disponibles
+      if (rmmBalances.isNotEmpty) {
+        calculateApyValues();
+      } else {
+        debugPrint("⚠️ Pas de données RMM pour calculer l'APY");
+        netGlobalApy = 0.0;
+      }
     } catch (e) {
       debugPrint("❌ Erreur lors du calcul de l'APY: $e");
-      return false;
+      netGlobalApy = 0.0;
     }
   }
+
+  // Nouvelle méthode pour nettoyer les caches des wallets supprimés
+  Future<void> cleanupRemovedWalletsCache() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      List<String> currentWallets = prefs.getStringList('evmAddresses') ?? [];
+      final box = Hive.box('realTokens');
+      final detailedBox = await Hive.openBox('detailedRentData');
+      
+      debugPrint("🧹 Nettoyage des caches pour les wallets supprimés...");
+      debugPrint("🧹 Wallets actuels: ${currentWallets.join(', ')}");
+      
+      // Collecter toutes les clés de cache existantes
+      List<String> keysToDelete = [];
+      
+      // Nettoyer les caches de rentData
+      for (String key in box.keys) {
+        if (key.startsWith('cachedRentData_') || 
+            key.startsWith('lastRentSuccess_')) {
+          String walletFromKey = key.replaceAll('cachedRentData_', '').replaceAll('lastRentSuccess_', '');
+          if (!currentWallets.contains(walletFromKey)) {
+            keysToDelete.add(key);
+          }
+        }
+      }
+      
+      // Nettoyer les caches de detailedRentData
+      for (String key in detailedBox.keys) {
+        if (key.startsWith('cachedDetailedRentData_') || 
+            key.startsWith('lastDetailedRentSuccess_')) {
+          String walletFromKey = key.replaceAll('cachedDetailedRentData_', '').replaceAll('lastDetailedRentSuccess_', '');
+          if (!currentWallets.contains(walletFromKey)) {
+            keysToDelete.add(key);
+          }
+        }
+      }
+      
+      // Supprimer les clés identifiées
+      for (String key in keysToDelete) {
+        if (box.containsKey(key)) {
+          await box.delete(key);
+          debugPrint("🗑️ Suppression cache: $key");
+        }
+        if (detailedBox.containsKey(key)) {
+          await detailedBox.delete(key);
+          debugPrint("🗑️ Suppression cache détaillé: $key");
+        }
+      }
+      
+      // Supprimer aussi les caches globaux pour forcer une régénération
+      await box.delete('cachedRentData');
+      await box.delete('cachedDetailedRentDataAll');
+      
+      debugPrint("🧹 Nettoyage terminé: ${keysToDelete.length} entrées supprimées");
+      
+      // Réinitialiser les données détaillées pour forcer un recalcul
+      detailedRentData.clear();
+      cumulativeRentsByToken.clear();
+      cumulativeRentsByWallet.clear();
+      rentHistory.clear();
+      
+      debugPrint("🧹 Données détaillées réinitialisées pour recalcul");
+      
+    } catch (e) {
+      debugPrint("❌ Erreur lors du nettoyage des caches: $e");
+    }
+  }
+
+
 
   dynamic sanitizeValue(dynamic value) {
     if (value is Map) {

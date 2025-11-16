@@ -768,7 +768,6 @@ class DashboardPageState extends State<DashboardPage> {
 
   // Récupère la dernière valeur de loyer
   String _getLastRentReceived(DataManager dataManager) {
-    final rentData = dataManager.rentData;
     final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
     final appState = Provider.of<AppState>(context);
 
@@ -777,12 +776,14 @@ class DashboardPageState extends State<DashboardPage> {
       return "---";
     }
 
-    if (rentData.isEmpty) {
+    // Utiliser la nouvelle méthode qui prend en compte tous les wallets
+    final lastRentData = dataManager.getLastRentReceivedFromAllWallets();
+    
+    if (lastRentData['rent'] == 0.0) {
       return S.of(context).noRentReceived;
     }
 
-    rentData.sort((a, b) => DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
-    final lastRent = rentData.first['rent'];
+    final lastRent = lastRentData['rent'] as double;
 
     // Utiliser _getFormattedAmount pour masquer ou afficher la valeur
     return currencyUtils.getFormattedAmount(currencyUtils.convert(lastRent), currencyUtils.currencySymbol, appState.showAmounts);
@@ -795,7 +796,8 @@ class DashboardPageState extends State<DashboardPage> {
       return "---";
     }
 
-    final totalRent = dataManager.getTotalRentReceived();
+    // Utiliser la nouvelle méthode qui prend en compte tous les wallets
+    final totalRent = dataManager.getTotalRentReceivedFromAllWallets();
     return currencyUtils.getFormattedAmount(currencyUtils.convert(totalRent), currencyUtils.currencySymbol, appState.showAmounts);
   }
 }

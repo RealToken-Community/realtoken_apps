@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'dart:math' as math;
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
@@ -212,7 +213,7 @@ class _TokenCountEvolutionChartState extends State<TokenCountEvolutionChart> {
               x: index,
               barRods: [
                 BarChartRodData(
-                  toY: data.y,
+                  toY: math.max(data.y, 1.0),
                   color: const Color(0xFF007AFF),
                   width: 16,
                   borderRadius: const BorderRadius.all(Radius.circular(4)),

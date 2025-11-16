@@ -224,7 +224,8 @@ class MapsPageState extends State<MapsPage> {
       }
       
       // Filtre APY
-      final apy = token['annualPercentageYield'] ?? 0.0;
+      final dynamic apyRaw = token['annualPercentageYield'] ?? 0.0;
+      final double apy = apyRaw is int ? apyRaw.toDouble() : (apyRaw is double ? apyRaw : 0.0);
       if (apy < _minApy || apy > _maxApy) {
         return false;
       }
@@ -239,8 +240,8 @@ class MapsPageState extends State<MapsPage> {
       
       // Filtre uniquement entièrement loués
       if (_onlyFullyRented) {
-        final rentedUnits = token['rentedUnits'] ?? 0;
-        final totalUnits = token['totalUnits'] ?? 1;
+        final rentedUnits = (token['rentedUnits'] ?? 0).toInt();
+        final totalUnits = (token['totalUnits'] ?? 1).toInt();
         if (rentedUnits < totalUnits) {
           return false;
         }
@@ -254,8 +255,10 @@ class MapsPageState extends State<MapsPage> {
       }
       
       // Filtre ROI (si applicable)
-      final initialValue = token['initialTotalValue'] ?? token['tokenPrice'];
-      final currentValue = token['tokenPrice'] ?? 0.0;
+      final dynamic initialValueRaw = token['initialTotalValue'] ?? token['tokenPrice'];
+      final double initialValue = initialValueRaw is int ? initialValueRaw.toDouble() : (initialValueRaw is double ? initialValueRaw : 0.0);
+      final dynamic currentValueRaw = token['tokenPrice'] ?? 0.0;
+      final double currentValue = currentValueRaw is int ? currentValueRaw.toDouble() : (currentValueRaw is double ? currentValueRaw : 0.0);
       final roi = initialValue > 0 ? ((currentValue - initialValue) / initialValue * 100) : 0.0;
       if (roi < _minRoi || roi > _maxRoi) {
         return false;
@@ -270,7 +273,13 @@ class MapsPageState extends State<MapsPage> {
     } else if (_sortOption == 'Value') {
       filteredTokens.sort((a, b) => _isAscending ? a['totalValue'].compareTo(b['totalValue']) : b['totalValue'].compareTo(a['totalValue']));
     } else if (_sortOption == 'APY') {
-      filteredTokens.sort((a, b) => _isAscending ? a['annualPercentageYield'].compareTo(b['annualPercentageYield']) : b['annualPercentageYield'].compareTo(a['annualPercentageYield']));
+      filteredTokens.sort((a, b) {
+        final dynamic apyARaw = a['annualPercentageYield'] ?? 0.0;
+        final double apyA = apyARaw is int ? apyARaw.toDouble() : (apyARaw is double ? apyARaw : 0.0);
+        final dynamic apyBRaw = b['annualPercentageYield'] ?? 0.0;
+        final double apyB = apyBRaw is int ? apyBRaw.toDouble() : (apyBRaw is double ? apyBRaw : 0.0);
+        return _isAscending ? apyA.compareTo(apyB) : apyB.compareTo(apyA);
+      });
     } else if (_sortOption == 'ROI') {
       filteredTokens.sort((a, b) {
         final roiA = _calculateRoi(a);
@@ -289,8 +298,10 @@ class MapsPageState extends State<MapsPage> {
   }
   
   double _calculateRoi(Map<String, dynamic> token) {
-    final initialValue = token['initialTotalValue'] ?? token['tokenPrice'];
-    final currentValue = token['tokenPrice'] ?? 0.0;
+    final dynamic initialValueRaw = token['initialTotalValue'] ?? token['tokenPrice'];
+    final double initialValue = initialValueRaw is int ? initialValueRaw.toDouble() : (initialValueRaw is double ? initialValueRaw : 0.0);
+    final dynamic currentValueRaw = token['tokenPrice'] ?? 0.0;
+    final double currentValue = currentValueRaw is int ? currentValueRaw.toDouble() : (currentValueRaw is double ? currentValueRaw : 0.0);
     return initialValue > 0 ? ((currentValue - initialValue) / initialValue * 100) : 0.0;
   }
   
@@ -332,8 +343,8 @@ class MapsPageState extends State<MapsPage> {
     }) {
       final latValue = lat ?? double.tryParse(matchingToken['lat']?.toString() ?? '');
       final lngValue = lng ?? double.tryParse(matchingToken['lng']?.toString() ?? '');
-      final rentedUnits = matchingToken['rentedUnits'] ?? 0;
-      final totalUnits = matchingToken['totalUnits'] ?? 1;
+      final rentedUnits = (matchingToken['rentedUnits'] ?? 0).toInt();
+      final totalUnits = (matchingToken['totalUnits'] ?? 1).toInt();
 
       if (latValue != null && lngValue != null) {
         return Marker(
@@ -760,10 +771,12 @@ class MapsPageState extends State<MapsPage> {
       if (marker.key is ValueKey) {
         final token = (marker.key as ValueKey).value as Map<String, dynamic>;
 
-        final rentedUnits = token['rentedUnits'] ?? 0;
-        final totalUnits = token['totalUnits'] ?? 1;
-        final tokenPrice = token['tokenPrice'] ?? 0.0;
-        final apy = token['annualPercentageYield'] ?? 0.0;
+        final rentedUnits = (token['rentedUnits'] ?? 0).toInt();
+        final totalUnits = (token['totalUnits'] ?? 1).toInt();
+        final dynamic tokenPriceRaw = token['tokenPrice'] ?? 0.0;
+        final double tokenPrice = tokenPriceRaw is int ? tokenPriceRaw.toDouble() : (tokenPriceRaw is double ? tokenPriceRaw : 0.0);
+        final dynamic apyRaw = token['annualPercentageYield'] ?? 0.0;
+        final double apy = apyRaw is int ? apyRaw.toDouble() : (apyRaw is double ? apyRaw : 0.0);
 
         // Calculs pour les statistiques
         totalValue += tokenPrice;
@@ -871,18 +884,24 @@ class MapsPageState extends State<MapsPage> {
     final double yamTotalVolume = matchingToken['yamTotalVolume'] ?? 0.0;
     final double yamAverageValue = matchingToken['yamAverageValue'] ?? 0.0;
     final List<Map<String, dynamic>> transactions = dataManager.transactionsByToken[tokenId] ?? [];
-    final double initialValue = matchingToken['initialTotalValue'] ?? matchingToken['tokenPrice'];
-    final double currentValue = matchingToken['tokenPrice'] ?? 0.0;
+    final dynamic initialValueRaw = matchingToken['initialTotalValue'] ?? matchingToken['tokenPrice'];
+    final double initialValue = initialValueRaw is int ? initialValueRaw.toDouble() : (initialValueRaw is double ? initialValueRaw : 0.0);
+    final dynamic currentValueRaw = matchingToken['tokenPrice'] ?? 0.0;
+    final double currentValue = currentValueRaw is int ? currentValueRaw.toDouble() : (currentValueRaw is double ? currentValueRaw : 0.0);
     final double roi = initialValue > 0 ? ((currentValue - initialValue) / initialValue * 100) : 0.0;
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         final currencyUtils = Provider.of<CurrencyProvider>(context, listen: false);
-        final rentedUnits = matchingToken['rentedUnits'] ?? 0;
-        final totalUnits = matchingToken['totalUnits'] ?? 1;
+        final rentedUnits = (matchingToken['rentedUnits'] ?? 0).toInt();
+        final totalUnits = (matchingToken['totalUnits'] ?? 1).toInt();
         final lat = double.tryParse(matchingToken['lat']) ?? 0.0;
         final lng = double.tryParse(matchingToken['lng']) ?? 0.0;
+        final dynamic tokenPriceRaw = matchingToken['tokenPrice'] ?? 0.0;
+        final double tokenPrice = tokenPriceRaw is int ? tokenPriceRaw.toDouble() : (tokenPriceRaw is double ? tokenPriceRaw : 0.0);
+        final dynamic apyRaw = matchingToken['annualPercentageYield'];
+        final double? apy = apyRaw == null ? null : (apyRaw is int ? apyRaw.toDouble() : (apyRaw is double ? apyRaw : 0.0));
 
         return AlertDialog(
           backgroundColor: Theme.of(context).cardColor,
@@ -925,11 +944,11 @@ class MapsPageState extends State<MapsPage> {
                     child: Column(
                       children: [
                         _buildInfoRow(S.of(context).tokenPrice, 
-                          currencyUtils.formatCurrency(currencyUtils.convert(matchingToken['tokenPrice']), currencyUtils.currencySymbol),
+                          currencyUtils.formatCurrency(currencyUtils.convert(tokenPrice), currencyUtils.currencySymbol),
                           Icons.monetization_on, Colors.green),
                         const Divider(height: 8),
                         _buildInfoRow(S.of(context).annualPercentageYield, 
-                          '${matchingToken['annualPercentageYield'] != null ? matchingToken['annualPercentageYield'].toStringAsFixed(2) : 'N/A'}%',
+                          '${apy != null ? apy.toStringAsFixed(2) : 'N/A'}%',
                           Icons.trending_up, Colors.blue),
                         const Divider(height: 8),
                         _buildInfoRow(S.of(context).rentedUnitsSimple, 
@@ -1239,19 +1258,27 @@ class MapsPageState extends State<MapsPage> {
     // Calculer les statistiques
     final int totalTokens = displayedTokens.length;
     final int uniqueProperties = uniquePropertiesSet.length;
-    final double totalValue = displayedTokens.fold(0.0, (sum, token) => sum + (token['tokenPrice'] ?? 0.0));
+    final double totalValue = displayedTokens.fold(0.0, (sum, token) {
+      final dynamic tokenPriceRaw = token['tokenPrice'] ?? 0.0;
+      final double tokenPrice = tokenPriceRaw is int ? tokenPriceRaw.toDouble() : (tokenPriceRaw is double ? tokenPriceRaw : 0.0);
+      return sum + tokenPrice;
+    });
     final double averageApy = displayedTokens.isNotEmpty 
-        ? displayedTokens.fold(0.0, (sum, token) => sum + (token['annualPercentageYield'] ?? 0.0)) / totalTokens
+        ? displayedTokens.fold(0.0, (sum, token) {
+            final dynamic apyRaw = token['annualPercentageYield'] ?? 0.0;
+            final double apy = apyRaw is int ? apyRaw.toDouble() : (apyRaw is double ? apyRaw : 0.0);
+            return sum + apy;
+          }) / totalTokens
         : 0.0;
     final double totalRent = displayedTokens.fold(0.0, (sum, token) => 
         sum + _getTokenRentSafely(token['uuid'], dataManager));
     
     final int fullyRented = displayedTokens.where((token) => 
-        (token['rentedUnits'] ?? 0) >= (token['totalUnits'] ?? 1)).length;
+        (token['rentedUnits'] ?? 0).toInt() >= (token['totalUnits'] ?? 1).toInt()).length;
     final int partiallyRented = displayedTokens.where((token) => 
-        (token['rentedUnits'] ?? 0) > 0 && (token['rentedUnits'] ?? 0) < (token['totalUnits'] ?? 1)).length;
+        (token['rentedUnits'] ?? 0).toInt() > 0 && (token['rentedUnits'] ?? 0).toInt() < (token['totalUnits'] ?? 1).toInt()).length;
     final int notRented = displayedTokens.where((token) => 
-        (token['rentedUnits'] ?? 0) == 0).length;
+        (token['rentedUnits'] ?? 0).toInt() == 0).length;
     
     // Répartition par pays
     final Map<String, int> countryDistribution = {};
@@ -1406,12 +1433,13 @@ class MapsPageState extends State<MapsPage> {
   // Obtenir la couleur d'un marker selon le mode de coloration
   Color _getMarkerColor(Map<String, dynamic> token) {
     if (_colorationMode == ColorationMode.apy) {
-      final apy = token['annualPercentageYield'] ?? 0.0;
+      final dynamic apyRaw = token['annualPercentageYield'] ?? 0.0;
+      final double apy = apyRaw is int ? apyRaw.toDouble() : (apyRaw is double ? apyRaw : 0.0);
       return _getApyBasedColor(apy);
     } else {
       // Mode location par défaut
-      final rentedUnits = token['rentedUnits'] ?? 0;
-      final totalUnits = token['totalUnits'] ?? 1;
+      final rentedUnits = (token['rentedUnits'] ?? 0).toInt();
+      final totalUnits = (token['totalUnits'] ?? 1).toInt();
       return UIUtils.getRentalStatusColor(rentedUnits, totalUnits);
     }
   }

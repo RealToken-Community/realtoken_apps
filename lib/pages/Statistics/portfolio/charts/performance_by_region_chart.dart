@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 import 'package:realtoken_asset_tracker/managers/data_manager.dart';
 import 'package:realtoken_asset_tracker/app_state.dart';
 import 'package:realtoken_asset_tracker/generated/l10n.dart';
@@ -259,7 +260,7 @@ class _PerformanceByRegionChartState extends State<PerformanceByRegionChart> {
             x: index,
             barRods: [
               BarChartRodData(
-                toY: roi,
+                toY: math.max(roi.abs(), 1.0) * (roi >= 0 ? 1 : -1),
                 color: barColor.withOpacity(isSelected ? 1.0 : 0.8),
                 width: 20,
                 borderRadius: const BorderRadius.only(

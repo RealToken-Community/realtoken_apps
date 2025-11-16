@@ -36,6 +36,14 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
   // Variable pour suivre le point sélectionné
   int? _selectedSpotIndex;
 
+  // Helper pour convertir en int de manière sécurisée
+  int _safeToInt(double value) {
+    if (value.isNaN || value.isInfinite) {
+      return 0;
+    }
+    return value.toInt();
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
@@ -258,7 +266,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               final realValue = showHealthFactor ? groupedData[date]!['healtFactor']! : groupedData[date]!['ltv']!;
 
               return BarTooltipItem(
-                '$date\n${showHealthFactor ? 'Health Factor' : 'LTV'}: ${showHealthFactor ? realValue.toInt() : realValue.toInt()}${showHealthFactor ? '' : '%'}',
+                '$date\n${showHealthFactor ? 'Health Factor' : 'LTV'}: ${_safeToInt(realValue)}${showHealthFactor ? '' : '%'}',
                 TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -294,13 +302,14 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (value, meta) {
-                if (value.toInt() >= 0 && value.toInt() < labels.length) {
+                final intValue = _safeToInt(value);
+                if (intValue >= 0 && intValue < labels.length) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Transform.rotate(
                       angle: -0.5,
                       child: Text(
-                        labels[value.toInt()],
+                        labels[intValue],
                         style: TextStyle(
                           fontSize: 10 + appState.getTextSizeOffset(),
                           color: Colors.grey.shade600,
@@ -321,7 +330,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                 return Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    showHealthFactor ? value.toInt().toString() : '${value.toInt()}%',
+                    showHealthFactor ? _safeToInt(value).toString() : '${_safeToInt(value)}%',
                     style: TextStyle(
                       fontSize: 10 + appState.getTextSizeOffset(),
                       color: Colors.grey.shade600,
@@ -463,13 +472,14 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                   widget.dataManager,
                   widget.selectedPeriod,
                 );
-                if (value.toInt() >= 0 && value.toInt() < labels.length) {
+                final intValue = _safeToInt(value);
+                if (intValue >= 0 && intValue < labels.length) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Transform.rotate(
                       angle: -0.5,
                       child: Text(
-                        labels[value.toInt()],
+                        labels[intValue],
                         style: TextStyle(
                           fontSize: 10 + appState.getTextSizeOffset(),
                           color: Colors.grey.shade600,
@@ -490,7 +500,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
                 return Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    showHealthFactor ? value.toInt().toString() : '${value.toInt()}%',
+                    showHealthFactor ? _safeToInt(value).toString() : '${_safeToInt(value)}%',
                     style: TextStyle(
                       fontSize: 10 + appState.getTextSizeOffset(),
                       color: Colors.grey.shade600,
@@ -529,7 +539,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
               },
               checkToShowDot: (spot, barData) {
                 // Afficher les points aux extrémités et quelques points intermédiaires
-                return spot.x == 0 || spot.x == barData.spots.length - 1 || spot.x % (barData.spots.length > 8 ? 4 : 2) == 0 || _selectedSpotIndex == spot.x.toInt();
+                return spot.x == 0 || spot.x == barData.spots.length - 1 || spot.x % (barData.spots.length > 8 ? 4 : 2) == 0 || _selectedSpotIndex == _safeToInt(spot.x);
               },
             ),
             belowBarData: BarAreaData(
@@ -572,7 +582,7 @@ class _HealthAndLtvHistoryGraphState extends State<HealthAndLtvHistoryGraph> {
 
               return [
                 LineTooltipItem(
-                  '$date\n${showHealthFactor ? 'Health Factor' : 'LTV'}: ${showHealthFactor ? realValue.toInt() : realValue.toInt()}${showHealthFactor ? '' : '%'}',
+                  '$date\n${showHealthFactor ? 'Health Factor' : 'LTV'}: ${_safeToInt(realValue)}${showHealthFactor ? '' : '%'}',
                   TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

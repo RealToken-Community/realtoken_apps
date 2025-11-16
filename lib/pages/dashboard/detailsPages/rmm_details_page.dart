@@ -442,7 +442,7 @@ class _WalletDetailCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  hf.toStringAsFixed(1),
+                  hf.toStringAsFixed(2),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,

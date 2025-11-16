@@ -429,9 +429,9 @@ class PortfolioCard extends StatelessWidget {
     final dataManager = Provider.of<DataManager>(context, listen: false);
     final theme = Theme.of(context);
 
-    // Utiliser la méthode d'origine qui calcule le ROI basé sur les loyers reçus
+    // Utiliser la nouvelle méthode qui prend en compte tous les wallets pour calculer le ROI
     // ROI = (Total des loyers reçus / Investissement initial) * 100
-    double totalRentReceived = dataManager.getTotalRentReceived();
+    double totalRentReceived = dataManager.getTotalRentReceivedFromAllWallets();
     double initialInvestment = dataManager.initialTotalValue + Parameters.initialInvestmentAdjustment;
 
     // Vérifier si l'investissement initial est valide pour éviter la division par zéro
